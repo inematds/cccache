@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="inema-course" content="cccache">
+  <title>Módulo 3.2 — Arquitetura pró-cache e auditoria | cccache · INEMA.CLUB</title>
+
+  <!-- 1) ANTI-FOUC -->
+  <script>
+    (function () {
+      try {
+        var p = JSON.parse(localStorage.getItem('inema.prefs') || '{}');
+        var d = document.documentElement;
+        var dark = p.theme ? p.theme !== 'claro' : (localStorage.getItem('theme') !== 'light');
+        if (dark) { d.classList.add('dark'); } else { d.classList.remove('dark'); }
+        if (p.theme && p.theme !== 'inema-dark' && p.theme !== 'claro') { d.setAttribute('data-theme', p.theme); }
+        if (p.font) { d.setAttribute('data-font', p.font); }
+        if (p.accent) { d.setAttribute('data-accent', p.accent); }
+        if (p.fontScale) { d.style.setProperty('--fs-root', p.fontScale + '%'); d.style.setProperty('--inema-font-scale', p.fontScale); d.style.fontSize = p.fontScale + '%'; }
+        if (p.lineWidth) { d.style.setProperty('--measure', p.lineWidth + 'ch'); }
+        if (p.leading) { d.style.setProperty('--lh-body', p.leading); }
+        d.style.colorScheme = (p.theme === 'claro' || p.theme === 'sepia') ? 'light' : 'dark';
+      } catch (e) { document.documentElement.classList.add('dark'); }
+    })();
+  </script>
+
+  <!-- 2) MANIFESTO (erro #28) -->
+  <script type="application/json" data-inema-manifest>
+{
+  "course": { "id": "cccache", "title": "cccache — Prompt Caching no Claude Code" },
+  "tracks": [
+    {
+      "id": "trilha1", "title": "Fundamentos e termos",
+      "modules": [
+        { "id": "modulo-1-1", "title": "O que é prompt caching", "href": "curso/trilha1/modulo-1-1.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] },
+        { "id": "modulo-1-2", "title": "Termos e economia", "href": "curso/trilha1/modulo-1-2.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] }
+      ]
+    },
+    {
+      "id": "trilha2", "title": "Técnico",
+      "modules": [
+        { "id": "modulo-2-1", "title": "O cache numa conversa", "href": "curso/trilha2/modulo-2-1.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] },
+        { "id": "modulo-2-2", "title": "Skills e ferramentas: anexar vs quebrar", "href": "curso/trilha2/modulo-2-2.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] },
+        { "id": "modulo-2-3", "title": "Invalidação a fundo", "href": "curso/trilha2/modulo-2-3.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] }
+      ]
+    },
+    {
+      "id": "trilha3", "title": "Boas práticas avançadas",
+      "modules": [
+        { "id": "modulo-3-1", "title": "Cache vs Compactação", "href": "curso/trilha3/modulo-3-1.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] },
+        { "id": "modulo-3-2", "title": "Arquitetura pró-cache e auditoria", "href": "curso/trilha3/modulo-3-2.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] },
+        { "id": "modulo-3-3", "title": "Prompts prontos (copy-run)", "href": "curso/trilha3/modulo-3-3.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] }
+      ]
+    }
+  ]
+}
+  </script>
+
+  <!-- 3) Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } } }
+  </script>
+
+  <!-- 4) CSS base -->
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+    main [id], section[id] { scroll-margin-top: 5rem; }
+
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124, 58, 237, 0.12); }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .border-purple-500\/30 { border-color: rgba(124, 58, 237, 0.25); }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .hover\:bg-purple-500\/30:hover { background-color: rgba(124, 58, 237, 0.18); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .text-amber-400 { color: #b45309; }
+    html:not(.dark) .bg-amber-500\/20 { background-color: rgba(217, 119, 6, 0.14); }
+    html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+    html:not(.dark) .border-amber-500\/30 { border-color: rgba(217, 119, 6, 0.28); }
+    html:not(.dark) .text-red-400 { color: #b91c1c; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(185, 28, 28, 0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(185, 28, 28, 0.25); }
+
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+    html:not(.dark) svg[role="img"] { filter: saturate(0.82) brightness(0.96); }
+
+    @keyframes t3pulse { 0%, 100% { opacity: .5 } 50% { opacity: 1 } }
+    @media (prefers-reduced-motion: no-preference) {
+      .t3-a { animation: t3pulse 2.6s ease-in-out infinite; }
+      .t3-a:nth-of-type(2) { animation-delay: .3s }
+    }
+    .nav-appearance-wrap { position: relative; }
+  </style>
+
+  <link rel="stylesheet" href="../../assets/learn.css">
+</head>
+
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <a href="#conteudo" class="inema-skip">Pular para o conteúdo</a>
+
+  <!-- ================= NAVIGATION ================= -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-3 sm:space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl" aria-hidden="true">🧠</span>
+            <span class="font-bold text-lg hidden sm:inline">cccache</span>
+          </a>
+          <span class="text-neutral-600" aria-hidden="true">|</span>
+          <a href="https://inema.club" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Técnico</span></a>
+          <a href="index.html" aria-current="page" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-purple-400 bg-purple-500/10"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Boas práticas</span></a>
+          <button type="button" data-inema-journey-open class="hidden md:inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-neutral-300 hover:text-neutral-100 hover:bg-dark-700 transition-colors text-sm">
+            <span aria-hidden="true">◷</span><span>Minha jornada</span>
+            <span class="inema-journey-badge hidden" data-inema-journey-badge data-count="0"></span>
+          </button>
+          <div class="nav-appearance-wrap">
+            <button type="button" data-inema-appearance-toggle="[data-inema-appearance]" aria-expanded="false" aria-haspopup="true" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-neutral-300 hover:text-neutral-100 hover:bg-dark-700 transition-colors text-sm">
+              <span aria-hidden="true">◑</span><span class="hidden sm:inline">Aparência</span>
+            </button>
+            <div data-inema-appearance class="inema-appearance-pop" role="group" aria-label="Aparência e leitura">
+              <p class="inema-seg-label">Tema</p>
+              <div class="inema-segment">
+                <button type="button" data-inema-set-theme="inema-dark">Escuro</button>
+                <button type="button" data-inema-set-theme="claro">Claro</button>
+                <button type="button" data-inema-set-theme="sepia">Sépia</button>
+                <button type="button" data-inema-set-theme="foco">Foco</button>
+                <button type="button" data-inema-set-theme="contraste">Alto contraste</button>
+              </div>
+              <p class="inema-seg-label">Fonte</p>
+              <div class="inema-segment">
+                <button type="button" data-inema-set-font="inter">Inter</button>
+                <button type="button" data-inema-set-font="system">Sistema</button>
+                <button type="button" data-inema-set-font="leitura">Leitura</button>
+              </div>
+              <p class="inema-seg-label">Tamanho</p>
+              <div class="inema-segment">
+                <button type="button" data-inema-set-fontscale="100">A</button>
+                <button type="button" data-inema-set-fontscale="112">A+</button>
+                <button type="button" data-inema-set-fontscale="125">A++</button>
+              </div>
+              <p class="inema-seg-label">Largura da linha</p>
+              <div class="inema-segment">
+                <button type="button" data-inema-set-linewidth="60">Estreito</button>
+                <button type="button" data-inema-set-linewidth="68">Médio</button>
+                <button type="button" data-inema-set-linewidth="75">Largo</button>
+              </div>
+              <p class="inema-seg-label">Entrelinha</p>
+              <div class="inema-segment">
+                <button type="button" data-inema-set-leading="1.45">Compacto</button>
+                <button type="button" data-inema-set-leading="1.7">Confortável</button>
+              </div>
+              <p class="inema-seg-label">Acento</p>
+              <div class="inema-accent-grid" role="group" aria-label="Cor de acento">
+                <button type="button" data-inema-set-accent="emerald" aria-label="Esmeralda"></button>
+                <button type="button" data-inema-set-accent="blue" aria-label="Azul"></button>
+                <button type="button" data-inema-set-accent="purple" aria-label="Roxo"></button>
+                <button type="button" data-inema-set-accent="amber" aria-label="Âmbar"></button>
+                <button type="button" data-inema-set-accent="teal" aria-label="Turquesa"></button>
+                <button type="button" data-inema-set-accent="rose" aria-label="Rosa"></button>
+              </div>
+            </div>
+          </div>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-1" aria-label="Alternar claro/escuro">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Breadcrumb -->
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4" aria-label="Trilha de navegação">
+    <div class="flex items-center flex-wrap gap-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-purple-400">Início</a><span aria-hidden="true">/</span>
+      <a href="index.html" class="hover:text-purple-400">Trilha 3</a><span aria-hidden="true">/</span>
+      <span class="text-purple-400">Módulo 3.2</span>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header class="bg-gradient-to-br from-purple-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-purple-500/20 text-purple-400 text-xs font-semibold rounded-full mb-4">MÓDULO 3.2</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🏛️ Arquitetura pró-cache e auditoria</h1>
+      <p class="text-lg text-neutral-300 max-w-3xl">O melhor cache é o que <strong class="text-purple-400">nunca invalida sem querer</strong>. Aqui você desenha o prefixo — system congelado, tools determinísticas, um modelo por loop, forks que copiam o pai — e ganha um checklist e um prompt de auditoria pra rodar no Claude Code.</p>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">~45</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">Avançado</div><div class="text-xs text-neutral-400">Nível</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">Prática</div><div class="text-xs text-neutral-400">Tipo</div></div>
+      </div>
+    </div>
+  </header>
+
+  <div id="conteudo" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:flex lg:gap-8">
+
+    <!-- TOC -->
+    <nav data-inema-toc aria-label="Índice da página" class="hidden lg:block sticky top-20 self-start w-56 shrink-0">
+      <p class="text-xs uppercase tracking-wide text-neutral-500 mb-2">Neste módulo</p>
+      <p class="text-sm text-neutral-400 mb-3"><span data-inema-section-counter>Seção 1 de 6</span></p>
+      <ol class="space-y-1 text-sm">
+        <li><a href="#topico-1" class="inema-toc-link">1. System congelado</a></li>
+        <li><a href="#topico-2" class="inema-toc-link">2. Tools determinísticas</a></li>
+        <li><a href="#topico-3" class="inema-toc-link">3. Um modelo por loop</a></li>
+        <li><a href="#topico-4" class="inema-toc-link">4. Fork reusa o pai</a></li>
+        <li><a href="#topico-5" class="inema-toc-link">5. Checklist de invalidators</a></li>
+        <li><a href="#topico-6" class="inema-toc-link">6. Pré-aquecimento e TTL 1h</a></li>
+      </ol>
+      <div class="mt-5 pt-4 border-t border-dark-600">
+        <div data-inema-meter="modulo-3-2" class="inema-meter" aria-label="Progresso do módulo 3.2">
+          <div class="inema-bar"><div class="inema-bar__fill" data-inema-meter-fill></div></div>
+          <span class="text-xs text-purple-400 font-semibold" data-inema-meter-pct>0%</span>
+        </div>
+        <p class="text-xs text-neutral-500 mt-1"><span data-inema-meter-frac>0 de 6</span> lidos</p>
+      </div>
+    </nav>
+
+    <!-- Conteúdo -->
+    <main id="modulo-3-2" data-inema-module="3-2" data-inema-track="3" class="flex-1 min-w-0">
+
+      <!-- ===== TÓPICO 1 ===== -->
+      <section id="topico-1" data-inema-topic="modulo-3-2#topico-1" class="mb-16">
+        <div class="flex items-start justify-between gap-4 mb-6">
+          <div class="flex items-center space-x-4">
+            <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">1</span>
+            <h2 class="text-2xl font-bold">🧊 System prompt congelado</h2>
+          </div>
+          <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tenho dúvida</span></button>
+        </div>
+
+        <div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
+          <p data-inema-block="m3-2-t1-p1">O <strong class="text-purple-400">system prompt</strong> (o texto de instruções antes da conversa) fica logo na frente do prefixo. Se você interpola <strong>data/hora, modo ou nome do usuário</strong> ali, cada requisição tem bytes diferentes no começo — e <strong>invalida tudo</strong>. A regra é: system congelado; contexto dinâmico vai depois, nas <code class="font-mono text-sm">messages</code>.</p>
+        </div>
+
+        <!-- SVG: system congelado vs interpolado -->
+        <div class="rounded-2xl border border-purple-500/30 bg-dark-900/40 p-3 sm:p-4 mb-6 overflow-hidden">
+          <svg viewBox="0 0 1000 240" class="w-full h-auto" role="img" aria-label="À esquerda, um system prompt com data e nome do usuário interpolados muda a cada turno e derruba o cache. À direita, um system congelado permanece idêntico e o contexto dinâmico é injetado no fim das mensagens, preservando o cache.">
+            <defs>
+              <pattern id="m32a-grid" width="32" height="32" patternUnits="userSpaceOnUse"><circle cx="1.3" cy="1.3" r="1.3" fill="#a855f7" opacity="0.12"/></pattern>
+              <filter id="m32a-glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            </defs>
+            <rect x="0" y="0" width="1000" height="240" fill="url(#m32a-grid)"/>
+            <line x1="500" y1="24" x2="500" y2="216" stroke="#4b5563" stroke-width="1.5" stroke-dasharray="7 7"/>
+            <!-- ERRADO -->
+            <text x="250" y="34" text-anchor="middle" fill="#fca5a5" font-family="Inter,sans-serif" font-size="13" font-weight="600">✗ system interpolado</text>
+            <rect x="60" y="50" width="380" height="46" rx="10" fill="#2a0f16" stroke="#f87171" stroke-width="2"/>
+            <text x="250" y="72" text-anchor="middle" fill="#fca5a5" font-family="Inter,sans-serif" font-size="12">system + "hoje é {data}, user {nome}"</text>
+            <text x="250" y="88" text-anchor="middle" fill="#fecaca" font-family="Inter,sans-serif" font-size="10.5">muda a cada turno</text>
+            <rect x="60" y="104" width="380" height="30" rx="8" fill="#0e1622" stroke="#4b5563" stroke-width="1.5"/>
+            <text x="250" y="124" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="11">messages</text>
+            <text x="250" y="164" text-anchor="middle" fill="#fca5a5" font-family="Inter,sans-serif" font-size="12" font-weight="600">→ cache invalida todo turno</text>
+            <!-- CERTO -->
+            <text x="750" y="34" text-anchor="middle" fill="#c084fc" font-family="Inter,sans-serif" font-size="13" font-weight="600">✓ system congelado</text>
+            <g filter="url(#m32a-glow)"><rect x="560" y="50" width="380" height="46" rx="10" fill="#1a1230" stroke="#c084fc" stroke-width="2"/></g>
+            <text x="750" y="72" text-anchor="middle" fill="#c084fc" font-family="Inter,sans-serif" font-size="12">system fixo (sem variáveis) 🧊</text>
+            <text x="750" y="88" text-anchor="middle" fill="#e9d5ff" font-family="Inter,sans-serif" font-size="10.5">idêntico byte a byte</text>
+            <rect x="560" y="104" width="380" height="30" rx="8" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/>
+            <text x="750" y="124" text-anchor="middle" fill="#bfe6ff" font-family="Inter,sans-serif" font-size="11">messages + "hoje é {data}, user {nome}"</text>
+            <text x="750" y="164" text-anchor="middle" fill="#c084fc" font-family="Inter,sans-serif" font-size="12" font-weight="600">→ prefixo estável, cache quente</text>
+          </svg>
+          <p class="text-xs text-neutral-400 mt-3 px-1">Legenda: o dinâmico não some — ele <strong class="text-sky-400">muda de lugar</strong>. Sai da frente (system) e vai pro fim (messages), onde não quebra o prefixo.</p>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+          <div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Congela</div><p class="text-xs text-neutral-400">System sem variáveis</p></div>
+          <div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Dinâmico</div><p class="text-xs text-neutral-400">Vai pro fim das messages</p></div>
+          <div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Frente</div><p class="text-xs text-neutral-400">System é quase posição 0</p></div>
+          <div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">1 byte</div><p class="text-xs text-neutral-400">Basta pra invalidar</p></div>
+        </div>
+
+        <div class="flex justify-start mt-6">
+          <button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex items-center gap-2 justify-start px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors">
+            <span class="inema-ico-todo" aria-hidden="true">○</span><span class="inema-ico-done" aria-hidden="true">●</span>
+            <span class="inema-label-todo">Marcar como lido</span><span class="inema-label-done">Lido ✓</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ===== TÓPICO 2 ===== -->
+      <section id="topico-2" data-inema-topic="modulo-3-2#topico-2" class="mb-16">
+        <div class="flex items-start justify-between gap-4 mb-6">
+          <div class="flex items-center space-x-4">
+            <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">2</span>
+            <h2 class="text-2xl font-bold">🔤 Tools determinísticas</h2>
+          </div>
+          <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tenho dúvida</span></button>
+        </div>
+
+        <div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
+          <p data-inema-block="m3-2-t2-p1">A lista de <code class="font-mono text-sm">tools</code> é renderizada na <strong class="text-purple-400">posição 0</strong> — antes de tudo. Se você a monta de um <code class="font-mono text-sm">set</code>/<code class="font-mono text-sm">dict</code> sem ordenar, a ordem varia entre requests e o cache <strong>nunca bate</strong>. Serialize sempre na mesma ordem: <strong class="text-purple-400">ordene por nome</strong>.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div class="bg-red-900/20 border border-red-500/30 rounded-xl p-5">
+            <h4 class="font-bold text-red-400 mb-3">✗ Ordem variável</h4>
+            <pre class="font-mono text-xs bg-dark-900/70 border border-dark-600 rounded-lg p-3 overflow-x-auto text-neutral-200">tools = [t <span class="text-neutral-500">for</span> t <span class="text-neutral-500">in</span> registry]
+<span class="text-neutral-500"># registry é um set/dict</span>
+<span class="text-neutral-500"># ordem muda entre requests → miss</span></pre>
+          </div>
+          <div class="bg-emerald-900/20 border border-emerald-500/30 rounded-xl p-5">
+            <h4 class="font-bold text-emerald-400 mb-3">✓ Ordem estável</h4>
+            <pre class="font-mono text-xs bg-dark-900/70 border border-dark-600 rounded-lg p-3 overflow-x-auto text-neutral-200">tools = <span class="text-purple-400">sorted</span>(registry, key=<span class="text-neutral-500">lambda</span> t: t[<span class="text-emerald-400">"name"</span>])
+<span class="text-neutral-500"># mesma ordem sempre → prefixo idêntico</span>
+<span class="text-neutral-500"># cache_read para de ser 0</span></pre>
+          </div>
+        </div>
+
+        <!-- COPY-RUN (erro #30) — prompt de revisão pró-cache (system + tools) -->
+        <div class="bg-dark-800 border border-purple-500/30 rounded-xl overflow-hidden mb-6">
+          <div class="px-5 py-3 bg-purple-500/10 border-b border-purple-500/30 flex items-center gap-2">
+            <span aria-hidden="true">▶️</span><span class="font-semibold text-purple-400">Prompt pronto — revisão pró-cache (system + tools)</span>
+          </div>
+          <div class="p-5 space-y-4">
+            <div>
+              <p class="text-sm font-semibold text-purple-400 mb-1">Objetivo</p>
+              <p class="text-sm text-neutral-300">Fazer o Claude Code apontar o que, no seu system prompt e na montagem das <code class="font-mono text-xs">tools</code>, está impedindo o cache — e reescrever pra maximizar o hit.</p>
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-purple-400 mb-1">Prompt (cole no Claude Code)</p>
+              <pre class="font-mono text-xs sm:text-sm bg-dark-900/70 border border-dark-600 rounded-lg p-4 overflow-x-auto whitespace-pre-wrap text-neutral-200">Revise meu system prompt e a montagem de `tools` em &lt;caminho/do/arquivo&gt;.
+Aponte o que está impedindo o prompt caching:
+1) interpolação dinâmica no system (data/hora, nome do usuário, modo,
+   uuid, qualquer coisa que muda entre requests);
+2) ordem não-determinística das tools (montadas de set/dict sem sort).
+Depois reescreva: (a) congele o system e mova o dinâmico pro fim das
+messages; (b) serialize as tools em ordem estável (ordene por nome).
+Mostre o diff e explique por que cada mudança preserva o prefixo.</pre>
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-purple-400 mb-1">Como verificar</p>
+              <p class="text-sm text-neutral-300">Rode duas requisições iguais depois da mudança e confira o <code class="font-mono text-xs">usage</code>: <code class="font-mono text-xs">cache_read_input_tokens</code> deve deixar de ser 0 a partir da 2ª. Se ainda vier 0, sobrou um invalidator no prefixo (veja o tópico 5).</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+          <div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Posição 0</div><p class="text-xs text-neutral-400">Tools vêm antes de tudo</p></div>
+          <div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">sorted()</div><p class="text-xs text-neutral-400">Ordene por nome</p></div>
+          <div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">set/dict</div><p class="text-xs text-neutral-400">Ordem varia = miss</p></div>
+          <div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Estável</div><p class="text-xs text-neutral-400">Mesmos bytes = hit</p></div>
+        </div>
+
+        <div class="flex justify-start mt-6">
+          <button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex items-center gap-2 justify-start px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors">
+            <span class="inema-ico-todo" aria-hidden="true">○</span><span class="inema-ico-done" aria-hidden="true">●</span>
+            <span class="inema-label-todo">Marcar como lido</span><span class="inema-label-done">Lido ✓</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ===== TÓPICO 3 ===== -->
+      <section id="topico-3" data-inema-topic="modulo-3-2#topico-3" class="mb-16">
+        <div class="flex items-start justify-between gap-4 mb-6">
+          <div class="flex items-center space-x-4">
+            <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">3</span>
+            <h2 class="text-2xl font-bold">🚫 Não trocar modelo no meio</h2>
+          </div>
+          <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tenho dúvida</span></button>
+        </div>
+
+        <div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
+          <p data-inema-block="m3-2-t3-p1">Cache é <strong class="text-purple-400">por modelo</strong>. Trocar de modelo no meio invalida tudo — o prefixo cacheado de um modelo não serve pro outro. Precisa de um modelo mais barato pra uma subtarefa? <strong class="text-purple-400">Use um subagente</strong>, mantendo o loop principal num modelo só.</p>
+        </div>
+
+        <!-- SVG: um modelo por loop -->
+        <div class="rounded-2xl border border-purple-500/30 bg-dark-900/40 p-3 sm:p-4 mb-6 overflow-hidden">
+          <svg viewBox="0 0 1000 220" class="w-full h-auto" role="img" aria-label="No loop principal, trocar do modelo A para o modelo B invalida o cache. A solução é manter o loop principal num único modelo e delegar a subtarefa mais barata a um subagente, que roda em paralelo com o próprio modelo.">
+            <defs>
+              <pattern id="m32c-grid" width="32" height="32" patternUnits="userSpaceOnUse"><circle cx="1.3" cy="1.3" r="1.3" fill="#a855f7" opacity="0.12"/></pattern>
+              <filter id="m32c-glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              <marker id="m32c-ap" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#c084fc"/></marker>
+              <marker id="m32c-ac" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#38bdf8"/></marker>
+            </defs>
+            <rect x="0" y="0" width="1000" height="220" fill="url(#m32c-grid)"/>
+            <text x="40" y="36" fill="#d8b4fe" font-family="Inter,sans-serif" font-size="13" font-weight="600">Loop principal — um modelo só (cache quente)</text>
+            <g filter="url(#m32c-glow)"><rect x="40" y="52" width="150" height="52" rx="12" fill="#1a1230" stroke="url(#m32c-ap)" stroke-width="2.5"/></g>
+            <rect x="40" y="52" width="150" height="52" rx="12" fill="#1a1230" stroke="#c084fc" stroke-width="2.5"/>
+            <text x="115" y="83" text-anchor="middle" fill="#c084fc" font-family="Inter,sans-serif" font-size="13" font-weight="700">modelo A</text>
+            <path d="M190,78 L280,78" fill="none" stroke="#c084fc" stroke-width="2" opacity="0.7" marker-end="url(#m32c-ap)"/>
+            <rect x="280" y="52" width="150" height="52" rx="12" fill="#1a1230" stroke="#c084fc" stroke-width="2"/>
+            <text x="355" y="83" text-anchor="middle" fill="#c084fc" font-family="Inter,sans-serif" font-size="13" font-weight="600">modelo A</text>
+            <path d="M430,78 L520,78" fill="none" stroke="#c084fc" stroke-width="2" opacity="0.7" marker-end="url(#m32c-ap)"/>
+            <rect x="520" y="52" width="150" height="52" rx="12" fill="#1a1230" stroke="#c084fc" stroke-width="2"/>
+            <text x="595" y="83" text-anchor="middle" fill="#c084fc" font-family="Inter,sans-serif" font-size="13" font-weight="600">modelo A</text>
+            <!-- subagente ciano -->
+            <path d="M355,104 C355,150 470,150 500,158" fill="none" stroke="#38bdf8" stroke-width="2" opacity="0.65" marker-end="url(#m32c-ac)"/>
+            <text x="360" y="140" fill="#9ad6ff" font-family="Inter,sans-serif" font-size="11">delega subtarefa</text>
+            <rect x="500" y="150" width="230" height="46" rx="12" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/>
+            <text x="615" y="170" text-anchor="middle" fill="#bfe6ff" font-family="Inter,sans-serif" font-size="12" font-weight="600">subagente · modelo barato</text>
+            <text x="615" y="187" text-anchor="middle" fill="#9ad6ff" font-family="Inter,sans-serif" font-size="10.5">cache próprio, não toca o do pai</text>
+            <!-- alerta trocar -->
+            <rect x="770" y="52" width="190" height="52" rx="12" fill="#2a0f16" stroke="#f87171" stroke-width="2"/>
+            <text x="865" y="76" text-anchor="middle" fill="#fca5a5" font-family="Inter,sans-serif" font-size="12" font-weight="600">trocar p/ modelo B</text>
+            <text x="865" y="93" text-anchor="middle" fill="#fecaca" font-family="Inter,sans-serif" font-size="10.5">no loop → reset total</text>
+          </svg>
+          <p class="text-xs text-neutral-400 mt-3 px-1">Legenda: o loop <strong class="text-purple-400">roxo</strong> fica num modelo só; o <strong class="text-sky-400">subagente</strong> ciano usa outro modelo sem tocar no cache do pai.</p>
+        </div>
+
+        <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+          <h3 class="text-lg font-semibold text-blue-400 mb-2 flex items-center"><span class="mr-2" aria-hidden="true">🧩</span> Por que subagente resolve</h3>
+          <p class="text-neutral-300 text-sm">O subagente tem o próprio prefixo e o próprio cache. Ele roda a subtarefa no modelo barato e devolve o resultado como texto — o loop principal continua no mesmo modelo, com o cache intacto.</p>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+          <div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Por modelo</div><p class="text-xs text-neutral-400">Cache não cruza modelos</p></div>
+          <div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Trocar = reset</div><p class="text-xs text-neutral-400">Invalida tudo</p></div>
+          <div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Subagente</div><p class="text-xs text-neutral-400">Modelo barato à parte</p></div>
+          <div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Um por loop</div><p class="text-xs text-neutral-400">Mantém o cache quente</p></div>
+        </div>
+
+        <div class="flex justify-start mt-6">
+          <button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex items-center gap-2 justify-start px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors">
+            <span class="inema-ico-todo" aria-hidden="true">○</span><span class="inema-ico-done" aria-hidden="true">●</span>
+            <span class="inema-label-todo">Marcar como lido</span><span class="inema-label-done">Lido ✓</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ===== TÓPICO 4 ===== -->
+      <section id="topico-4" data-inema-topic="modulo-3-2#topico-4" class="mb-16">
+        <div class="flex items-start justify-between gap-4 mb-6">
+          <div class="flex items-center space-x-4">
+            <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">4</span>
+            <h2 class="text-2xl font-bold">🌿 Fork reusa o prefixo do pai</h2>
+          </div>
+          <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tenho dúvida</span></button>
+        </div>
+
+        <div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
+          <p data-inema-block="m3-2-t4-p1">Uma operação lateral — um resumo, um subagente — que remonta <code class="font-mono text-sm">system</code>/<code class="font-mono text-sm">tools</code>/<code class="font-mono text-sm">model</code> diferentes <strong>perde o cache do pai</strong>. Para reaproveitar o prefixo quente, o fork precisa <strong class="text-purple-400">copiar system/tools/model verbatim</strong> e só anexar o específico no fim.</p>
+        </div>
+
+        <!-- SVG: fork reusa o pai -->
+        <div class="rounded-2xl border border-purple-500/30 bg-dark-900/40 p-3 sm:p-4 mb-6 overflow-hidden">
+          <svg viewBox="0 0 1000 250" class="w-full h-auto" role="img" aria-label="O prefixo do pai é formado por tools, system e modelo. Um fork bom copia esse prefixo verbatim e anexa apenas a instrução específica no fim, reusando o cache quente. Um fork ruim remonta tools, system e modelo diferentes e paga o prefixo do zero.">
+            <defs>
+              <pattern id="m32d-grid" width="32" height="32" patternUnits="userSpaceOnUse"><circle cx="1.3" cy="1.3" r="1.3" fill="#a855f7" opacity="0.12"/></pattern>
+              <filter id="m32d-glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              <marker id="m32d-ac" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#38bdf8"/></marker>
+              <marker id="m32d-ar" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#f87171"/></marker>
+            </defs>
+            <rect x="0" y="0" width="1000" height="250" fill="url(#m32d-grid)"/>
+            <!-- pai -->
+            <text x="240" y="34" text-anchor="middle" fill="#d8b4fe" font-family="Inter,sans-serif" font-size="13" font-weight="600">PAI — prefixo quente</text>
+            <g filter="url(#m32d-glow)"><rect x="120" y="48" width="240" height="60" rx="14" fill="#1a1230" stroke="#c084fc" stroke-width="2.5"/></g>
+            <text x="240" y="72" text-anchor="middle" fill="#c084fc" font-family="Inter,sans-serif" font-size="12.5" font-weight="700">tools → system → model</text>
+            <text x="240" y="92" text-anchor="middle" fill="#e9d5ff" font-family="Inter,sans-serif" font-size="11">já cacheado</text>
+            <!-- fork bom -->
+            <path d="M240,108 C240,140 500,140 560,150" fill="none" stroke="#38bdf8" stroke-width="2" opacity="0.7" marker-end="url(#m32d-ac)"/>
+            <text x="470" y="132" text-anchor="middle" fill="#9ad6ff" font-family="Inter,sans-serif" font-size="11" font-weight="600">✓ copia verbatim + anexa no fim</text>
+            <rect x="560" y="150" width="380" height="60" rx="12" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/>
+            <text x="750" y="174" text-anchor="middle" fill="#bfe6ff" font-family="Inter,sans-serif" font-size="12" font-weight="600">tools → system → model (idênticos) + tarefa</text>
+            <text x="750" y="193" text-anchor="middle" fill="#9ad6ff" font-family="Inter,sans-serif" font-size="10.5">reusa o cache do pai · só grava o bloco novo</text>
+            <!-- fork ruim -->
+            <path d="M240,108 C240,180 130,190 110,204" fill="none" stroke="#f87171" stroke-width="2" opacity="0.6" marker-end="url(#m32d-ar)"/>
+            <rect x="40" y="196" width="360" height="44" rx="12" fill="#2a0f16" stroke="#f87171" stroke-width="2"/>
+            <text x="220" y="216" text-anchor="middle" fill="#fca5a5" font-family="Inter,sans-serif" font-size="12" font-weight="600">✗ remonta system/tools/model diferentes</text>
+            <text x="220" y="232" text-anchor="middle" fill="#fecaca" font-family="Inter,sans-serif" font-size="10.5">paga o prefixo do zero</text>
+          </svg>
+          <p class="text-xs text-neutral-400 mt-3 px-1">Legenda: o fork <strong class="text-sky-400">ciano</strong> herda o prefixo do pai (só grava o sufixo); o fork <strong class="text-red-400">vermelho</strong> remonta e paga tudo de novo.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+            <h4 class="font-bold text-emerald-400 mb-4">✓ Fork que reusa</h4>
+            <ul class="space-y-2 text-neutral-300 text-sm">
+              <li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>Copia <code class="font-mono text-xs">system</code> byte a byte</span></li>
+              <li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>Mantém a mesma lista de <code class="font-mono text-xs">tools</code> e o mesmo <code class="font-mono text-xs">model</code></span></li>
+              <li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>Anexa a instrução específica só no fim</span></li>
+            </ul>
+          </div>
+          <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+            <h4 class="font-bold text-red-400 mb-4">✗ Fork que perde</h4>
+            <ul class="space-y-2 text-neutral-300 text-sm">
+              <li class="flex items-start gap-2"><span class="text-red-400">✗</span><span>Escreve um system novo "enxuto" pro resumo</span></li>
+              <li class="flex items-start gap-2"><span class="text-red-400">✗</span><span>Passa outro conjunto de tools ou outro modelo</span></li>
+              <li class="flex items-start gap-2"><span class="text-red-400">✗</span><span>Resultado: prefixo diferente, cache do zero</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+          <div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Verbatim</div><p class="text-xs text-neutral-400">Copie system/tools/model</p></div>
+          <div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">No fim</div><p class="text-xs text-neutral-400">Anexe o específico</p></div>
+          <div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Herda</div><p class="text-xs text-neutral-400">Reusa o cache do pai</p></div>
+          <div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Remontar</div><p class="text-xs text-neutral-400">= pagar do zero</p></div>
+        </div>
+
+        <div class="flex justify-start mt-6">
+          <button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex items-center gap-2 justify-start px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors">
+            <span class="inema-ico-todo" aria-hidden="true">○</span><span class="inema-ico-done" aria-hidden="true">●</span>
+            <span class="inema-label-todo">Marcar como lido</span><span class="inema-label-done">Lido ✓</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ===== TÓPICO 5 ===== -->
+      <section id="topico-5" data-inema-topic="modulo-3-2#topico-5" class="mb-16">
+        <div class="flex items-start justify-between gap-4 mb-6">
+          <div class="flex items-center space-x-4">
+            <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">5</span>
+            <h2 class="text-2xl font-bold">🔎 Checklist de silent invalidators</h2>
+          </div>
+          <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tenho dúvida</span></button>
+        </div>
+
+        <div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
+          <p data-inema-block="m3-2-t5-p1">Um <strong class="text-purple-400">silent invalidator</strong> não dá erro — só faz <code class="font-mono text-sm">cache_read_input_tokens</code> ficar sempre 0. Antes de culpar o modelo, varra tudo que alimenta o prefixo e cace estes suspeitos.</p>
+        </div>
+
+        <!-- SVG: lupa varrendo o prefixo -->
+        <div class="rounded-2xl border border-purple-500/30 bg-dark-900/40 p-3 sm:p-4 mb-6 overflow-hidden">
+          <svg viewBox="0 0 1000 170" class="w-full h-auto" role="img" aria-label="Uma varredura percorre o prefixo formado por tools, system e messages procurando fontes de variação: relógio, identificadores aleatórios, serialização sem ordenação e conjuntos não ordenados.">
+            <defs><pattern id="m32e-grid" width="32" height="32" patternUnits="userSpaceOnUse"><circle cx="1.3" cy="1.3" r="1.3" fill="#a855f7" opacity="0.12"/></pattern>
+              <marker id="m32e-ac" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#38bdf8"/></marker></defs>
+            <rect x="0" y="0" width="1000" height="170" fill="url(#m32e-grid)"/>
+            <text x="40" y="34" fill="#d8b4fe" font-family="Inter,sans-serif" font-size="13" font-weight="600">Varra o que entra no prefixo</text>
+            <g font-family="Inter,sans-serif" font-size="12">
+              <rect x="40" y="50" width="150" height="40" rx="10" fill="#1a1230" stroke="#c084fc" stroke-width="2"/><text x="115" y="75" text-anchor="middle" fill="#c084fc" font-weight="600">tools</text>
+              <rect x="210" y="50" width="150" height="40" rx="10" fill="#1a1230" stroke="#c084fc" stroke-width="2"/><text x="285" y="75" text-anchor="middle" fill="#c084fc" font-weight="600">system</text>
+              <rect x="380" y="50" width="150" height="40" rx="10" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/><text x="455" y="75" text-anchor="middle" fill="#bfe6ff" font-weight="600">messages</text>
+            </g>
+            <circle cx="640" cy="70" r="26" fill="none" stroke="#38bdf8" stroke-width="3" class="t3-a"/>
+            <line x1="660" y1="90" x2="686" y2="116" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" class="t3-a"/>
+            <path d="M530,70 L604,70" fill="none" stroke="#38bdf8" stroke-width="2" opacity="0.6" marker-end="url(#m32e-ac)"/>
+            <text x="770" y="60" fill="#9ad6ff" font-family="Inter,sans-serif" font-size="12" font-weight="600">procurando variação</text>
+            <text x="770" y="80" fill="#e5e7eb" font-family="Inter,sans-serif" font-size="11">relógio · uuid · sort · set</text>
+          </svg>
+          <p class="text-xs text-neutral-400 mt-3 px-1">Legenda: qualquer fonte de variação no que vira <code class="font-mono text-xs">tools</code>/<code class="font-mono text-xs">system</code> muda o prefixo — e derruba o cache em silêncio.</p>
+        </div>
+
+        <div class="bg-dark-800 border border-dark-600 rounded-xl p-6 mb-6">
+          <h3 class="text-lg font-semibold text-purple-400 mb-4">Os 6 suspeitos de sempre</h3>
+          <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-neutral-300">
+            <li class="flex items-start gap-2"><span class="text-purple-400 mt-0.5">☐</span><span><code class="font-mono text-xs">datetime.now()</code> / <code class="font-mono text-xs">Date.now()</code> no system</span></li>
+            <li class="flex items-start gap-2"><span class="text-purple-400 mt-0.5">☐</span><span><code class="font-mono text-xs">uuid</code> ou id aleatório no prefixo</span></li>
+            <li class="flex items-start gap-2"><span class="text-purple-400 mt-0.5">☐</span><span><code class="font-mono text-xs">json.dumps</code> sem <code class="font-mono text-xs">sort_keys=True</code></span></li>
+            <li class="flex items-start gap-2"><span class="text-purple-400 mt-0.5">☐</span><span>Iterar um <code class="font-mono text-xs">set</code> (ordem não garantida)</span></li>
+            <li class="flex items-start gap-2"><span class="text-purple-400 mt-0.5">☐</span><span><code class="font-mono text-xs">tools</code> montadas por usuário/modo</span></li>
+            <li class="flex items-start gap-2"><span class="text-purple-400 mt-0.5">☐</span><span>Seção condicional no system (<code class="font-mono text-xs">if flag: system += …</code>)</span></li>
+          </ul>
+        </div>
+
+        <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+          <h3 class="text-lg font-semibold text-primary mb-2 flex items-center"><span class="mr-2" aria-hidden="true">💡</span> Sintoma → causa</h3>
+          <p class="text-neutral-300 text-sm"><code class="font-mono text-xs">cache_read_input_tokens</code> sempre 0 em requests repetidos = tem um invalidator. Faça o diff dos bytes do prefixo entre dois requests iguais e o byte que muda é o culpado (o tópico 4 do módulo 3.3 tem o prompt pronto pra isso).</p>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+          <div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Silencioso</div><p class="text-xs text-neutral-400">Não dá erro</p></div>
+          <div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">read = 0</div><p class="text-xs text-neutral-400">O sintoma único</p></div>
+          <div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">6 suspeitos</div><p class="text-xs text-neutral-400">Varra o prefixo</p></div>
+          <div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Diff</div><p class="text-xs text-neutral-400">Acha o byte culpado</p></div>
+        </div>
+
+        <div class="flex justify-start mt-6">
+          <button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex items-center gap-2 justify-start px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors">
+            <span class="inema-ico-todo" aria-hidden="true">○</span><span class="inema-ico-done" aria-hidden="true">●</span>
+            <span class="inema-label-todo">Marcar como lido</span><span class="inema-label-done">Lido ✓</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ===== TÓPICO 6 ===== -->
+      <section id="topico-6" data-inema-topic="modulo-3-2#topico-6" class="mb-16">
+        <div class="flex items-start justify-between gap-4 mb-6">
+          <div class="flex items-center space-x-4">
+            <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">6</span>
+            <h2 class="text-2xl font-bold">🔥 Pré-aquecimento e TTL 1h</h2>
+          </div>
+          <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tenho dúvida</span></button>
+        </div>
+
+        <div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
+          <p data-inema-block="m3-2-t6-p1">Uma requisição com <code class="font-mono text-sm">max_tokens: 0</code> ao subir o app <strong class="text-purple-400">grava o cache do prefixo e retorna na hora</strong> — tira a latência do 1º request real. Só vale se três coisas forem verdade; e, pra tráfego com pausas longas, existe o <strong class="text-purple-400">TTL de 1h</strong> (write ~2×).</p>
+        </div>
+
+        <!-- SVG: timeline de pré-aquecimento -->
+        <div class="rounded-2xl border border-purple-500/30 bg-dark-900/40 p-3 sm:p-4 mb-6 overflow-hidden">
+          <svg viewBox="0 0 1000 180" class="w-full h-auto" role="img" aria-label="Linha do tempo: ao subir o app, uma requisição com max_tokens zero grava o cache do prefixo antes de qualquer usuário; quando o primeiro usuário chega, o prefixo já está quente e a resposta é rápida.">
+            <defs><pattern id="m32f-grid" width="32" height="32" patternUnits="userSpaceOnUse"><circle cx="1.3" cy="1.3" r="1.3" fill="#a855f7" opacity="0.12"/></pattern>
+              <filter id="m32f-glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              <marker id="m32f-ap" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#c084fc"/></marker></defs>
+            <rect x="0" y="0" width="1000" height="180" fill="url(#m32f-grid)"/>
+            <line x1="60" y1="100" x2="940" y2="100" stroke="#4b5563" stroke-width="2" marker-end="url(#m32f-ap)"/>
+            <text x="900" y="128" fill="#9ca3af" font-family="Inter,sans-serif" font-size="11">tempo</text>
+            <!-- boot -->
+            <circle cx="180" cy="100" r="8" fill="#c084fc"/>
+            <text x="180" y="72" text-anchor="middle" fill="#d8b4fe" font-family="Inter,sans-serif" font-size="12" font-weight="600">app sobe</text>
+            <!-- warm write -->
+            <g filter="url(#m32f-glow)"><rect x="360" y="76" width="220" height="48" rx="12" fill="#1a1230" stroke="#c084fc" stroke-width="2.5"/></g>
+            <text x="470" y="98" text-anchor="middle" fill="#c084fc" font-family="Inter,sans-serif" font-size="12" font-weight="700">max_tokens: 0</text>
+            <text x="470" y="115" text-anchor="middle" fill="#e9d5ff" font-family="Inter,sans-serif" font-size="10.5">grava o cache · retorna na hora</text>
+            <!-- 1st user -->
+            <circle cx="800" cy="100" r="8" fill="#38bdf8"/>
+            <text x="800" y="72" text-anchor="middle" fill="#9ad6ff" font-family="Inter,sans-serif" font-size="12" font-weight="600">1º usuário</text>
+            <text x="800" y="148" text-anchor="middle" fill="#bfe6ff" font-family="Inter,sans-serif" font-size="11">prefixo já quente → resposta rápida</text>
+          </svg>
+          <p class="text-xs text-neutral-400 mt-3 px-1">Legenda: o pré-aquecimento paga o write <strong>antes</strong> do tráfego, pra o primeiro usuário não sentir a latência da gravação.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+            <h4 class="font-bold text-emerald-400 mb-4">✓ Pré-aquecer vale quando</h4>
+            <ul class="space-y-2 text-neutral-300 text-sm">
+              <li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>A 1ª latência é visível pro usuário</span></li>
+              <li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>O prefixo é grande (vale a gravação)</span></li>
+              <li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>Há um momento antes do tráfego (boot/deploy)</span></li>
+            </ul>
+          </div>
+          <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+            <h4 class="font-bold text-blue-400 mb-4">TTL de 1h</h4>
+            <ul class="space-y-2 text-neutral-300 text-sm">
+              <li class="flex items-start gap-2"><span class="text-blue-400">•</span><span>Write mais caro (~2× em vez de ~1,25×)</span></li>
+              <li class="flex items-start gap-2"><span class="text-blue-400">•</span><span>Vale pra tráfego com gaps &gt; 5 min</span></li>
+              <li class="flex items-start gap-2"><span class="text-blue-400">•</span><span>Segura o cache quente entre pausas longas</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+          <div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">max_tokens: 0</div><p class="text-xs text-neutral-400">Grava sem gerar resposta</p></div>
+          <div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Antes do tráfego</div><p class="text-xs text-neutral-400">Boot/deploy</p></div>
+          <div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">TTL 1h</div><p class="text-xs text-neutral-400">Gaps &gt; 5 min</p></div>
+          <div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">~2×</div><p class="text-xs text-neutral-400">Write de 1h</p></div>
+        </div>
+
+        <div class="flex justify-start mt-6">
+          <button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex items-center gap-2 justify-start px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors">
+            <span class="inema-ico-todo" aria-hidden="true">○</span><span class="inema-ico-done" aria-hidden="true">●</span>
+            <span class="inema-label-todo">Marcar como lido</span><span class="inema-label-done">Lido ✓</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ===== RESUMO ===== -->
+      <section class="mb-12">
+        <div class="bg-gradient-to-br from-purple-900/40 via-dark-800 to-dark-800 rounded-xl border border-purple-500/30 p-8">
+          <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3" aria-hidden="true">📌</span> Resumo do módulo</h2>
+          <div class="space-y-4 mb-8">
+            <div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">System congelado</strong><span class="text-neutral-400"> — nada de data/hora/nome; dinâmico vai pro fim das messages.</span></div></div>
+            <div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">Tools determinísticas</strong><span class="text-neutral-400"> — ordene por nome; set/dict sem sort = miss.</span></div></div>
+            <div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">Um modelo por loop</strong><span class="text-neutral-400"> — trocar modelo reseta; use subagente pra subtarefa barata.</span></div></div>
+            <div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">Fork copia o pai</strong><span class="text-neutral-400"> — system/tools/model verbatim + específico no fim.</span></div></div>
+            <div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">Checklist de invalidators</strong><span class="text-neutral-400"> — relógio, uuid, sort, set, tools por usuário, condicional no system.</span></div></div>
+            <div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">Pré-aquecimento e TTL 1h</strong><span class="text-neutral-400"> — <code class="font-mono text-xs">max_tokens: 0</code> no boot; 1h pra gaps longos.</span></div></div>
+          </div>
+          <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+            <h3 class="font-semibold text-purple-400 mb-1">Próximo módulo</h3>
+            <p class="text-neutral-300 text-sm">3.3 — Prompts prontos (copy-run): o kit de 6 prompts pra auditar e corrigir cache no Claude Code.</p>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href="modulo-3-1.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Anterior: 3.1</a>
+            <a href="modulo-3-3.html" class="flex-1 text-center px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-500 transition-colors">Próximo: 3.3 →</a>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>cccache — Prompt Caching no Claude Code · Curso <a href="https://inema.club" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a> · 2026</p>
+    </div>
+  </footer>
+
+  <script src="../../assets/learn.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.INEMA && typeof INEMA.init === 'function') { INEMA.init(); }
+    });
+  </script>
+
+</body>
+</html>

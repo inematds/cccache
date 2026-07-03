@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="inema-course" content="cccache">
+  <title>Trilha 1 · Fundamentos e termos | cccache — Prompt Caching no Claude Code</title>
+
+  <!-- ============================================================
+       1) ANTI-FOUC — script BLOQUEANTE, PRIMEIRO no <head>, ACIMA do Tailwind.
+       (espelhado da landing, erro #18) ============================================================ -->
+  <script>
+    (function () {
+      try {
+        var p = JSON.parse(localStorage.getItem('inema.prefs') || '{}');
+        var d = document.documentElement;
+        var dark = p.theme ? p.theme !== 'claro' : (localStorage.getItem('theme') !== 'light');
+        if (dark) { d.classList.add('dark'); } else { d.classList.remove('dark'); }
+        if (p.theme && p.theme !== 'inema-dark' && p.theme !== 'claro') { d.setAttribute('data-theme', p.theme); }
+        if (p.font) { d.setAttribute('data-font', p.font); }
+        if (p.accent) { d.setAttribute('data-accent', p.accent); }
+        if (p.fontScale) { d.style.setProperty('--fs-root', p.fontScale + '%'); d.style.setProperty('--inema-font-scale', p.fontScale); d.style.fontSize = p.fontScale + '%'; }
+        if (p.lineWidth) { d.style.setProperty('--measure', p.lineWidth + 'ch'); }
+        if (p.leading) { d.style.setProperty('--lh-body', p.leading); }
+        d.style.colorScheme = (p.theme === 'claro' || p.theme === 'sepia') ? 'light' : 'dark';
+      } catch (e) { document.documentElement.classList.add('dark'); }
+    })();
+  </script>
+
+  <!-- 2) MANIFESTO do curso (erro #28) — COLADO VERBATIM da landing, idêntico em toda página. -->
+  <script type="application/json" data-inema-manifest>
+{
+  "course": { "id": "cccache", "title": "cccache — Prompt Caching no Claude Code" },
+  "tracks": [
+    {
+      "id": "trilha1", "title": "Fundamentos e termos",
+      "modules": [
+        { "id": "modulo-1-1", "title": "O que é prompt caching", "href": "curso/trilha1/modulo-1-1.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] },
+        { "id": "modulo-1-2", "title": "Termos e economia", "href": "curso/trilha1/modulo-1-2.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] }
+      ]
+    },
+    {
+      "id": "trilha2", "title": "Técnico",
+      "modules": [
+        { "id": "modulo-2-1", "title": "O cache numa conversa", "href": "curso/trilha2/modulo-2-1.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] },
+        { "id": "modulo-2-2", "title": "Skills e ferramentas: anexar vs quebrar", "href": "curso/trilha2/modulo-2-2.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] },
+        { "id": "modulo-2-3", "title": "Invalidação a fundo", "href": "curso/trilha2/modulo-2-3.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] }
+      ]
+    },
+    {
+      "id": "trilha3", "title": "Boas práticas avançadas",
+      "modules": [
+        { "id": "modulo-3-1", "title": "Cache vs Compactação", "href": "curso/trilha3/modulo-3-1.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] },
+        { "id": "modulo-3-2", "title": "Arquitetura pró-cache e auditoria", "href": "curso/trilha3/modulo-3-2.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] },
+        { "id": "modulo-3-3", "title": "Prompts prontos (copy-run)", "href": "curso/trilha3/modulo-3-3.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] }
+      ]
+    }
+  ]
+}
+  </script>
+
+  <!-- 3) Tailwind via CDN (único externo — offline-first no resto) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- 4) CSS base do curso (Inter, light mode completo, bordas dark suaves) -->
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+    section[id^="topico-"], [id^="modulo-"] { scroll-margin-top: 4.75rem; }
+
+    /* ------ Light mode — base ------ */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    /* ------ Light mode — acento T1 Emerald ------ */
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5, 150, 105, 0.12); }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .group:hover .group-hover\:text-emerald-400 { color: #059669; }
+    html:not(.dark) .hover\:border-emerald-500\/30:hover { border-color: rgba(5, 150, 105, 0.25); }
+    html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5, 150, 105, 0.08); }
+    /* Blue (boxes de dados) */
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37, 99, 235, 0.12); }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37, 99, 235, 0.07); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37, 99, 235, 0.08); }
+    /* Red (✗ / alertas) */
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(220, 38, 38, 0.07); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220, 38, 38, 0.25); }
+    /* Purple (nav trilha 3) */
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124, 58, 237, 0.08); }
+
+    /* ------ Light mode — remove gradientes + cores especiais ------ */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-amber-400 { color: #b45309; }
+    html:not(.dark) .bg-amber-500\/20 { background-color: rgba(217, 119, 6, 0.14); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+
+    /* ------ Light mode — navbar ------ */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+
+    /* ------ Dark mode — bordas suaves (erro #15) ------ */
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+
+    /* ------ Diagramas SVG — suavizar neon no tema claro ------ */
+    html:not(.dark) svg[role="img"] { filter: saturate(0.82) brightness(0.96); }
+
+    /* ------ Pulso dos "reads" (só sem reduced-motion) ------ */
+    @keyframes t1-pulse { 0%, 100% { opacity: .5 } 50% { opacity: 1 } }
+    @media (prefers-reduced-motion: no-preference) {
+      .t1-a { animation: t1-pulse 2.6s ease-in-out infinite; }
+      .t1-a:nth-of-type(2) { animation-delay: .25s }
+      .t1-a:nth-of-type(3) { animation-delay: .5s }
+      .t1-a:nth-of-type(4) { animation-delay: .75s }
+      .t1-a:nth-of-type(5) { animation-delay: 1s }
+    }
+    .nav-appearance-wrap { position: relative; }
+  </style>
+
+  <!-- 5) learn.css (depois do CSS base) -->
+  <link rel="stylesheet" href="../../assets/learn.css">
+</head>
+
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <a href="#conteudo" class="inema-skip">Pular para o conteúdo</a>
+
+  <!-- ================= NAVIGATION (erro #13 — completo, espelhado da landing) ================= -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-3 sm:space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl" aria-hidden="true">🧠</span>
+            <span class="font-bold text-lg hidden sm:inline">cccache</span>
+          </a>
+          <span class="text-neutral-600" aria-hidden="true">|</span>
+          <a href="https://inema.club" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" aria-current="page" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-emerald-400 bg-emerald-500/10">
+            <span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span>
+          </a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span><span class="hidden sm:inline">Técnico</span>
+          </a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span><span class="hidden sm:inline">Boas práticas</span>
+          </a>
+
+          <button type="button" data-inema-journey-open
+                  class="hidden md:inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-neutral-300 hover:text-neutral-100 hover:bg-dark-700 transition-colors text-sm">
+            <span aria-hidden="true">◷</span>
+            <span>Minha jornada</span>
+            <span class="inema-journey-badge hidden" data-inema-journey-badge data-count="0"></span>
+          </button>
+
+          <div class="nav-appearance-wrap">
+            <button type="button"
+                    data-inema-appearance-toggle="[data-inema-appearance]"
+                    aria-expanded="false" aria-haspopup="true"
+                    class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-neutral-300 hover:text-neutral-100 hover:bg-dark-700 transition-colors text-sm">
+              <span aria-hidden="true">◑</span>
+              <span class="hidden sm:inline">Aparência</span>
+            </button>
+
+            <div data-inema-appearance class="inema-appearance-pop" role="group" aria-label="Aparência e leitura">
+              <p class="inema-seg-label">Tema</p>
+              <div class="inema-segment">
+                <button type="button" data-inema-set-theme="inema-dark">Escuro</button>
+                <button type="button" data-inema-set-theme="claro">Claro</button>
+                <button type="button" data-inema-set-theme="sepia">Sépia</button>
+                <button type="button" data-inema-set-theme="foco">Foco</button>
+                <button type="button" data-inema-set-theme="contraste">Alto contraste</button>
+              </div>
+              <p class="inema-seg-label">Fonte</p>
+              <div class="inema-segment">
+                <button type="button" data-inema-set-font="inter">Inter</button>
+                <button type="button" data-inema-set-font="system">Sistema</button>
+                <button type="button" data-inema-set-font="leitura">Leitura</button>
+              </div>
+              <p class="inema-seg-label">Tamanho</p>
+              <div class="inema-segment">
+                <button type="button" data-inema-set-fontscale="100">A</button>
+                <button type="button" data-inema-set-fontscale="112">A+</button>
+                <button type="button" data-inema-set-fontscale="125">A++</button>
+              </div>
+              <p class="inema-seg-label">Largura da linha</p>
+              <div class="inema-segment">
+                <button type="button" data-inema-set-linewidth="60">Estreito</button>
+                <button type="button" data-inema-set-linewidth="68">Médio</button>
+                <button type="button" data-inema-set-linewidth="75">Largo</button>
+              </div>
+              <p class="inema-seg-label">Entrelinha</p>
+              <div class="inema-segment">
+                <button type="button" data-inema-set-leading="1.45">Compacto</button>
+                <button type="button" data-inema-set-leading="1.7">Confortável</button>
+              </div>
+              <p class="inema-seg-label">Acento</p>
+              <div class="inema-accent-grid" role="group" aria-label="Cor de acento">
+                <button type="button" data-inema-set-accent="emerald" aria-label="Esmeralda"></button>
+                <button type="button" data-inema-set-accent="blue" aria-label="Azul"></button>
+                <button type="button" data-inema-set-accent="purple" aria-label="Roxo"></button>
+                <button type="button" data-inema-set-accent="amber" aria-label="Âmbar"></button>
+                <button type="button" data-inema-set-accent="teal" aria-label="Turquesa"></button>
+                <button type="button" data-inema-set-accent="rose" aria-label="Rosa"></button>
+              </div>
+            </div>
+          </div>
+
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-1" aria-label="Alternar claro/escuro">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main id="conteudo">
+
+    <!-- ======================= HEADER DA TRILHA ======================= -->
+    <header class="bg-gradient-to-br from-emerald-900/30 via-dark-900 to-dark-900 border-b border-dark-600">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+        <span class="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-full mb-5">
+          TRILHA 1 · FUNDAMENTOS
+        </span>
+        <h1 class="text-3xl sm:text-4xl font-bold mb-4 leading-tight">🌱 Fundamentos e termos</h1>
+        <p class="text-lg text-neutral-300 max-w-3xl mb-8">
+          Antes de mexer em nada, entenda o que o prompt caching é e o vocabulário que o cerca.
+          Aqui você sai sabendo <strong class="text-emerald-400">por que o cache existe</strong>,
+          <strong class="text-emerald-400">o que é hit, miss, write e TTL</strong>, e por que uma conversa
+          longa pode custar <strong class="text-emerald-400">~10% em vez de 100%</strong>. Cada termo técnico é
+          definido na primeira vez que aparece — sem pré-requisito de API.
+        </p>
+
+        <!-- Hero SVG futurista (emerald + ciano) -->
+        <div class="rounded-2xl border border-emerald-500/30 bg-dark-900/40 p-3 sm:p-5 mb-8 overflow-hidden">
+          <svg viewBox="0 0 1000 300" class="w-full h-auto" role="img"
+               aria-label="O prefixo estável (ferramentas, sistema e histórico) é processado uma vez e guardado no cache; a cada novo turno o Claude Code relê esse prefixo do cache por cerca de um décimo do preço de input, gravando apenas a parte nova.">
+            <defs>
+              <linearGradient id="t1h-grad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#34d399"/><stop offset="1" stop-color="#10b981"/>
+              </linearGradient>
+              <filter id="t1h-glow" x="-40%" y="-40%" width="180%" height="180%">
+                <feGaussianBlur stdDeviation="1.8" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <pattern id="t1h-grid" width="32" height="32" patternUnits="userSpaceOnUse">
+                <circle cx="1.3" cy="1.3" r="1.3" fill="#10b981" opacity="0.12"/>
+              </pattern>
+              <marker id="t1h-ah" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto">
+                <path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#34d399"/>
+              </marker>
+              <marker id="t1h-ahc" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto">
+                <path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#38bdf8"/>
+              </marker>
+            </defs>
+
+            <rect x="0" y="0" width="1000" height="300" fill="url(#t1h-grid)"/>
+
+            <text x="40" y="40" fill="#a7f3d0" font-family="Inter,sans-serif" font-size="13" font-weight="600">Prefixo estável (tools → system → histórico)</text>
+            <g font-family="Inter,sans-serif" font-size="13" font-weight="600">
+              <rect x="40" y="56" width="210" height="40" rx="10" fill="#0e2018" stroke="#34d399" stroke-width="2"/>
+              <text x="145" y="81" text-anchor="middle" fill="#34d399">tools</text>
+              <rect x="40" y="104" width="210" height="40" rx="10" fill="#0e2018" stroke="#34d399" stroke-width="2"/>
+              <text x="145" y="129" text-anchor="middle" fill="#34d399">system</text>
+              <rect x="40" y="152" width="210" height="40" rx="10" fill="#0e2018" stroke="#34d399" stroke-width="2"/>
+              <text x="145" y="177" text-anchor="middle" fill="#34d399">histórico</text>
+            </g>
+
+            <path d="M250,124 L392,124" fill="none" stroke="#34d399" stroke-width="2" opacity="0.7" marker-end="url(#t1h-ah)"/>
+            <text x="320" y="114" text-anchor="middle" fill="#a7f3d0" font-family="Inter,sans-serif" font-size="11.5">grava 1×</text>
+
+            <g filter="url(#t1h-glow)">
+              <rect x="396" y="84" width="168" height="80" rx="16" fill="#0e2018" stroke="url(#t1h-grad)" stroke-width="2.5"/>
+            </g>
+            <text x="480" y="120" text-anchor="middle" fill="#34d399" font-family="Inter,sans-serif" font-weight="700" font-size="20">CACHE</text>
+            <text x="480" y="142" text-anchor="middle" fill="#a7f3d0" font-family="Inter,sans-serif" font-size="12">prefixo processado</text>
+
+            <g fill="none" stroke="#38bdf8" stroke-width="2" opacity="0.55">
+              <path class="t1-a" d="M564,110 C680,110 700,58  800,58"  marker-end="url(#t1h-ahc)"/>
+              <path class="t1-a" d="M564,120 C680,120 700,112 800,112" marker-end="url(#t1h-ahc)"/>
+              <path class="t1-a" d="M564,132 C680,132 700,166 800,166" marker-end="url(#t1h-ahc)"/>
+              <path class="t1-a" d="M564,142 C680,142 700,220 800,220" marker-end="url(#t1h-ahc)"/>
+            </g>
+            <g font-family="Inter,sans-serif" font-size="13" font-weight="600">
+              <rect x="800" y="40"  width="150" height="34" rx="9" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/><text x="875" y="62"  text-anchor="middle" fill="#bfe6ff">turno 1 · lê</text>
+              <rect x="800" y="95"  width="150" height="34" rx="9" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/><text x="875" y="117" text-anchor="middle" fill="#bfe6ff">turno 2 · lê</text>
+              <rect x="800" y="150" width="150" height="34" rx="9" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/><text x="875" y="172" text-anchor="middle" fill="#bfe6ff">turno 3 · lê</text>
+              <rect x="800" y="205" width="150" height="34" rx="9" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/><text x="875" y="227" text-anchor="middle" fill="#bfe6ff">turno N · lê</text>
+            </g>
+            <text x="700" y="272" text-anchor="middle" fill="#9ad6ff" font-family="Inter,sans-serif" font-size="13" font-weight="600">cada leitura ≈ 0,1× do preço de input</text>
+          </svg>
+          <p class="text-xs text-neutral-400 mt-3 max-w-3xl">
+            <strong class="text-emerald-400">Ilustração:</strong> o começo da conversa (o <em>prefixo</em>) é montado
+            sempre na ordem <code class="font-mono">tools → system → histórico</code>. Ele é processado uma vez, gravado
+            no cache e, depois, apenas <em>relido</em> a cada turno — barato. É essa a máquina inteira que a Trilha 1
+            desmonta peça por peça.
+          </p>
+        </div>
+
+        <!-- Stats + progresso da trilha -->
+        <div class="flex flex-col lg:flex-row lg:items-center gap-6">
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 flex-1 max-w-2xl">
+            <div class="bg-dark-800/60 rounded-lg p-3 border border-dark-600">
+              <div class="text-xl font-bold text-emerald-400">2</div>
+              <div class="text-xs text-neutral-400">Módulos</div>
+            </div>
+            <div class="bg-dark-800/60 rounded-lg p-3 border border-dark-600">
+              <div class="text-xl font-bold text-emerald-400">12</div>
+              <div class="text-xs text-neutral-400">Tópicos</div>
+            </div>
+            <div class="bg-dark-800/60 rounded-lg p-3 border border-dark-600">
+              <div class="text-xl font-bold text-emerald-400">~35 min</div>
+              <div class="text-xs text-neutral-400">Duração</div>
+            </div>
+            <div class="bg-dark-800/60 rounded-lg p-3 border border-dark-600">
+              <div class="text-xl font-bold text-emerald-400">Básico</div>
+              <div class="text-xs text-neutral-400">Nível</div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4 bg-dark-800/60 rounded-lg p-4 border border-dark-600">
+            <div data-inema-meter="trilha:1" class="inema-ring" aria-label="Progresso da trilha 1">
+              <span class="inema-ring__value" data-inema-meter-pct>0%</span>
+              <svg viewBox="0 0 36 36" aria-hidden="true">
+                <circle class="inema-ring__track" cx="18" cy="18" r="16"></circle>
+                <circle data-inema-ring cx="18" cy="18" r="16"></circle>
+              </svg>
+            </div>
+            <div class="leading-tight">
+              <div class="text-sm font-semibold text-neutral-200">Progresso da trilha</div>
+              <div class="text-xs text-neutral-400" data-inema-meter="trilha:1"><span data-inema-meter-frac>0 de 0</span> tópicos lidos</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ======================= MAPA DA TRILHA (OBRIGATÓRIO — erro #12) ======================= -->
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 mb-4">
+      <h2 class="text-2xl font-bold mb-6">Mapa da trilha</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <a href="#modulo-1-1" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-emerald-500/30 p-5 transition-all">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-emerald-400 font-bold text-sm">1.1</span>
+            <span class="text-xs text-neutral-500">~18 min</span>
+          </div>
+          <h3 class="font-semibold mb-1 group-hover:text-emerald-400 transition-colors">🧩 O que é prompt caching</h3>
+          <p class="text-xs text-neutral-400">Reprocessar 100% vs reler 10%</p>
+        </a>
+        <a href="#modulo-1-2" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-emerald-500/30 p-5 transition-all">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-emerald-400 font-bold text-sm">1.2</span>
+            <span class="text-xs text-neutral-500">~17 min</span>
+          </div>
+          <h3 class="font-semibold mb-1 group-hover:text-emerald-400 transition-colors">💸 Termos e economia</h3>
+          <p class="text-xs text-neutral-400">read 0,1× · write 1,25× · cheio 1×</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- ======================= CONTEÚDO DETALHADO ======================= -->
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <h2 class="text-2xl font-bold mb-6">Conteúdo detalhado</h2>
+
+      <!-- ===== MÓDULO 1.1 ===== -->
+      <div id="modulo-1-1" data-inema-module="1-1" data-inema-track="1" class="bg-dark-800 rounded-xl border border-dark-600 mb-8">
+        <div class="p-6 border-b border-dark-600">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-emerald-400 font-bold">1.1</span>
+            <span class="text-xs text-neutral-500">~18 min · 6 tópicos</span>
+          </div>
+          <h3 class="text-2xl font-bold mb-2">🧩 O que é prompt caching</h3>
+          <p class="text-neutral-400 text-sm mb-4">
+            Do problema do reprocessamento à ideia do prefixo: hit, miss, write, a ordem
+            <code class="font-mono text-xs">tools → system → messages</code> e o breakpoint. Cada termo definido na 1ª aparição.
+          </p>
+          <div data-inema-meter="modulo-1-1" class="inema-meter" aria-label="Progresso do módulo 1.1">
+            <div class="inema-bar"><div class="inema-bar__fill" data-inema-meter-fill></div></div>
+            <span class="text-xs text-emerald-400 font-semibold" data-inema-meter-pct>0%</span>
+            <span class="text-xs text-neutral-400" data-inema-meter-frac>0 de 0</span>
+          </div>
+        </div>
+
+        <div class="divide-y divide-dark-600">
+          <!-- t1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="acc-1-1-1" class="w-full px-6 py-4 flex items-center gap-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-lg" aria-hidden="true">🔁</span>
+              <span class="min-w-0"><span class="font-medium">O problema: reprocessar tudo toda vez</span><span class="text-neutral-500 text-sm ml-2">— a API é stateless</span></span>
+            </button>
+            <div id="acc-1-1-1" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-emerald-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm inline">A API do Claude é <em>stateless</em> — não guarda a conversa. A cada mensagem você reenvia tudo: prompt de sistema, ferramentas e histórico inteiro.</p></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm inline">É a dor que o cache resolve. Sem entender o reprocessamento, o resto não faz sentido.</p></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm inline">stateless · prompt de sistema · reenviar a conversa inteira · custo e latência que crescem por turno.</p></div>
+              </div>
+            </div>
+          </div>
+          <!-- t2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="acc-1-1-2" class="w-full px-6 py-4 flex items-center gap-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-lg" aria-hidden="true">♻️</span>
+              <span class="min-w-0"><span class="font-medium">A ideia: reaproveitar o prefixo</span><span class="text-neutral-500 text-sm ml-2">— guardar o começo já processado</span></span>
+            </button>
+            <div id="acc-1-1-2" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-emerald-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm inline">O começo da conversa é estável e se repete a cada turno. O cache guarda esse começo já processado e o reaproveita, em vez de reprocessar.</p></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm inline">É a virada de chave: pagar uma vez pelo que não muda, em vez de pagar todo turno.</p></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm inline">prefixo estável · processado uma vez · reaproveitamento · o que muda fica no fim.</p></div>
+              </div>
+            </div>
+          </div>
+          <!-- t3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="acc-1-1-3" class="w-full px-6 py-4 flex items-center gap-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-lg" aria-hidden="true">🧩</span>
+              <span class="min-w-0"><span class="font-medium">O invariante: casamento de prefixo</span><span class="text-neutral-500 text-sm ml-2">— 1 byte muda, invalida o resto</span></span>
+            </button>
+            <div id="acc-1-1-3" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-emerald-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm inline">A chave do cache são os bytes exatos até o ponto de corte. Um único byte diferente no meio invalida tudo dali pra frente.</p></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm inline">Explica todo "por que meu cache não bateu?". É o invariante que rege a trilha inteira.</p></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm inline">prefixo · bytes exatos · ponto de corte · invalidação a partir do byte que muda.</p></div>
+              </div>
+            </div>
+          </div>
+          <!-- t4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="acc-1-1-4" class="w-full px-6 py-4 flex items-center gap-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-lg" aria-hidden="true">📚</span>
+              <span class="min-w-0"><span class="font-medium">A ordem: tools → system → messages</span><span class="text-neutral-500 text-sm ml-2">— estável no começo</span></span>
+            </button>
+            <div id="acc-1-1-4" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-emerald-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm inline">O prompt é montado nessa ordem. Um breakpoint no fim do <code class="font-mono text-xs">system</code> cacheia tools + system juntos.</p></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm inline">Saber a ordem diz o que colocar no começo (estável) e o que deixar no fim (muda).</p></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm inline">ordem de montagem · posição 0 = tools · coisa estável no começo · coisa volátil no fim.</p></div>
+              </div>
+            </div>
+          </div>
+          <!-- t5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="acc-1-1-5" class="w-full px-6 py-4 flex items-center gap-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-lg" aria-hidden="true">🎯</span>
+              <span class="min-w-0"><span class="font-medium">Hit, miss e write</span><span class="text-neutral-500 text-sm ml-2">— leu, gravou ou processou cheio</span></span>
+            </button>
+            <div id="acc-1-1-5" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-emerald-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm inline">Hit = leu do cache (barato). Write = gravou no cache (leve prêmio). Miss = não achou, processou cheio. A 1ª mensagem grava; as seguintes leem.</p></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm inline">É o vocabulário que você vai ler nos campos de <code class="font-mono text-xs">usage</code> e usar pra diagnosticar.</p></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm inline">hit · miss · write · 1ª mensagem grava, próximas leem.</p></div>
+              </div>
+            </div>
+          </div>
+          <!-- t6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="acc-1-1-6" class="w-full px-6 py-4 flex items-center gap-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-lg" aria-hidden="true">✂️</span>
+              <span class="min-w-0"><span class="font-medium">Breakpoint (cache_control)</span><span class="text-neutral-500 text-sm ml-2">— "cacheie até aqui"</span></span>
+            </button>
+            <div id="acc-1-1-6" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-emerald-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm inline">A marca que diz "cacheie até aqui". Máx. 4 por requisição; prefixo mínimo ~1024–4096 tokens (varia por modelo) — abaixo disso não cacheia e não dá erro.</p></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm inline">No Claude Code é automático, mas entender o conceito explica por que trechos curtos não cacheiam.</p></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm inline">cache_control · máx. 4 breakpoints · mínimo cacheável · automático no Claude Code.</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 bg-dark-700/30 flex justify-start gap-3">
+          <a href="modulo-1-1.html" class="px-4 py-2 text-sm bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-semibold transition-colors">Ver Completo →</a>
+        </div>
+      </div>
+
+      <!-- ===== MÓDULO 1.2 ===== -->
+      <div id="modulo-1-2" data-inema-module="1-2" data-inema-track="1" class="bg-dark-800 rounded-xl border border-dark-600 mb-8">
+        <div class="p-6 border-b border-dark-600">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-emerald-400 font-bold">1.2</span>
+            <span class="text-xs text-neutral-500">~17 min · 6 tópicos</span>
+          </div>
+          <h3 class="text-2xl font-bold mb-2">💸 Termos e economia</h3>
+          <p class="text-neutral-400 text-sm mb-4">
+            Os três campos de <code class="font-mono text-xs">usage</code>, o TTL de 5 min e 1 h, os custos relativos
+            e o cálculo de break-even. A economia real, sem mistério.
+          </p>
+          <div data-inema-meter="modulo-1-2" class="inema-meter" aria-label="Progresso do módulo 1.2">
+            <div class="inema-bar"><div class="inema-bar__fill" data-inema-meter-fill></div></div>
+            <span class="text-xs text-emerald-400 font-semibold" data-inema-meter-pct>0%</span>
+            <span class="text-xs text-neutral-400" data-inema-meter-frac>0 de 0</span>
+          </div>
+        </div>
+
+        <div class="divide-y divide-dark-600">
+          <!-- t1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="acc-1-2-1" class="w-full px-6 py-4 flex items-center gap-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-lg" aria-hidden="true">📖</span>
+              <span class="min-w-0"><span class="font-medium">cache_read_input_tokens</span><span class="text-neutral-500 text-sm ml-2">— o que veio do cache</span></span>
+            </button>
+            <div id="acc-1-2-1" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-emerald-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm inline">Tokens servidos do cache neste turno. Custam ~0,1× do preço de input.</p></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm inline">É o campo que prova que o cache bateu. Zero repetindo o mesmo prefixo = tem problema.</p></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm inline">leitura do cache · ~0,1× · sinal de hit.</p></div>
+              </div>
+            </div>
+          </div>
+          <!-- t2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="acc-1-2-2" class="w-full px-6 py-4 flex items-center gap-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-lg" aria-hidden="true">✍️</span>
+              <span class="min-w-0"><span class="font-medium">cache_creation_input_tokens</span><span class="text-neutral-500 text-sm ml-2">— o que foi gravado</span></span>
+            </button>
+            <div id="acc-1-2-2" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-emerald-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm inline">Tokens gravados no cache neste turno. Custam ~1,25× (TTL 5 min) ou ~2× (TTL 1 h).</p></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm inline">É o "prêmio" que você paga uma vez pra ler barato depois. Ver isso alto o tempo todo é sinal de cache que nunca lê.</p></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm inline">gravação · ~1,25× / ~2× · pago uma vez por bloco novo.</p></div>
+              </div>
+            </div>
+          </div>
+          <!-- t3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="acc-1-2-3" class="w-full px-6 py-4 flex items-center gap-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-lg" aria-hidden="true">🧮</span>
+              <span class="min-w-0"><span class="font-medium">input_tokens (o resto)</span><span class="text-neutral-500 text-sm ml-2">— só a parte não-cacheada</span></span>
+            </button>
+            <div id="acc-1-2-3" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-emerald-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm inline">Só a parte NÃO cacheada, preço cheio (1×). O total do prompt = soma dos três campos.</p></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm inline">Pegadinha: se o agente rodou horas e <code class="font-mono text-xs">input_tokens</code> mostra pouco, o resto veio do cache — olhe a SOMA dos três.</p></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm inline">parte não-cacheada · 1× · total = soma dos três.</p></div>
+              </div>
+            </div>
+          </div>
+          <!-- t4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="acc-1-2-4" class="w-full px-6 py-4 flex items-center gap-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-lg" aria-hidden="true">⏱️</span>
+              <span class="min-w-0"><span class="font-medium">TTL: 5 min e 1 h</span><span class="text-neutral-500 text-sm ml-2">— tempo de vida da entrada</span></span>
+            </button>
+            <div id="acc-1-2-4" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-emerald-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm inline">TTL = tempo de vida da entrada no cache. Padrão 5 min, renovado a cada uso. Existe opção de 1 h (write ~2×) pra tráfego com pausas longas.</p></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm inline">Explica por que uma conversa ativa fica "quente" e uma pausa longa te faz pagar write de novo.</p></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm inline">TTL · 5 min renovável · 1 h mais caro · conversa ativa mantém quente.</p></div>
+              </div>
+            </div>
+          </div>
+          <!-- t5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="acc-1-2-5" class="w-full px-6 py-4 flex items-center gap-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-lg" aria-hidden="true">💸</span>
+              <span class="min-w-0"><span class="font-medium">Custos relativos</span><span class="text-neutral-500 text-sm ml-2">— 0,1× / 1,25× / 2× / 1×</span></span>
+            </button>
+            <div id="acc-1-2-5" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-emerald-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm inline">read ~0,1× · write 5 min ~1,25× · write 1 h ~2× · não-cacheado 1×. Numa conversa longa, o grosso do input sai a ~10%.</p></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm inline">São os quatro números que explicam qualquer conta de economia do curso.</p></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm inline">tabela de custos · read barato · write com prêmio · cheio como referência.</p></div>
+              </div>
+            </div>
+          </div>
+          <!-- t6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="acc-1-2-6" class="w-full px-6 py-4 flex items-center gap-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-lg" aria-hidden="true">⚖️</span>
+              <span class="min-w-0"><span class="font-medium">Break-even</span><span class="text-neutral-500 text-sm ml-2">— quando o cache já pagou</span></span>
+            </button>
+            <div id="acc-1-2-6" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-emerald-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm inline">Com TTL 5 min, 2 requisições já pagam o write (1,25× + 0,1× = 1,35× vs 2× sem cache). Com 1 h, precisa ~3.</p></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm inline">Ensina a NÃO cachear prefixo que muda todo request (só paga write, nunca lê).</p></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm inline">ponto de equilíbrio · 2 reqs (5 min) / ~3 (1 h) · não cachear o que muda sempre.</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 bg-dark-700/30 flex justify-start gap-3">
+          <a href="modulo-1-2.html" class="px-4 py-2 text-sm bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-semibold transition-colors">Ver Completo →</a>
+        </div>
+      </div>
+
+      <!-- Navegação entre trilhas -->
+      <div class="flex flex-col sm:flex-row gap-4 mt-4">
+        <a href="../../index.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Voltar à landing</a>
+        <a href="../trilha2/index.html" class="flex-1 text-center px-6 py-3 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-500 transition-colors">Próxima trilha: Técnico →</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- ======================= FOOTER ======================= -->
+  <footer class="border-t border-dark-600 py-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>cccache — Prompt Caching no Claude Code · Curso <a href="https://inema.club" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a> · 2026</p>
+    </div>
+  </footer>
+
+  <!-- ======================= SCRIPTS ======================= -->
+  <script>
+    // Accordion do tópico (v1) + a11y aria-expanded
+    function toggleTopic(button) {
+      var topicItem = button.closest('.topic-item');
+      var explanation = topicItem.querySelector('.topic-explanation');
+      var moduleCard = button.closest('.bg-dark-800');
+      if (moduleCard) {
+        moduleCard.querySelectorAll('.topic-explanation.active').forEach(function (exp) {
+          if (exp !== explanation) {
+            exp.classList.remove('active');
+            var b = exp.parentElement.querySelector('[aria-expanded]');
+            if (b) { b.setAttribute('aria-expanded', 'false'); }
+          }
+        });
+      }
+      var open = explanation.classList.toggle('active');
+      button.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    // Theme toggle sol/lua (v1) — coerente com anti-FOUC/prefs
+    (function () {
+      var themeToggle = document.getElementById('theme-toggle');
+      var darkIcon = document.getElementById('theme-toggle-dark-icon');
+      var lightIcon = document.getElementById('theme-toggle-light-icon');
+      var html = document.documentElement;
+      function syncIcons() {
+        if (html.classList.contains('dark')) { lightIcon.classList.remove('hidden'); darkIcon.classList.add('hidden'); }
+        else { darkIcon.classList.remove('hidden'); lightIcon.classList.add('hidden'); }
+      }
+      syncIcons();
+      if (themeToggle) {
+        themeToggle.addEventListener('click', function () {
+          html.classList.toggle('dark');
+          try { localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light'); } catch (e) {}
+          if (window.INEMA && INEMA.setPref) { INEMA.setPref('theme', html.classList.contains('dark') ? 'inema-dark' : 'claro'); }
+          syncIcons();
+        });
+      }
+    })();
+  </script>
+  <script src="../../assets/learn.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.INEMA && typeof INEMA.init === 'function') { INEMA.init(); }
+    });
+  </script>
+
+</body>
+</html>

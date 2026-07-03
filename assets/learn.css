@@ -1,0 +1,433 @@
+/* =========================================================================
+   INEMA formato-curso-v2 — learn.css
+   Camada de aprendizagem: tokens de tema (3 niveis) + .inema-prose +
+   controles novos (marcar-lido, popover/highlight, jornada, medidores).
+   Self-contained, independente do baseline v1. Contraste AA por tema (#23).
+   Referenciado por caminho relativo pelas paginas (link, nao inline).
+   ========================================================================= */
+
+/* -------------------------------------------------------------------------
+   1. TOKENS — 3 niveis de cor + prefs de leitura
+   Nivel 1 (primitivos) -> Nivel 2 (tokens de tema) -> Nivel 3 (semanticos).
+   A pagina consome SO o nivel 3 (--bg/--surface/--text/--accent/...).
+   ------------------------------------------------------------------------- */
+
+:root {
+  /* prefs de leitura (defaults; applyPrefs sobrescreve inline no <html>) */
+  --measure: 68ch;
+  --lh-body: 1.7;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --fs-root: 100%;
+  --inema-font-scale: 100;
+
+  /* acento (default emerald; applyPrefs troca por trilha) */
+  --accent-h: 158;
+  --accent-s: 64%;
+  --accent-l: 52%;
+  --accent: hsl(var(--accent-h) var(--accent-s) var(--accent-l));
+  --accent-2: #38bdf8;              /* ciano — anel de foco / secundaria */
+
+  /* ===== TEMA DEFAULT = inema-dark (baseline intacta) ===== */
+  --bg: #111827;
+  --surface: #1f2937;
+  --surface-2: #374151;
+  --text: #e6e6e6;                  /* nunca #fff puro (#23) */
+  --text-muted: #9ca3af;           /* 6.2:1 sobre --bg (AA) */
+  --border: #374151;
+  --primary: #facc15;              /* amber — so fill/borda/destaque */
+  --shadow: rgba(0,0,0,.45);
+
+  /* highlight swatches (constantes entre temas) */
+  --hl-yellow: 245, 217, 10;
+  --hl-green:  52, 211, 153;
+  --hl-blue:   96, 165, 250;
+  --hl-pink:   244, 114, 182;
+
+  color-scheme: dark;
+}
+
+/* ===== claro (eixo 1: .dark ausente, sem data-theme) ===== */
+html:not(.dark) {
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --surface-2: #f3f4f6;
+  --text: #111827;
+  --text-muted: #4b5563;           /* 7.7:1 sobre --bg (AA/AAA) */
+  --border: #d1d5db;
+  --primary: #a16207;              /* amber-700 — texto de acento no claro */
+  --accent-2: #0369a1;
+  --shadow: rgba(15, 23, 42, .12);
+  color-scheme: light;
+}
+
+/* ===== sepia / leitura (data-theme, superficie clara quente) ===== */
+html[data-theme="sepia"] {
+  --bg: #f2e8d0;
+  --surface: #fbf3e0;
+  --surface-2: #ece0c2;
+  --text: #40372a;                 /* ~8.7:1 sobre --bg */
+  --text-muted: #6a5c44;           /* ~4.9:1 sobre --bg (AA) */
+  --border: #d8c8a4;
+  --primary: #92400e;              /* amber-800 (ambar nunca texto claro #23) */
+  --accent-2: #0369a1;
+  --shadow: rgba(87, 66, 30, .16);
+  color-scheme: light;
+}
+
+/* ===== foco — nao mexe na cor (herda dark), so remove distracao ===== */
+html[data-theme="foco"] [class*="bg-gradient-to"] { background-image: none !important; }
+html[data-theme="foco"] .inema-prose { letter-spacing: .003em; }
+
+/* ===== alto contraste (caminho a11y principal; AAA) ===== */
+html[data-theme="contraste"] {
+  --bg: #05070d;
+  --surface: #0d1220;
+  --surface-2: #1a2233;
+  --text: #f7f8fa;                 /* ~18:1 sobre --bg */
+  --text-muted: #cdd4de;           /* ~13:1 sobre --bg */
+  --border: #5b6675;               /* bordas visiveis */
+  --primary: #ffd23f;              /* ambar ~12:1 (fill/texto de acento) */
+  --accent-2: #7dd3fc;             /* ciano ~9:1 */
+  --shadow: rgba(0,0,0,.7);
+  color-scheme: dark;
+}
+
+/* -------------------------------------------------------------------------
+   3b. BRIDGE DE CHROME — sepia/contraste pintam a PAGINA inteira
+   Mapeia as classes utilitarias do chrome v1 para os tokens de tema APENAS
+   sob data-theme sepia/contraste. claro/inema-dark seguem o mecanismo v1
+   intacto (nao tocados aqui — Erro Critico #5).
+   ------------------------------------------------------------------------- */
+html:is([data-theme="sepia"], [data-theme="contraste"]) body { background-color: var(--bg) !important; color: var(--text) !important; }
+html:is([data-theme="sepia"], [data-theme="contraste"]) .bg-dark-900 { background-color: var(--bg) !important; }
+html:is([data-theme="sepia"], [data-theme="contraste"]) .bg-dark-800 { background-color: var(--surface) !important; }
+html:is([data-theme="sepia"], [data-theme="contraste"]) .bg-dark-700 { background-color: var(--surface-2) !important; }
+html:is([data-theme="sepia"], [data-theme="contraste"]) .bg-dark-600 { background-color: var(--surface-2) !important; }
+html:is([data-theme="sepia"], [data-theme="contraste"]) .bg-dark-900\/95 { background-color: color-mix(in srgb, var(--bg) 94%, transparent) !important; }
+html:is([data-theme="sepia"], [data-theme="contraste"]) .bg-dark-800\/50,
+html:is([data-theme="sepia"], [data-theme="contraste"]) .bg-dark-800\/40,
+html:is([data-theme="sepia"], [data-theme="contraste"]) .bg-dark-900\/40,
+html:is([data-theme="sepia"], [data-theme="contraste"]) .bg-dark-700\/50,
+html:is([data-theme="sepia"], [data-theme="contraste"]) .bg-dark-700\/30 { background-color: color-mix(in srgb, var(--surface) 70%, transparent) !important; }
+html:is([data-theme="sepia"], [data-theme="contraste"]) .text-neutral-100,
+html:is([data-theme="sepia"], [data-theme="contraste"]) .text-white { color: var(--text) !important; }
+html:is([data-theme="sepia"], [data-theme="contraste"]) .text-neutral-300 { color: var(--text) !important; }
+html:is([data-theme="sepia"], [data-theme="contraste"]) .text-neutral-400,
+html:is([data-theme="sepia"], [data-theme="contraste"]) .text-neutral-500 { color: var(--text-muted) !important; }
+html:is([data-theme="sepia"], [data-theme="contraste"]) .border-dark-600,
+html:is([data-theme="sepia"], [data-theme="contraste"]) .border-dark-700 { border-color: var(--border) !important; }
+html:is([data-theme="sepia"], [data-theme="contraste"]) [class*="bg-gradient-to"] { background-image: none !important; }
+/* ambar como texto no sepia cai para o token escuro; ciano do link idem */
+html[data-theme="sepia"] .text-sky-400 { color: #0369a1 !important; }
+html[data-theme="sepia"] .text-yellow-400,
+html[data-theme="sepia"] .text-primary { color: #92400e !important; }
+
+/* diagramas SVG: suavizar neon fora do dark saturado */
+html:not(.dark) svg[role="img"],
+html[data-theme="sepia"] svg[role="img"] { filter: saturate(.82) brightness(.96); }
+
+/* -------------------------------------------------------------------------
+   2. .inema-prose — clampa SO a prosa (medida/entrelinha/fonte)
+   ------------------------------------------------------------------------- */
+.inema-prose {
+  max-width: var(--measure, 68ch);
+  margin-inline: auto;
+  line-height: var(--lh-body, 1.7);
+  font-family: var(--font-body, 'Inter', sans-serif);
+}
+.inema-prose :where(pre, code, table, .inema-nowrap) { max-width: none; }
+.inema-prose :where(p, ul, ol) { margin-bottom: 1rem; }
+
+/* -------------------------------------------------------------------------
+   4. MARCAR COMO LIDO — estado por icone + texto + cor (nunca so cor, #20)
+   Botao a ESQUERDA (nunca justify-center, #1.1) — regido pela pagina.
+   ------------------------------------------------------------------------- */
+[data-inema-read-toggle] { cursor: pointer; }
+/* padrao canonico: 4 spans regidos por aria-pressed */
+[data-inema-read-toggle] .inema-ico-done,
+[data-inema-read-toggle] .inema-label-done { display: none; }
+[data-inema-read-toggle][aria-pressed="true"] .inema-ico-todo,
+[data-inema-read-toggle].is-read .inema-ico-todo,
+[data-inema-read-toggle][aria-pressed="true"] .inema-label-todo,
+[data-inema-read-toggle].is-read .inema-label-todo { display: none; }
+[data-inema-read-toggle][aria-pressed="true"] .inema-ico-done,
+[data-inema-read-toggle].is-read .inema-ico-done,
+[data-inema-read-toggle][aria-pressed="true"] .inema-label-done,
+[data-inema-read-toggle].is-read .inema-label-done { display: inline; }
+[data-inema-read-toggle][aria-pressed="true"],
+[data-inema-read-toggle].is-read {
+  color: #fff;
+  background-color: var(--accent) !important;
+  border-color: var(--accent) !important;
+}
+html:not(.dark) [data-inema-read-toggle][aria-pressed="true"],
+html:not(.dark) [data-inema-read-toggle].is-read { color: #fff; }
+.inema-ico-done svg path { transition: stroke-dashoffset .35s ease; }
+
+/* -------------------------------------------------------------------------
+   5. FLAG DE DUVIDA
+   ------------------------------------------------------------------------- */
+[data-inema-doubt-toggle] { cursor: pointer; }
+[data-inema-doubt-toggle].is-doubt,
+[data-inema-doubt-toggle][aria-pressed="true"] {
+  color: var(--accent-2);
+  border-color: var(--accent-2) !important;
+  background-color: color-mix(in srgb, var(--accent-2) 16%, transparent);
+}
+[data-inema-topic].has-doubt { position: relative; }
+[data-inema-topic].has-doubt::before {
+  content: ""; position: absolute; left: -14px; top: .35em;
+  width: 4px; height: 1.4em; border-radius: 4px;
+  background: var(--accent-2); opacity: .8;
+}
+
+/* -------------------------------------------------------------------------
+   6. MEDIDORES — barra e anel (so derivado; JS seta --inema-pct + ARIA)
+   ------------------------------------------------------------------------- */
+.inema-meter { display: flex; align-items: center; gap: .5rem; }
+.inema-bar {
+  height: 8px; flex: 1 1 auto; min-width: 60px;
+  background: var(--surface-2); border-radius: 999px; overflow: hidden;
+}
+.inema-bar__fill {
+  height: 100%; width: calc(var(--inema-pct, 0) * 1%);
+  background: var(--accent); border-radius: inherit;
+  transition: width .45s cubic-bezier(.4,0,.2,1);
+}
+.inema-meter-pct, [data-inema-meter-pct] { font-variant-numeric: tabular-nums; font-weight: 600; }
+.inema-meter-count, [data-inema-meter-frac] { color: var(--text-muted); font-size: .8rem; font-variant-numeric: tabular-nums; }
+
+.inema-ring { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 72px; height: 72px; }
+.inema-ring svg { width: 100%; height: 100%; }
+.inema-ring circle { fill: none; }
+.inema-ring circle.inema-ring__track,
+.inema-ring [data-inema-ring-track] { stroke: var(--surface-2); stroke-width: 3; }
+.inema-ring [data-inema-ring] {
+  stroke: var(--accent); stroke-width: 3; stroke-linecap: round;
+  transform: rotate(-90deg); transform-origin: 50% 50%;
+  transition: stroke-dashoffset .45s cubic-bezier(.4,0,.2,1);
+}
+.inema-ring__value { position: absolute; font-size: .85rem; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--text); }
+
+/* -------------------------------------------------------------------------
+   7. TOC + scrollspy
+   ------------------------------------------------------------------------- */
+.inema-toc-link { display: block; color: var(--text-muted); text-decoration: none; padding: .15rem 0; border-left: 2px solid transparent; padding-left: .6rem; transition: color .15s, border-color .15s; }
+.inema-toc-link:hover { color: var(--text); }
+.inema-toc-link.is-active { color: var(--accent); border-left-color: var(--accent); font-weight: 600; }
+
+/* -------------------------------------------------------------------------
+   8. POPOVER DE SELECAO + SWATCHES + MARCAS DE HIGHLIGHT
+   ------------------------------------------------------------------------- */
+.inema-selpop {
+  position: absolute; z-index: 70; display: none;
+  align-items: center; gap: 6px; padding: 6px 8px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; box-shadow: 0 8px 26px var(--shadow);
+  font-family: var(--font-body);
+}
+.inema-selpop[data-open="true"] { display: flex; }
+.inema-selpop button { cursor: pointer; border: 0; background: transparent; color: var(--text); }
+[data-inema-swatch] {
+  width: 22px; height: 22px; border-radius: 999px;
+  border: 2px solid rgba(148,163,184,.35); padding: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; line-height: 1;
+}
+[data-inema-swatch][data-hl="yellow"] { background: rgb(var(--hl-yellow)); }
+[data-inema-swatch][data-hl="green"]  { background: rgb(var(--hl-green)); }
+[data-inema-swatch][data-hl="blue"]   { background: rgb(var(--hl-blue)); }
+[data-inema-swatch][data-hl="pink"]   { background: rgb(var(--hl-pink)); }
+[data-inema-swatch][data-hl="doubt"]  { background: transparent; border-color: var(--accent-2); color: var(--accent-2); }
+[data-inema-swatch]:hover { transform: none; box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 40%, transparent); }
+.inema-selpop [data-inema-act] {
+  font-size: .8rem; font-weight: 600; padding: 4px 8px; border-radius: 8px;
+  background: var(--surface-2); color: var(--text);
+}
+.inema-selpop [data-inema-act]:hover { background: color-mix(in srgb, var(--accent) 22%, var(--surface-2)); }
+.inema-selpop .inema-selpop__sep { width: 1px; align-self: stretch; background: var(--border); margin: 2px 2px; }
+
+mark.inema-hl {
+  background: transparent; color: inherit; border-radius: 3px;
+  padding: 0 1px; cursor: pointer;
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
+mark.inema-hl--yellow { background: rgba(var(--hl-yellow), .34); }
+mark.inema-hl--green  { background: rgba(var(--hl-green), .30); }
+mark.inema-hl--blue   { background: rgba(var(--hl-blue), .30); }
+mark.inema-hl--pink   { background: rgba(var(--hl-pink), .30); }
+mark.inema-hl--doubt  { background: color-mix(in srgb, var(--accent-2) 22%, transparent); border-bottom: 2px dashed var(--accent-2); }
+mark.inema-hl[data-inema-hasnote="1"],
+mark.inema-hl[data-has-note="true"] { border-bottom: 2px solid currentColor; }
+html:not(.dark) mark.inema-hl { color: inherit; }
+
+/* mini-menu ao clicar numa marca */
+.inema-marknote { position: absolute; z-index: 71; display: flex; gap: 4px; padding: 5px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 26px var(--shadow); }
+.inema-marknote button { cursor: pointer; border: 0; background: var(--surface-2); color: var(--text); font-size: .78rem; padding: 3px 8px; border-radius: 7px; }
+.inema-marknote button:hover { background: color-mix(in srgb, var(--accent) 22%, var(--surface-2)); }
+
+/* -------------------------------------------------------------------------
+   9. JORNADA — overlay dialog (foco preso, ESC, inert no resto — #25)
+   Suporta as classes geradas pelo JS + aliases BEM.
+   ------------------------------------------------------------------------- */
+.inema-journey-overlay, .inema-journey-backdrop {
+  position: fixed; inset: 0; z-index: 90; display: none;
+  align-items: flex-start; justify-content: center;
+  padding: 2.5rem 1rem; overflow-y: auto;
+  background: rgba(2, 6, 15, .72); backdrop-filter: blur(3px);
+}
+.inema-journey {
+  width: 100%; max-width: 720px; margin: auto;
+  background: var(--surface); color: var(--text);
+  border: 1px solid var(--border); border-radius: 18px;
+  box-shadow: 0 24px 60px var(--shadow);
+  font-family: var(--font-body); overflow: hidden;
+}
+.inema-journey-head, .inema-journey__header {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; padding: 1.1rem 1.4rem; border-bottom: 1px solid var(--border);
+}
+.inema-journey-title, .inema-journey__title { font-size: 1.15rem; font-weight: 700; }
+.inema-journey-close {
+  cursor: pointer; border: 1px solid var(--border); background: var(--surface-2);
+  color: var(--text); width: 34px; height: 34px; border-radius: 9px;
+  font-size: 1.25rem; line-height: 1; display: inline-flex; align-items: center; justify-content: center;
+}
+.inema-journey-close:hover { background: color-mix(in srgb, var(--accent) 20%, var(--surface-2)); }
+.inema-journey-body { padding: 1.2rem 1.4rem 1.6rem; }
+.inema-journey-sec { margin-bottom: 1.6rem; }
+.inema-journey-sec > h3 { font-size: .95rem; font-weight: 700; margin-bottom: .7rem; color: var(--text); }
+.inema-journey-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .55rem; }
+.inema-journey-item {
+  display: flex; align-items: center; gap: .7rem;
+  padding: .55rem .7rem; border: 1px solid var(--border); border-radius: 11px;
+  background: var(--surface-2);
+}
+.inema-journey-item .inema-journey-meter { flex: 1 1 auto; }
+.inema-journey-item a { color: var(--accent); text-decoration: none; }
+.inema-journey-item a:hover { text-decoration: underline; }
+.inema-journey-note { display: flex; flex-direction: column; gap: .2rem; padding: .55rem .7rem; border: 1px solid var(--border); border-radius: 11px; background: var(--surface-2); }
+.inema-journey-note .inema-jn-quote { font-size: .82rem; color: var(--text-muted); border-left: 3px solid var(--accent); padding-left: .5rem; }
+.inema-journey-note .inema-jn-text { font-size: .9rem; }
+.inema-journey-row { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
+.inema-journey-btn {
+  cursor: pointer; border: 1px solid var(--border); background: var(--surface-2);
+  color: var(--text); font-size: .85rem; font-weight: 600;
+  padding: .5rem .85rem; border-radius: 10px; text-decoration: none; display: inline-flex; align-items: center; gap: .4rem;
+}
+.inema-journey-btn:hover { background: color-mix(in srgb, var(--accent) 20%, var(--surface-2)); }
+.inema-journey-btn--primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.inema-journey-btn--danger { color: #fca5a5; }
+.inema-journey-empty { color: var(--text-muted); font-size: .88rem; }
+.inema-journey-check { display: inline-flex; align-items: center; gap: .35rem; font-size: .82rem; color: var(--text-muted); }
+.inema-jn-resolved { opacity: .55; }
+.inema-jn-resolved .inema-jn-text { text-decoration: line-through; }
+
+/* badge da jornada na nav */
+.inema-journey-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 1.4em; height: 1.4em; padding: 0 .35em;
+  font-size: .68rem; font-weight: 700; border-radius: 999px;
+  background: var(--accent); color: #fff; line-height: 1;
+}
+.inema-journey-badge[data-doubts]:not([data-doubts="0"])::after {
+  content: ""; display: inline-block; width: 6px; height: 6px; margin-left: 3px;
+  border-radius: 999px; background: var(--accent-2);
+}
+
+/* -------------------------------------------------------------------------
+   10. SELETOR DE APARENCIA (painel + segmentos)
+   ------------------------------------------------------------------------- */
+[data-inema-appearance] {
+  display: none; position: absolute; right: 0; top: calc(100% + .5rem); z-index: 80;
+  width: min(20rem, 92vw); padding: 1rem;
+  background: var(--surface); color: var(--text);
+  border: 1px solid var(--border); border-radius: 14px;
+  box-shadow: 0 18px 44px var(--shadow); font-family: var(--font-body);
+}
+[data-inema-appearance].is-open { display: block; }
+.inema-appearance-pop .inema-seg-label { font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--text-muted); margin: .1rem 0 .35rem; }
+.inema-segment { display: flex; flex-wrap: wrap; gap: .35rem; margin-bottom: .85rem; }
+.inema-segment button {
+  cursor: pointer; flex: 1 1 auto; min-width: 3rem;
+  padding: .4rem .5rem; border-radius: 9px;
+  border: 1px solid var(--border); background: var(--surface-2);
+  color: var(--text); font-size: .8rem; font-weight: 600;
+}
+.inema-segment button:hover { background: color-mix(in srgb, var(--accent) 18%, var(--surface-2)); }
+.inema-segment button.is-active,
+.inema-segment button[aria-pressed="true"] { background: var(--accent); color: #fff; border-color: var(--accent); }
+.inema-accent-grid { display: flex; gap: .5rem; flex-wrap: wrap; }
+.inema-accent-grid button {
+  cursor: pointer; width: 28px; height: 28px; border-radius: 999px; padding: 0;
+  border: 2px solid transparent; position: relative;
+}
+.inema-accent-grid button[data-inema-set-accent="emerald"] { background: #34d399; }
+.inema-accent-grid button[data-inema-set-accent="blue"]    { background: #60a5fa; }
+.inema-accent-grid button[data-inema-set-accent="purple"]  { background: #c084fc; }
+.inema-accent-grid button[data-inema-set-accent="amber"]   { background: #fbbf24; }
+.inema-accent-grid button[data-inema-set-accent="teal"]    { background: #2dd4bf; }
+.inema-accent-grid button[data-inema-set-accent="rose"]    { background: #fb7185; }
+.inema-accent-grid button.is-active,
+.inema-accent-grid button[aria-pressed="true"] { border-color: var(--text); box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--accent); }
+
+/* -------------------------------------------------------------------------
+   11. TOAST / AVISO EFEMERO (nao-bloqueante — #26)
+   ------------------------------------------------------------------------- */
+.inema-toast, .inema-notice {
+  position: fixed; left: 50%; bottom: 1.25rem; transform: translateX(-50%);
+  z-index: 95; max-width: min(30rem, 92vw);
+  padding: .7rem 1.1rem; border-radius: 12px;
+  background: var(--surface); color: var(--text);
+  border: 1px solid var(--border); box-shadow: 0 12px 34px var(--shadow);
+  font-family: var(--font-body); font-size: .88rem;
+  display: flex; align-items: center; gap: .6rem;
+}
+.inema-toast button, .inema-notice button { cursor: pointer; border: 0; background: transparent; color: var(--text-muted); font-size: 1.05rem; line-height: 1; }
+
+/* -------------------------------------------------------------------------
+   12. CHECAGEM LEVE (nao-bloqueante)
+   ------------------------------------------------------------------------- */
+.inema-check__option.is-correct, [data-inema-check-option].is-correct {
+  border-color: var(--accent) !important;
+  background: color-mix(in srgb, var(--accent) 18%, transparent) !important;
+  color: var(--text);
+}
+.inema-check__option.is-wrong, [data-inema-check-option].is-wrong {
+  border-color: #f87171 !important;
+  background: rgba(248,113,113,.14) !important;
+}
+.inema-check__option.is-chosen, [data-inema-check-option].is-chosen { outline: 2px solid var(--accent-2); outline-offset: 1px; }
+[data-inema-check-feedback]:empty { display: none; }
+[data-inema-check-feedback] { color: var(--text-muted); }
+
+/* -------------------------------------------------------------------------
+   13. FOCO VISIVEL (>=3:1 por tema — WCAG 2.4.11)
+   ------------------------------------------------------------------------- */
+:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; border-radius: 2px; }
+.inema-skip {
+  position: absolute; left: .5rem; top: -3rem; z-index: 100;
+  background: var(--accent); color: #fff; padding: .5rem .9rem; border-radius: 8px;
+  transition: top .15s ease;
+}
+.inema-skip:focus { top: .5rem; }
+
+/* -------------------------------------------------------------------------
+   14. MOVIMENTO REDUZIDO — zera/encurta, preserva estado final (#27)
+   ------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  * , *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+html[data-reduce-motion="1"] *,
+html[data-reduce-motion="1"] *::before,
+html[data-reduce-motion="1"] *::after {
+  animation-duration: .001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: .001ms !important;
+  scroll-behavior: auto !important;
+}

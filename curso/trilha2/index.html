@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="inema-course" content="cccache">
+  <title>Trilha 2 · Técnico | cccache — Prompt Caching no Claude Code</title>
+
+  <!-- ============================================================
+       1) ANTI-FOUC — script BLOQUEANTE, PRIMEIRO no <head>, ACIMA do Tailwind.
+       Aplica .dark + data-theme + prefs de leitura ANTES do 1o paint.
+       try/catch total: qualquer erro => default dark (marca preservada).
+       ============================================================ -->
+  <script>
+    (function () {
+      try {
+        var p = JSON.parse(localStorage.getItem('inema.prefs') || '{}');
+        var d = document.documentElement;
+        var dark = p.theme ? p.theme !== 'claro' : (localStorage.getItem('theme') !== 'light');
+        if (dark) { d.classList.add('dark'); } else { d.classList.remove('dark'); }
+        if (p.theme && p.theme !== 'inema-dark' && p.theme !== 'claro') { d.setAttribute('data-theme', p.theme); }
+        if (p.font) { d.setAttribute('data-font', p.font); }
+        if (p.accent) { d.setAttribute('data-accent', p.accent); }
+        if (p.fontScale) { d.style.setProperty('--fs-root', p.fontScale + '%'); d.style.setProperty('--inema-font-scale', p.fontScale); d.style.fontSize = p.fontScale + '%'; }
+        if (p.lineWidth) { d.style.setProperty('--measure', p.lineWidth + 'ch'); }
+        if (p.leading) { d.style.setProperty('--lh-body', p.leading); }
+        d.style.colorScheme = (p.theme === 'claro' || p.theme === 'sepia') ? 'light' : 'dark';
+      } catch (e) { document.documentElement.classList.add('dark'); }
+    })();
+  </script>
+
+  <!-- 2) MANIFESTO do curso (erro #28) — DADO, colar IDENTICO no <head> de TODA pagina. -->
+  <script type="application/json" data-inema-manifest>
+{
+  "course": { "id": "cccache", "title": "cccache — Prompt Caching no Claude Code" },
+  "tracks": [
+    {
+      "id": "trilha1", "title": "Fundamentos e termos",
+      "modules": [
+        { "id": "modulo-1-1", "title": "O que é prompt caching", "href": "curso/trilha1/modulo-1-1.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] },
+        { "id": "modulo-1-2", "title": "Termos e economia", "href": "curso/trilha1/modulo-1-2.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] }
+      ]
+    },
+    {
+      "id": "trilha2", "title": "Técnico",
+      "modules": [
+        { "id": "modulo-2-1", "title": "O cache numa conversa", "href": "curso/trilha2/modulo-2-1.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] },
+        { "id": "modulo-2-2", "title": "Skills e ferramentas: anexar vs quebrar", "href": "curso/trilha2/modulo-2-2.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] },
+        { "id": "modulo-2-3", "title": "Invalidação a fundo", "href": "curso/trilha2/modulo-2-3.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] }
+      ]
+    },
+    {
+      "id": "trilha3", "title": "Boas práticas avançadas",
+      "modules": [
+        { "id": "modulo-3-1", "title": "Cache vs Compactação", "href": "curso/trilha3/modulo-3-1.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] },
+        { "id": "modulo-3-2", "title": "Arquitetura pró-cache e auditoria", "href": "curso/trilha3/modulo-3-2.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] },
+        { "id": "modulo-3-3", "title": "Prompts prontos (copy-run)", "href": "curso/trilha3/modulo-3-3.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] }
+      ]
+    }
+  ]
+}
+  </script>
+
+  <!-- 3) Tailwind via CDN (unico externo — offline-first no resto) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- 4) CSS base do curso -->
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+
+    /* Alvos de ancora sob nav sticky (erro #25) */
+    [id^="topico-"], [id^="modulo-"], section[data-inema-topic] { scroll-margin-top: 5rem; }
+
+    /* ------ Light mode overrides (base) ------ */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    /* ------ Light mode — cores de acento das 3 trilhas + amber do curso ------ */
+    /* T1 Emerald */
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5, 150, 105, 0.12); }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .group:hover .group-hover\:text-emerald-400 { color: #059669; }
+    html:not(.dark) .hover\:border-emerald-500\/30:hover { border-color: rgba(5, 150, 105, 0.25); }
+    /* T2 Blue */
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37, 99, 235, 0.12); }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .hover\:bg-blue-500\/30:hover { background-color: rgba(37, 99, 235, 0.18); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .group:hover .group-hover\:text-blue-400 { color: #2563eb; }
+    html:not(.dark) .hover\:border-blue-500\/30:hover { border-color: rgba(37, 99, 235, 0.25); }
+    /* T3 Purple */
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124, 58, 237, 0.12); }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .border-purple-500\/30 { border-color: rgba(124, 58, 237, 0.25); }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .group:hover .group-hover\:text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .hover\:border-purple-500\/30:hover { border-color: rgba(124, 58, 237, 0.25); }
+    /* Vermelho (nao fazer) e emerald (fazer) em fundo claro */
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(220, 38, 38, 0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220, 38, 38, 0.25); }
+    html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5, 150, 105, 0.08); }
+    /* Amber (tema do curso) */
+    html:not(.dark) .text-amber-400 { color: #b45309; }
+    html:not(.dark) .bg-amber-500\/20 { background-color: rgba(217, 119, 6, 0.14); }
+    html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+    html:not(.dark) .border-amber-500\/30 { border-color: rgba(217, 119, 6, 0.28); }
+
+    /* ------ Light mode — remove gradientes + cores especiais ------ */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+
+    /* ------ Light mode — navbar ------ */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+
+    /* ------ Dark mode — bordas e divisorias mais suaves ------ */
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+
+    /* ------ Diagramas SVG — suavizar neon fora do dark saturado ------ */
+    html:not(.dark) svg[role="img"] { filter: saturate(0.82) brightness(0.96); }
+
+    /* ------ SVG — pulso dos "reads" (blue+ciano; so sem reduced-motion) ------ */
+    @keyframes t2-pulse { 0%, 100% { opacity: .5 } 50% { opacity: 1 } }
+    @media (prefers-reduced-motion: no-preference) {
+      .t2-a { animation: t2-pulse 2.6s ease-in-out infinite; }
+      .t2-a:nth-of-type(2) { animation-delay: .25s }
+      .t2-a:nth-of-type(3) { animation-delay: .5s }
+      .t2-a:nth-of-type(4) { animation-delay: .75s }
+    }
+
+    /* nav com painel de aparencia ancorado */
+    .nav-appearance-wrap { position: relative; }
+  </style>
+
+  <!-- 5) learn.css (depois do CSS base) -->
+  <link rel="stylesheet" href="../../assets/learn.css">
+</head>
+
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <a href="#conteudo" class="inema-skip">Pular para o conteúdo</a>
+
+  <!-- ================= NAVIGATION (erro #13 — completo) ================= -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <!-- Logo + INEMA.CLUB -->
+        <div class="flex items-center space-x-3 sm:space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl" aria-hidden="true">🧠</span>
+            <span class="font-bold text-lg hidden sm:inline">cccache</span>
+          </a>
+          <span class="text-neutral-600" aria-hidden="true">|</span>
+          <a href="https://inema.club" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+
+        <!-- Trilhas + controles v2 + theme toggle -->
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+            <span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span>
+          </a>
+          <a href="../trilha2/index.html" aria-current="page" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10">
+            <span class="sm:hidden">T2</span><span class="hidden sm:inline">Técnico</span>
+          </a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span><span class="hidden sm:inline">Boas práticas</span>
+          </a>
+
+          <!-- Minha jornada -->
+          <button type="button" data-inema-journey-open
+                  class="hidden md:inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-neutral-300 hover:text-neutral-100 hover:bg-dark-700 transition-colors text-sm">
+            <span aria-hidden="true">◷</span>
+            <span>Minha jornada</span>
+            <span class="inema-journey-badge hidden" data-inema-journey-badge data-count="0"></span>
+          </button>
+
+          <!-- Seletor de aparencia -->
+          <div class="nav-appearance-wrap">
+            <button type="button"
+                    data-inema-appearance-toggle="[data-inema-appearance]"
+                    aria-expanded="false" aria-haspopup="true"
+                    class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-neutral-300 hover:text-neutral-100 hover:bg-dark-700 transition-colors text-sm">
+              <span aria-hidden="true">◑</span>
+              <span class="hidden sm:inline">Aparência</span>
+            </button>
+
+            <div data-inema-appearance class="inema-appearance-pop" role="group" aria-label="Aparência e leitura">
+              <p class="inema-seg-label">Tema</p>
+              <div class="inema-segment">
+                <button type="button" data-inema-set-theme="inema-dark">Escuro</button>
+                <button type="button" data-inema-set-theme="claro">Claro</button>
+                <button type="button" data-inema-set-theme="sepia">Sépia</button>
+                <button type="button" data-inema-set-theme="foco">Foco</button>
+                <button type="button" data-inema-set-theme="contraste">Alto contraste</button>
+              </div>
+              <p class="inema-seg-label">Fonte</p>
+              <div class="inema-segment">
+                <button type="button" data-inema-set-font="inter">Inter</button>
+                <button type="button" data-inema-set-font="system">Sistema</button>
+                <button type="button" data-inema-set-font="leitura">Leitura</button>
+              </div>
+              <p class="inema-seg-label">Tamanho</p>
+              <div class="inema-segment">
+                <button type="button" data-inema-set-fontscale="100">A</button>
+                <button type="button" data-inema-set-fontscale="112">A+</button>
+                <button type="button" data-inema-set-fontscale="125">A++</button>
+              </div>
+              <p class="inema-seg-label">Largura da linha</p>
+              <div class="inema-segment">
+                <button type="button" data-inema-set-linewidth="60">Estreito</button>
+                <button type="button" data-inema-set-linewidth="68">Médio</button>
+                <button type="button" data-inema-set-linewidth="75">Largo</button>
+              </div>
+              <p class="inema-seg-label">Entrelinha</p>
+              <div class="inema-segment">
+                <button type="button" data-inema-set-leading="1.45">Compacto</button>
+                <button type="button" data-inema-set-leading="1.7">Confortável</button>
+              </div>
+              <p class="inema-seg-label">Acento</p>
+              <div class="inema-accent-grid" role="group" aria-label="Cor de acento">
+                <button type="button" data-inema-set-accent="emerald" aria-label="Esmeralda"></button>
+                <button type="button" data-inema-set-accent="blue" aria-label="Azul"></button>
+                <button type="button" data-inema-set-accent="purple" aria-label="Roxo"></button>
+                <button type="button" data-inema-set-accent="amber" aria-label="Âmbar"></button>
+                <button type="button" data-inema-set-accent="teal" aria-label="Turquesa"></button>
+                <button type="button" data-inema-set-accent="rose" aria-label="Rosa"></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Theme toggle sol/lua -->
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-1" aria-label="Alternar claro/escuro">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main id="conteudo">
+
+    <!-- ======================= HERO DA TRILHA ======================= -->
+    <header class="bg-gradient-to-br from-blue-900/30 via-dark-900 to-dark-900 border-b border-dark-600">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+        <span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-semibold rounded-full mb-5">
+          TRILHA 2 · TÉCNICO
+        </span>
+        <h1 class="text-3xl sm:text-4xl font-bold mb-4 leading-tight">
+          🔧 Técnico — o cache em ação
+        </h1>
+        <p class="text-lg text-neutral-300 max-w-3xl mb-8">
+          Agora que os termos estão claros, vamos ver o cache <strong class="text-blue-400">funcionando de verdade</strong>:
+          como ele se comporta numa conversa que cresce, o que <strong class="text-blue-400">anexa sem quebrar</strong>
+          e o que <strong class="text-blue-400">reseta a posição 0</strong>, e a invalidação a fundo — com exemplos
+          <strong class="text-blue-400">copy-run</strong> pra rodar no seu Claude Code.
+        </p>
+
+        <!-- Hero SVG futurista: a % de cache que SOBE a cada turno (blue + ciano) -->
+        <div class="rounded-2xl border border-blue-500/30 bg-dark-900/40 p-3 sm:p-5 mb-8 overflow-hidden">
+          <svg viewBox="0 0 1000 300" class="w-full h-auto" role="img"
+               aria-label="A cada turno de conversa, o prefixo estável cresce e é relido do cache. A porcentagem de tokens que vêm do cache sobe turno a turno: começa em torno de quarenta por cento no turno em que algo novo é carregado, e chega perto de noventa e nove por cento nos turnos seguintes.">
+            <defs>
+              <linearGradient id="t2h-grad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#60a5fa"/><stop offset="1" stop-color="#3b82f6"/>
+              </linearGradient>
+              <filter id="t2h-glow" x="-40%" y="-40%" width="180%" height="180%">
+                <feGaussianBlur stdDeviation="1.8" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <pattern id="t2h-grid" width="32" height="32" patternUnits="userSpaceOnUse">
+                <circle cx="1.3" cy="1.3" r="1.3" fill="#3b82f6" opacity="0.12"/>
+              </pattern>
+              <marker id="t2h-ahc" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto">
+                <path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#38bdf8"/>
+              </marker>
+            </defs>
+
+            <rect x="0" y="0" width="1000" height="300" fill="url(#t2h-grid)"/>
+            <text x="40" y="34" fill="#bfdbfe" font-family="Inter,sans-serif" font-size="13" font-weight="600">% do prompt que veio do cache (lido barato ≈ 0,1×) — sobe a cada turno</text>
+
+            <!-- Eixo base -->
+            <line x1="70" y1="250" x2="950" y2="250" stroke="#334155" stroke-width="2"/>
+
+            <!-- Barras: turno 1 (write frio) baixa, sobe ate ~99% -->
+            <g font-family="Inter,sans-serif" font-size="13" font-weight="600">
+              <!-- Turno 1 -->
+              <rect x="110" y="150" width="120" height="100" rx="8" fill="#0e1622" stroke="#60a5fa" stroke-width="2"/>
+              <rect x="110" y="210" width="120" height="40" rx="0" fill="#1d4ed8" opacity="0.5"/>
+              <text x="170" y="140" text-anchor="middle" fill="#bfe6ff">40%</text>
+              <text x="170" y="272" text-anchor="middle" fill="#93c5fd">turno 1</text>
+              <!-- Turno 2 -->
+              <rect x="290" y="100" width="120" height="150" rx="8" fill="#0e1622" stroke="#60a5fa" stroke-width="2"/>
+              <rect x="290" y="228" width="120" height="22" rx="0" fill="#1d4ed8" opacity="0.5"/>
+              <text x="350" y="90" text-anchor="middle" fill="#bfe6ff">85%</text>
+              <text x="350" y="272" text-anchor="middle" fill="#93c5fd">turno 2</text>
+              <!-- Turno 3 -->
+              <rect x="470" y="78" width="120" height="172" rx="8" fill="#0e1622" stroke="#60a5fa" stroke-width="2"/>
+              <rect x="470" y="236" width="120" height="14" rx="0" fill="#1d4ed8" opacity="0.5"/>
+              <text x="530" y="68" text-anchor="middle" fill="#bfe6ff">96%</text>
+              <text x="530" y="272" text-anchor="middle" fill="#93c5fd">turno 3</text>
+              <!-- Turno N (caixa-foco com glow) -->
+              <g filter="url(#t2h-glow)">
+                <rect x="650" y="66" width="120" height="184" rx="8" fill="#0e1622" stroke="url(#t2h-grad)" stroke-width="2.5"/>
+              </g>
+              <rect x="650" y="242" width="120" height="8" rx="0" fill="#1d4ed8" opacity="0.5"/>
+              <text x="710" y="56" text-anchor="middle" fill="#60a5fa" font-weight="700">99%</text>
+              <text x="710" y="272" text-anchor="middle" fill="#93c5fd">turno N</text>
+            </g>
+
+            <!-- Seta ascendente ilustrando a subida -->
+            <path class="t2-a" d="M180,225 C300,205 470,120 745,88" fill="none" stroke="#38bdf8" stroke-width="2.5" opacity="0.7" stroke-dasharray="2 8" stroke-linecap="round" marker-end="url(#t2h-ahc)"/>
+
+            <!-- Rotulo lateral: fatia azul = novo (write) -->
+            <g font-family="Inter,sans-serif" font-size="12.5">
+              <rect x="812" y="150" width="150" height="34" rx="9" fill="#0e1b26" stroke="#1d4ed8" stroke-width="2"/>
+              <text x="887" y="171" text-anchor="middle" fill="#bfe6ff">fatia escura = novo</text>
+              <rect x="812" y="192" width="150" height="34" rx="9" fill="#0e1622" stroke="#60a5fa" stroke-width="2"/>
+              <text x="887" y="213" text-anchor="middle" fill="#bfe6ff">resto = lido do cache</text>
+            </g>
+          </svg>
+          <p class="text-xs text-neutral-400 mt-3 text-center">O cache não é bateria que descarrega: a fatia lida do cache <strong class="text-blue-400">cresce</strong> a cada turno. Um turno com algo novo (ex.: uma skill grande) marca menos; o resto vira leitura barata no próximo.</p>
+        </div>
+
+        <!-- Stats + medidor da trilha -->
+        <div class="flex flex-col lg:flex-row lg:items-end gap-6">
+          <div class="grid grid-cols-4 gap-4 max-w-2xl flex-1">
+            <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+              <div class="text-xl font-bold text-blue-400">3</div>
+              <div class="text-xs text-neutral-400">Módulos</div>
+            </div>
+            <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+              <div class="text-xl font-bold text-blue-400">18</div>
+              <div class="text-xs text-neutral-400">Tópicos</div>
+            </div>
+            <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+              <div class="text-xl font-bold text-blue-400">~1h40</div>
+              <div class="text-xs text-neutral-400">Duração</div>
+            </div>
+            <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+              <div class="text-xl font-bold text-blue-400">Técnico</div>
+              <div class="text-xs text-neutral-400">Nível</div>
+            </div>
+          </div>
+
+          <div data-inema-meter="trilha:2" class="inema-meter w-full lg:w-72" aria-label="Progresso da trilha 2">
+            <div class="inema-bar"><div class="inema-bar__fill" data-inema-meter-fill></div></div>
+            <div class="text-right leading-tight">
+              <div class="text-blue-400 font-bold" data-inema-meter-pct>0%</div>
+              <div class="text-xs text-neutral-400" data-inema-meter-frac>0 de 0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ======================= INTRO ======================= -->
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="inema-prose text-neutral-300" style="margin-inline:0">
+        <p data-inema-block="t2-intro-p1">
+          Tudo nesta trilha sai de <strong class="text-blue-400">um único invariante</strong>: prompt caching é um
+          <strong class="text-blue-400">casamento de prefixo</strong>. A chave do cache são os bytes exatos do prompt
+          até o ponto de corte, e a ordem de montagem é sempre
+          <code class="font-mono text-sm text-blue-400">tools → system → messages</code>. Guarde essa frase — ela
+          explica por que anexar no fim é seguro e por que mexer na lista de ferramentas quebra tudo.
+        </p>
+        <p data-inema-block="t2-intro-p2">
+          Os três campos que você vai auditar o tempo todo: <code class="font-mono text-sm">cache_read_input_tokens</code>
+          (lido do cache, ~0,1×), <code class="font-mono text-sm">cache_creation_input_tokens</code> (gravado, ~1,25×)
+          e <code class="font-mono text-sm">input_tokens</code> (só o resto não-cacheado, preço cheio). A
+          <strong class="text-blue-400">soma dos três</strong> é o tamanho do prompt. Se o campo de leitura fica
+          <strong class="text-blue-400">zero</strong> repetindo o mesmo prefixo, tem um silent invalidator.
+        </p>
+      </div>
+    </section>
+
+    <!-- ======================= MAPA DA TRILHA (OBRIGATORIO - erro #12) ======================= -->
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-4">
+      <h2 class="text-2xl font-bold mb-6">Mapa da trilha</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <a href="#modulo-2-1" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-blue-500/30 p-5 transition-all">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-blue-400 font-bold text-sm">2.1</span>
+            <span class="text-xs text-neutral-500">~30 min</span>
+          </div>
+          <h3 class="font-semibold mb-1 group-hover:text-blue-400 transition-colors">💬 O cache numa conversa</h3>
+          <p class="text-xs text-neutral-400">A % sobe a cada turno</p>
+        </a>
+        <a href="#modulo-2-2" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-blue-500/30 p-5 transition-all">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-blue-400 font-bold text-sm">2.2</span>
+            <span class="text-xs text-neutral-500">~35 min</span>
+          </div>
+          <h3 class="font-semibold mb-1 group-hover:text-blue-400 transition-colors">🧩 Skills e ferramentas</h3>
+          <p class="text-xs text-neutral-400">Anexar é seguro, mexer quebra</p>
+        </a>
+        <a href="#modulo-2-3" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-blue-500/30 p-5 transition-all">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-blue-400 font-bold text-sm">2.3</span>
+            <span class="text-xs text-neutral-500">~35 min</span>
+          </div>
+          <h3 class="font-semibold mb-1 group-hover:text-blue-400 transition-colors">🔎 Invalidação a fundo</h3>
+          <p class="text-xs text-neutral-400">3 tiers e os silent invalidators</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- ======================= CONTEUDO DETALHADO ======================= -->
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <h2 class="text-2xl font-bold mb-6">Conteúdo detalhado</h2>
+
+      <!-- ===== MODULO 2.1 ===== -->
+      <div id="modulo-2-1" data-inema-module="2-1" data-inema-track="2" class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+        <div class="p-6 border-b border-dark-600">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-blue-400 font-bold">2.1</span>
+            <span class="text-xs text-neutral-500">~30 min · 6 tópicos</span>
+          </div>
+          <h3 class="text-2xl font-bold mb-2">💬 O cache numa conversa</h3>
+          <p class="text-neutral-400 text-sm mb-4">O prefixo estável cresce, cada turno relê barato, e a % de cache SOBE — não descarrega. Onde entra o write frio e por que a pausa longa custa.</p>
+          <div data-inema-meter="modulo-2-1" class="inema-meter max-w-xs" aria-label="Progresso do módulo 2.1">
+            <div class="inema-bar"><div class="inema-bar__fill" data-inema-meter-fill></div></div>
+            <span class="text-xs text-blue-400 font-semibold" data-inema-meter-pct>0%</span>
+          </div>
+        </div>
+
+        <div class="divide-y divide-dark-600">
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="m21-t1" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-lg" aria-hidden="true">📈</span>
+              <div><span class="font-medium">O prefixo estável cresce</span><span class="text-neutral-500 text-sm ml-2">— tudo antes da última msg vira cache</span></div>
+            </button>
+            <div id="m21-t1" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">system + tools + todo o histórico (inclusive a última resposta) formam o prefixo estável, que cresce a cada turno.</p></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">É o que torna a conversa barata: quanto maior o prefixo estável, mais tokens saem a ~0,1×.</p></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Prefixo = começo idêntico que se repete; só o final novo escapa do cache.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="m21-t2" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-lg" aria-hidden="true">🔁</span>
+              <div><span class="font-medium">Hit por turno</span><span class="text-neutral-500 text-sm ml-2">— relê o prefixo, grava só o novo</span></div>
+            </button>
+            <div id="m21-t2" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">A cada mensagem nova, só o final muda; a API relê todo o prefixo do cache (~0,1×) e grava só o bloco novo.</p></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Explica por que o segundo turno em diante é muito mais barato que o primeiro.</p></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Hit = leitura do cache; write = gravação do bloco novo daquele turno.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="m21-t3" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-lg" aria-hidden="true">⏱️</span>
+              <div><span class="font-medium">TTL de 5 min renovado por uso</span><span class="text-neutral-500 text-sm ml-2">— conversa ativa fica quente</span></div>
+            </button>
+            <div id="m21-t3" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Enquanto você responde dentro de ~5 min, a janela renova e o cache fica quente.</p></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Trabalhar em ritmo contínuo mantém tudo barato sem esforço.</p></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">TTL = tempo de vida da entrada; cada uso reinicia o relógio dos 5 min.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="m21-t4" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-lg" aria-hidden="true">📊</span>
+              <div><span class="font-medium">A % de cache SOBE a cada turno</span><span class="text-neutral-500 text-sm ml-2">— não é bateria que descarrega</span></div>
+            </button>
+            <div id="m21-t4" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Um turno pode marcar 40% (teve coisa nova, ex.: uma skill grande). Esse bloco vira read barato no próximo turno, e a % sobe.</p></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Desfaz a intuição errada de que o cache "acaba"; ele só melhora com a conversa.</p></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Turno agora: 40k lido / 60k novo = 40%; próximo turno: ~100k lido / ~1k novo ≈ 99%.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="m21-t5" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-lg" aria-hidden="true">✍️</span>
+              <div><span class="font-medium">Primeira mensagem = write</span><span class="text-neutral-500 text-sm ml-2">— não tem o que ler ainda</span></div>
+            </button>
+            <div id="m21-t5" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">A 1ª mensagem grava o cache (paga um pouco mais); não há prefixo anterior para ler.</p></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Evita o susto de ver o 1º turno "caro" — é o único que grava tudo.</p></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Write ~1,25× (TTL 5 min); a partir do 2º turno predomina read ~0,1×.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="m21-t6" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-lg" aria-hidden="true">🧊</span>
+              <div><span class="font-medium">Pausa longa = write frio</span><span class="text-neutral-500 text-sm ml-2">— TTL expira, paga de novo</span></div>
+            </button>
+            <div id="m21-t6" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Passou dos ~5 min parado, o TTL expira e a próxima mensagem paga a gravação de novo.</p></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Explica por que retomar depois do almoço "custa": foi um write frio, não um bug.</p></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Para tráfego com gaps > 5 min existe o TTL de 1 h (write ~2×).</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+          <a href="modulo-2-1.html" class="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors font-semibold">Ver Completo →</a>
+        </div>
+      </div>
+
+      <!-- ===== MODULO 2.2 ===== -->
+      <div id="modulo-2-2" data-inema-module="2-2" data-inema-track="2" class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+        <div class="p-6 border-b border-dark-600">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-blue-400 font-bold">2.2</span>
+            <span class="text-xs text-neutral-500">~35 min · 6 tópicos</span>
+          </div>
+          <h3 class="text-2xl font-bold mb-2">🧩 Skills e ferramentas: anexar vs quebrar</h3>
+          <p class="text-neutral-400 text-sm mb-4">Conteúdo novo no FIM é seguro; mexer na lista de <code class="font-mono text-xs">tools</code> reseta a posição 0. Por que Tool Search anexa de propósito.</p>
+          <div data-inema-meter="modulo-2-2" class="inema-meter max-w-xs" aria-label="Progresso do módulo 2.2">
+            <div class="inema-bar"><div class="inema-bar__fill" data-inema-meter-fill></div></div>
+            <span class="text-xs text-blue-400 font-semibold" data-inema-meter-pct>0%</span>
+          </div>
+        </div>
+
+        <div class="divide-y divide-dark-600">
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="m22-t1" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-lg" aria-hidden="true">🏷️</span>
+              <div><span class="font-medium">Dois sentidos de "skill"</span><span class="text-neutral-500 text-sm ml-2">— a descrição e o conteúdo</span></div>
+            </button>
+            <div id="m22-t1" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">(a) A DESCRIÇÃO da skill (linha curta na lista) fica sempre no prefixo estável. (b) O CONTEÚDO completo só entra quando a skill é invocada.</p></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Sem separar os dois, você acha que "toda skill é cara" — só o conteúdo pesa, e uma vez.</p></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Descrição = sempre presente e barata; conteúdo = sob demanda.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="m22-t2" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-lg" aria-hidden="true">➕</span>
+              <div><span class="font-medium">Skill no meio NÃO zera o cache</span><span class="text-neutral-500 text-sm ml-2">— entra anexada no fim</span></div>
+            </button>
+            <div id="m22-t2" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">O conteúdo da skill entra ANEXADO no FIM do histórico (não na posição 0). Tudo antes continua válido e é lido barato; só o bloco novo é gravado.</p></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Tira o medo de invocar skills no meio da conversa: é um write único, não um reset.</p></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Anexar no fim = seguro; nos turnos seguintes a skill já é read barato.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="m22-t3" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-lg" aria-hidden="true">💥</span>
+              <div><span class="font-medium">Quebrar a lista de tools = posição 0</span><span class="text-neutral-500 text-sm ml-2">— invalida TUDO</span></div>
+            </button>
+            <div id="m22-t3" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">As ferramentas são renderizadas na posição 0 (antes de system e histórico). Mudar a lista <code class="font-mono text-xs">tools</code> invalida tudo dali pra frente.</p></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">É o silent invalidator mais caro: um byte na posição 0 derruba o prefixo inteiro.</p></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Ordem de montagem: <code class="font-mono text-xs">tools → system → messages</code>.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="m22-t4" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-lg" aria-hidden="true">🔨</span>
+              <div><span class="font-medium">Exemplos de quebra</span><span class="text-neutral-500 text-sm ml-2">— MCP, schema, ordem, modo</span></div>
+            </button>
+            <div id="m22-t4" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">(1) Conectar/desconectar MCP no meio; (2) mudar <code class="font-mono text-xs">description</code>/<code class="font-mono text-xs">input_schema</code> de uma tool; (3) montar <code class="font-mono text-xs">tools</code> de um <code class="font-mono text-xs">set</code>/<code class="font-mono text-xs">dict</code> sem ordenar; (4) ligar/desligar tools por modo/permissão.</p></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">São as 4 causas mais comuns de cache que "some" sem motivo aparente.</p></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Basta uma palavra numa description mudar para invalidar a posição 0.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="m22-t5" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-lg" aria-hidden="true">🔍</span>
+              <div><span class="font-medium">Tool Search anexa de propósito</span><span class="text-neutral-500 text-sm ml-2">— descobrir tool é seguro</span></div>
+            </button>
+            <div id="m22-t5" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">O Tool Search carrega o schema de uma ferramenta ANEXANDO (não trocando a lista) — feito justamente pra NÃO quebrar o cache.</p></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Distingue "descobrir tool via Tool Search" (seguro) de "conectar MCP que reescreve a lista" (quebra).</p></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Anexar schema no fim = write único; reescrever <code class="font-mono text-xs">tools</code> = reset.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="m22-t6" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-lg" aria-hidden="true">👍</span>
+              <div><span class="font-medium">Regra de bolso</span><span class="text-neutral-500 text-sm ml-2">— fim = seguro, posição 0 = reset</span></div>
+            </button>
+            <div id="m22-t6" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Conteúdo novo no FIM = seguro. Mexer na lista de <code class="font-mono text-xs">tools</code> ou no system prompt = reset da posição 0.</p></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Uma frase que resolve 90% das decisões do dia a dia sobre o cache.</p></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Pergunte sempre: "isso muda o começo ou só acrescenta no fim?"</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+          <a href="modulo-2-2.html" class="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors font-semibold">Ver Completo →</a>
+        </div>
+      </div>
+
+      <!-- ===== MODULO 2.3 ===== -->
+      <div id="modulo-2-3" data-inema-module="2-3" data-inema-track="2" class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+        <div class="p-6 border-b border-dark-600">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-blue-400 font-bold">2.3</span>
+            <span class="text-xs text-neutral-500">~35 min · 6 tópicos</span>
+          </div>
+          <h3 class="text-2xl font-bold mb-2">🔎 Invalidação a fundo</h3>
+          <p class="text-neutral-400 text-sm mb-4">Hierarquia de 3 tiers, o 20-block lookback, os silent invalidators e o timing concorrente no fan-out. Como auditar com <code class="font-mono text-xs">usage</code>.</p>
+          <div data-inema-meter="modulo-2-3" class="inema-meter max-w-xs" aria-label="Progresso do módulo 2.3">
+            <div class="inema-bar"><div class="inema-bar__fill" data-inema-meter-fill></div></div>
+            <span class="text-xs text-blue-400 font-semibold" data-inema-meter-pct>0%</span>
+          </div>
+        </div>
+
+        <div class="divide-y divide-dark-600">
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="m23-t1" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-lg" aria-hidden="true">🪜</span>
+              <div><span class="font-medium">Hierarquia de 3 tiers</span><span class="text-neutral-500 text-sm ml-2">— cada mudança invalida do tier pra baixo</span></div>
+            </button>
+            <div id="m23-t1" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Mudança só invalida o tier dela e os de baixo: mudar tools OU trocar modelo = reset total; mudar system = invalida system+messages; mudar mensagem = só messages.</p></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Você calcula o "raio de dano" de qualquer mudança antes de fazê-la.</p></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Tiers na ordem <code class="font-mono text-xs">tools → system → messages</code>; o modelo é raiz de tudo.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="m23-t2" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-lg" aria-hidden="true">🎚️</span>
+              <div><span class="font-medium">tool_choice / thinking on-off</span><span class="text-neutral-500 text-sm ml-2">— NÃO derrubam tudo</span></div>
+            </button>
+            <div id="m23-t2" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Trocar <code class="font-mono text-xs">tool_choice</code> por request ou ligar/desligar <code class="font-mono text-xs">thinking</code> mantém o cache de tools+system.</p></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Evita paranoia: nem todo parâmetro que muda por request quebra o cache.</p></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Esses dois não entram no prefixo cacheável — não precisa se preocupar.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="m23-t3" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-lg" aria-hidden="true">🔭</span>
+              <div><span class="font-medium">20-block lookback</span><span class="text-neutral-500 text-sm ml-2">— loops longos furam o cache</span></div>
+            </button>
+            <div id="m23-t3" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Cada breakpoint procura entrada anterior olhando no máx. 20 blocos pra trás. Turno que adiciona >20 blocos (loops com muitos tool_use/tool_result) pode fazer o próximo turno errar o cache silenciosamente.</p></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">É a causa "invisível" de miss em agentes que fazem muitas chamadas de ferramenta por turno.</p></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Fix: breakpoint intermediário a cada ~15 blocos.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="m23-t4" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-lg" aria-hidden="true">👻</span>
+              <div><span class="font-medium">Silent invalidators</span><span class="text-neutral-500 text-sm ml-2">— data, uuid, dumps sem sort</span></div>
+            </button>
+            <div id="m23-t4" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm"><code class="font-mono text-xs">datetime.now()</code>/<code class="font-mono text-xs">Date.now()</code>/uuid no system; <code class="font-mono text-xs">json.dumps</code> sem <code class="font-mono text-xs">sort_keys=True</code>; iterar <code class="font-mono text-xs">set</code>; tools montadas por usuário; seção condicional no system.</p></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">São mudanças que você não "vê" mas alteram os bytes do prefixo a cada request.</p></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Sintoma comum: <code class="font-mono text-xs">cache_read_input_tokens</code> sempre 0.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="m23-t5" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-lg" aria-hidden="true">🌐</span>
+              <div><span class="font-medium">Timing concorrente (fan-out)</span><span class="text-neutral-500 text-sm ml-2">— N paralelos pagam cheio</span></div>
+            </button>
+            <div id="m23-t5" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">A entrada só fica legível DEPOIS que a 1ª resposta começa a streamar. N requests paralelos com o mesmo prefixo pagam todos preço cheio.</p></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Disparar tudo de uma vez parece rápido, mas joga fora o cache compartilhado.</p></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Fix: mandar 1, esperar o 1º token, disparar os N-1.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" aria-expanded="false" aria-controls="m23-t6" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-lg" aria-hidden="true">🧪</span>
+              <div><span class="font-medium">Verificar com usage</span><span class="text-neutral-500 text-sm ml-2">— zero repetido = invalidator</span></div>
+            </button>
+            <div id="m23-t6" class="topic-explanation px-6 pb-4">
+              <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+                <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm"><code class="font-mono text-xs">cache_read_input_tokens</code> / <code class="font-mono text-xs">cache_creation_input_tokens</code> na resposta. Zero em requests repetidos = tem invalidator.</p></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">É o instrumento de medição — sem ele você chuta; com ele você prova.</p></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Faça diff dos bytes do prompt entre dois requests iguais para achar o byte que muda.</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+          <a href="modulo-2-3.html" class="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors font-semibold">Ver Completo →</a>
+        </div>
+      </div>
+
+      <!-- Navegacao entre trilhas -->
+      <div class="flex flex-col sm:flex-row gap-4 mt-10">
+        <a href="../trilha1/index.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Trilha 1 · Fundamentos</a>
+        <a href="../trilha3/index.html" class="flex-1 text-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-500 transition-colors">Trilha 3 · Boas práticas →</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================= FOOTER ======================= -->
+  <footer class="border-t border-dark-600 py-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>cccache — Prompt Caching no Claude Code · Curso <a href="https://inema.club" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a> · 2026</p>
+    </div>
+  </footer>
+
+  <!-- ======================= SCRIPTS ======================= -->
+  <script src="../../assets/learn.js"></script>
+  <script>
+    // Accordion v1 (acessivel): alterna .active + aria-expanded; fecha os irmaos do mesmo modulo.
+    function toggleTopic(button) {
+      var item = button.closest('.topic-item');
+      if (!item) { return; }
+      var explanation = item.querySelector('.topic-explanation');
+      var card = button.closest('[data-inema-module]') || button.closest('.bg-dark-800');
+      if (card) {
+        card.querySelectorAll('.topic-explanation.active').forEach(function (exp) {
+          if (exp !== explanation) {
+            exp.classList.remove('active');
+            var sib = exp.closest('.topic-item');
+            var b = sib && sib.querySelector('[aria-expanded]');
+            if (b) { b.setAttribute('aria-expanded', 'false'); }
+          }
+        });
+      }
+      var open = explanation.classList.toggle('active');
+      button.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.INEMA && typeof INEMA.init === 'function') { INEMA.init(); }
+    });
+  </script>
+
+</body>
+</html>
