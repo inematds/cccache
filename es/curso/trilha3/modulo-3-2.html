@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 
-<html class="dark" lang="pt-BR">
+<html class="dark" lang="es">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta content="cccache" name="inema-course"/>
-<title>Módulo 3.2 — Arquitetura pró-cache e auditoria | cccache · INEMA.CLUB</title>
+<title>Módulo 3.2 — Arquitectura favorable al caché y auditoría | cccache · INEMA.CLUB</title>
 <!-- 1) ANTI-FOUC -->
 <script>
     (function () {
@@ -136,10 +136,10 @@
     }
     .nav-appearance-wrap { position: relative; }
   </style>
-<link href="../../assets/learn.css" rel="stylesheet"/>
+<link href="../../../assets/learn.css" rel="stylesheet"/>
 <link href="https://inematds.github.io/cccache/curso/trilha3/modulo-3-2.html" hreflang="pt-BR" rel="alternate"/><link href="https://inematds.github.io/cccache/en/curso/trilha3/modulo-3-2.html" hreflang="en" rel="alternate"/><link href="https://inematds.github.io/cccache/es/curso/trilha3/modulo-3-2.html" hreflang="es" rel="alternate"/></head>
-<body class="bg-dark-900 text-neutral-100 min-h-screen"><div class="inema-lang" style="position:fixed;right:14px;bottom:14px;z-index:9999;display:flex;gap:2px;padding:4px;border-radius:10px;background:rgba(12,12,16,.82);border:1px solid rgba(226,162,59,.45);font:600 12px/1 Sora,Inter,system-ui,sans-serif;backdrop-filter:blur(8px)" translate="no"><a href="modulo-3-2.html" hreflang="pt-BR" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#1a1206;background:#E2A23B">PT</a><a href="../../en/curso/trilha3/modulo-3-2.html" hreflang="en" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">EN</a><a href="../../es/curso/trilha3/modulo-3-2.html" hreflang="es" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">ES</a></div>
-<a class="inema-skip" href="#conteudo">Pular para o conteúdo</a>
+<body class="bg-dark-900 text-neutral-100 min-h-screen"><div class="inema-lang" style="position:fixed;right:14px;bottom:14px;z-index:9999;display:flex;gap:2px;padding:4px;border-radius:10px;background:rgba(12,12,16,.82);border:1px solid rgba(226,162,59,.45);font:600 12px/1 Sora,Inter,system-ui,sans-serif;backdrop-filter:blur(8px)" translate="no"><a href="../../../curso/trilha3/modulo-3-2.html" hreflang="pt-BR" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">PT</a><a href="../../../en/curso/trilha3/modulo-3-2.html" hreflang="en" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">EN</a><a href="modulo-3-2.html" hreflang="es" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#1a1206;background:#E2A23B">ES</a></div>
+<a class="inema-skip" href="#conteudo">Saltar al contenido</a>
 <!-- ================= NAVIGATION ================= -->
 <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
 <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -155,59 +155,59 @@
 <div class="flex items-center space-x-1 sm:space-x-2">
 <a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors" href="../trilha1/index.html"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
 <a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors" href="../trilha2/index.html"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Técnico</span></a>
-<a aria-current="page" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-purple-400 bg-purple-500/10" href="index.html"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Boas práticas</span></a>
+<a aria-current="page" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-purple-400 bg-purple-500/10" href="index.html"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Buenas prácticas</span></a>
 <button class="hidden md:inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-neutral-300 hover:text-neutral-100 hover:bg-dark-700 transition-colors text-sm" data-inema-journey-open="" type="button">
-<span aria-hidden="true">◷</span><span>Minha jornada</span>
+<span aria-hidden="true">◷</span><span>Mi recorrido</span>
 <span class="inema-journey-badge hidden" data-count="0" data-inema-journey-badge=""></span>
 </button>
 <div class="nav-appearance-wrap">
 <button aria-expanded="false" aria-haspopup="true" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-neutral-300 hover:text-neutral-100 hover:bg-dark-700 transition-colors text-sm" data-inema-appearance-toggle="[data-inema-appearance]" type="button">
-<span aria-hidden="true">◑</span><span class="hidden sm:inline">Aparência</span>
+<span aria-hidden="true">◑</span><span class="hidden sm:inline">Apariencia</span>
 </button>
-<div aria-label="Aparência e leitura" class="inema-appearance-pop" data-inema-appearance="" role="group">
+<div aria-label="Apariencia y lectura" class="inema-appearance-pop" data-inema-appearance="" role="group">
 <p class="inema-seg-label">Tema</p>
 <div class="inema-segment">
-<button data-inema-set-theme="inema-dark" type="button">Escuro</button>
+<button data-inema-set-theme="inema-dark" type="button">Oscuro</button>
 <button data-inema-set-theme="claro" type="button">Claro</button>
-<button data-inema-set-theme="sepia" type="button">Sépia</button>
-<button data-inema-set-theme="foco" type="button">Foco</button>
+<button data-inema-set-theme="sepia" type="button">Sepia</button>
+<button data-inema-set-theme="foco" type="button">Enfoque</button>
 <button data-inema-set-theme="contraste" type="button">Alto contraste</button>
 </div>
-<p class="inema-seg-label">Fonte</p>
+<p class="inema-seg-label">Fuente</p>
 <div class="inema-segment">
 <button data-inema-set-font="inter" type="button">Inter</button>
 <button data-inema-set-font="system" type="button">Sistema</button>
-<button data-inema-set-font="leitura" type="button">Leitura</button>
+<button data-inema-set-font="leitura" type="button">Lectura</button>
 </div>
-<p class="inema-seg-label">Tamanho</p>
+<p class="inema-seg-label">Tamaño</p>
 <div class="inema-segment">
 <button data-inema-set-fontscale="100" type="button">A</button>
 <button data-inema-set-fontscale="112" type="button">A+</button>
 <button data-inema-set-fontscale="125" type="button">A++</button>
 </div>
-<p class="inema-seg-label">Largura da linha</p>
+<p class="inema-seg-label">Ancho de línea</p>
 <div class="inema-segment">
-<button data-inema-set-linewidth="60" type="button">Estreito</button>
-<button data-inema-set-linewidth="68" type="button">Médio</button>
-<button data-inema-set-linewidth="75" type="button">Largo</button>
+<button data-inema-set-linewidth="60" type="button">Estrecho</button>
+<button data-inema-set-linewidth="68" type="button">Medio</button>
+<button data-inema-set-linewidth="75" type="button">Ancho</button>
 </div>
-<p class="inema-seg-label">Entrelinha</p>
+<p class="inema-seg-label">Interlineado</p>
 <div class="inema-segment">
 <button data-inema-set-leading="1.45" type="button">Compacto</button>
-<button data-inema-set-leading="1.7" type="button">Confortável</button>
+<button data-inema-set-leading="1.7" type="button">Cómodo</button>
 </div>
 <p class="inema-seg-label">Acento</p>
-<div aria-label="Cor de acento" class="inema-accent-grid" role="group">
+<div aria-label="Color de acento" class="inema-accent-grid" role="group">
 <button aria-label="Esmeralda" data-inema-set-accent="emerald" type="button"></button>
 <button aria-label="Azul" data-inema-set-accent="blue" type="button"></button>
-<button aria-label="Roxo" data-inema-set-accent="purple" type="button"></button>
-<button aria-label="Âmbar" data-inema-set-accent="amber" type="button"></button>
+<button aria-label="Morado" data-inema-set-accent="purple" type="button"></button>
+<button aria-label="Ámbar" data-inema-set-accent="amber" type="button"></button>
 <button aria-label="Turquesa" data-inema-set-accent="teal" type="button"></button>
 <button aria-label="Rosa" data-inema-set-accent="rose" type="button"></button>
 </div>
 </div>
 </div>
-<button aria-label="Alternar claro/escuro" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-1" id="theme-toggle">
+<button aria-label="Alternar entre claro y oscuro" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-1" id="theme-toggle">
 <svg aria-hidden="true" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-dark-icon" viewbox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
 <svg aria-hidden="true" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-light-icon" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd"></path></svg>
 </button>
@@ -216,9 +216,9 @@
 </div>
 </nav>
 <!-- Breadcrumb -->
-<nav aria-label="Trilha de navegação" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+<nav aria-label="Ruta de navegación" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
 <div class="flex items-center flex-wrap gap-2 text-sm text-neutral-400">
-<a class="hover:text-purple-400" href="../../index.html">Início</a><span aria-hidden="true">/</span>
+<a class="hover:text-purple-400" href="../../index.html">Inicio</a><span aria-hidden="true">/</span>
 <a class="hover:text-purple-400" href="index.html">Trilha 3</a><span aria-hidden="true">/</span>
 <span class="text-purple-400">Módulo 3.2</span>
 </div>
@@ -227,35 +227,35 @@
 <header class="bg-gradient-to-br from-purple-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
 <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 <span class="inline-block px-3 py-1 bg-purple-500/20 text-purple-400 text-xs font-semibold rounded-full mb-4">MÓDULO 3.2</span>
-<h1 class="text-3xl sm:text-4xl font-bold mb-4">🏛️ Arquitetura pró-cache e auditoria</h1>
-<p class="text-lg text-neutral-300 max-w-3xl">O melhor cache é o que <strong class="text-purple-400">nunca invalida sem querer</strong>. Aqui você desenha o prefixo — system congelado, tools determinísticas, um modelo por loop, forks que copiam o pai — e ganha um checklist e um prompt de auditoria pra rodar no Claude Code.</p>
+<h1 class="text-3xl sm:text-4xl font-bold mb-4">🏛️ Arquitectura pro caché y auditoría</h1>
+<p class="text-lg text-neutral-300 max-w-3xl">La mejor caché es la que <strong class="text-purple-400">nunca invalida sin querer</strong>. Aquí diseñas el prefijo —system congelado, tools determinísticas, un modelo por loop, forks que copian al padre— y obtienes una lista de verificación y un prompt de auditoría para ejecutar en Claude Code.</p>
 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 max-w-2xl">
-<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">6</div><div class="text-xs text-neutral-400">Temas</div></div>
 <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">~45</div><div class="text-xs text-neutral-400">Minutos</div></div>
-<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">Avançado</div><div class="text-xs text-neutral-400">Nível</div></div>
-<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">Prática</div><div class="text-xs text-neutral-400">Tipo</div></div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">Avanzado</div><div class="text-xs text-neutral-400">Nivel</div></div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">Práctica</div><div class="text-xs text-neutral-400">Tipo</div></div>
 </div>
 </div>
 </header>
 <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:flex lg:gap-8" id="conteudo">
 <!-- TOC -->
-<nav aria-label="Índice da página" class="hidden lg:block sticky top-20 self-start w-56 shrink-0" data-inema-toc="">
-<p class="text-xs uppercase tracking-wide text-neutral-500 mb-2">Neste módulo</p>
-<p class="text-sm text-neutral-400 mb-3"><span data-inema-section-counter="">Seção 1 de 6</span></p>
+<nav aria-label="Índice de la página" class="hidden lg:block sticky top-20 self-start w-56 shrink-0" data-inema-toc="">
+<p class="text-xs uppercase tracking-wide text-neutral-500 mb-2">En este módulo</p>
+<p class="text-sm text-neutral-400 mb-3"><span data-inema-section-counter="">Sección 1 de 6</span></p>
 <ol class="space-y-1 text-sm">
-<li><a class="inema-toc-link" href="#topico-1">1. System congelado</a></li>
+<li><a class="inema-toc-link" href="#topico-1">1. Sistema congelado</a></li>
 <li><a class="inema-toc-link" href="#topico-2">2. Tools determinísticas</a></li>
-<li><a class="inema-toc-link" href="#topico-3">3. Um modelo por loop</a></li>
-<li><a class="inema-toc-link" href="#topico-4">4. Fork reusa o pai</a></li>
-<li><a class="inema-toc-link" href="#topico-5">5. Checklist de invalidators</a></li>
-<li><a class="inema-toc-link" href="#topico-6">6. Pré-aquecimento e TTL 1h</a></li>
+<li><a class="inema-toc-link" href="#topico-3">3. Un modelo por loop</a></li>
+<li><a class="inema-toc-link" href="#topico-4">4. Fork reutiliza el padre</a></li>
+<li><a class="inema-toc-link" href="#topico-5">5. Lista de verificación de invalidadores</a></li>
+<li><a class="inema-toc-link" href="#topico-6">6. Precalentamiento y TTL 1h</a></li>
 </ol>
 <div class="mt-5 pt-4 border-t border-dark-600">
-<div aria-label="Progresso do módulo 3.2" class="inema-meter" data-inema-meter="modulo-3-2">
+<div aria-label="Progreso del módulo 3.2" class="inema-meter" data-inema-meter="modulo-3-2">
 <div class="inema-bar"><div class="inema-bar__fill" data-inema-meter-fill=""></div></div>
 <span class="text-xs text-purple-400 font-semibold" data-inema-meter-pct="">0%</span>
 </div>
-<p class="text-xs text-neutral-500 mt-1"><span data-inema-meter-frac="">0 de 6</span> lidos</p>
+<p class="text-xs text-neutral-500 mt-1"><span data-inema-meter-frac="">0 de 6</span> leídos</p>
 </div>
 </nav>
 <!-- Conteúdo -->
@@ -267,14 +267,14 @@
 <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">1</span>
 <h2 class="text-2xl font-bold">🧊 System prompt congelado</h2>
 </div>
-<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Marcar dúvida neste tópico" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tenho dúvida</span></button>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Marcar duda en este tema" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tengo una duda</span></button>
 </div>
 <div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
-<p data-inema-block="m3-2-t1-p1">O <strong class="text-purple-400">system prompt</strong> (o texto de instruções antes da conversa) fica logo na frente do prefixo. Se você interpola <strong>data/hora, modo ou nome do usuário</strong> ali, cada requisição tem bytes diferentes no começo — e <strong>invalida tudo</strong>. A regra é: system congelado; contexto dinâmico vai depois, nas <code class="font-mono text-sm">messages</code>.</p>
+<p data-inema-block="m3-2-t1-p1">O <strong class="text-purple-400">prompt de sistema</strong> (el texto de instrucciones antes de la conversación) queda justo al principio del prefijo. Si interpolas <strong>fecha/hora, modo o nombre del usuario</strong> ahí, cada solicitud tiene bytes diferentes al comienzo — y <strong>invalida todo</strong>. La regla es: system congelado; el contexto dinámico va después, en las <code class="font-mono text-sm">messages</code>.</p>
 </div>
 <!-- SVG: system congelado vs interpolado -->
 <div class="rounded-2xl border border-purple-500/30 bg-dark-900/40 p-3 sm:p-4 mb-6 overflow-hidden">
-<svg aria-label="À esquerda, um system prompt com data e nome do usuário interpolados muda a cada turno e derruba o cache. À direita, um system congelado permanece idêntico e o contexto dinâmico é injetado no fim das mensagens, preservando o cache." class="w-full h-auto" role="img" viewbox="0 0 1000 240">
+<svg aria-label="A la izquierda, un system prompt con la fecha y el nombre del usuario interpolados cambia en cada turno y hace caer la caché. A la derecha, un system congelado permanece idéntico y el contexto dinámico se inyecta al final de los mensajes, preservando la caché." class="w-full h-auto" role="img" viewbox="0 0 1000 240">
 <defs>
 <pattern height="32" id="m32a-grid" patternunits="userSpaceOnUse" width="32"><circle cx="1.3" cy="1.3" fill="#a855f7" opacity="0.12" r="1.3"></circle></pattern>
 <filter height="180%" id="m32a-glow" width="180%" x="-40%" y="-40%"><fegaussianblur result="b" stddeviation="1.8"></fegaussianblur><femerge><femergenode in="b"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge></filter>
@@ -284,32 +284,32 @@
 <!-- ERRADO -->
 <text fill="#fca5a5" font-family="Inter,sans-serif" font-size="13" font-weight="600" text-anchor="middle" x="250" y="34">✗ system interpolado</text>
 <rect fill="#2a0f16" height="46" rx="10" stroke="#f87171" stroke-width="2" width="380" x="60" y="50"></rect>
-<text fill="#fca5a5" font-family="Inter,sans-serif" font-size="12" text-anchor="middle" x="250" y="72">system + "hoje é {data}, user {nome}"</text>
-<text fill="#fecaca" font-family="Inter,sans-serif" font-size="10.5" text-anchor="middle" x="250" y="88">muda a cada turno</text>
+<text fill="#fca5a5" font-family="Inter,sans-serif" font-size="12" text-anchor="middle" x="250" y="72">system + "hoy es {data}, user {nome}"</text>
+<text fill="#fecaca" font-family="Inter,sans-serif" font-size="10.5" text-anchor="middle" x="250" y="88">cambia en cada turno</text>
 <rect fill="#0e1622" height="30" rx="8" stroke="#4b5563" stroke-width="1.5" width="380" x="60" y="104"></rect>
 <text fill="#9ca3af" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="250" y="124">messages</text>
-<text fill="#fca5a5" font-family="Inter,sans-serif" font-size="12" font-weight="600" text-anchor="middle" x="250" y="164">→ cache invalida todo turno</text>
+<text fill="#fca5a5" font-family="Inter,sans-serif" font-size="12" font-weight="600" text-anchor="middle" x="250" y="164">→ la caché se invalida en cada turno</text>
 <!-- CERTO -->
 <text fill="#c084fc" font-family="Inter,sans-serif" font-size="13" font-weight="600" text-anchor="middle" x="750" y="34">✓ system congelado</text>
 <g filter="url(#m32a-glow)"><rect fill="#1a1230" height="46" rx="10" stroke="#c084fc" stroke-width="2" width="380" x="560" y="50"></rect></g>
-<text fill="#c084fc" font-family="Inter,sans-serif" font-size="12" text-anchor="middle" x="750" y="72">system fixo (sem variáveis) 🧊</text>
-<text fill="#e9d5ff" font-family="Inter,sans-serif" font-size="10.5" text-anchor="middle" x="750" y="88">idêntico byte a byte</text>
+<text fill="#c084fc" font-family="Inter,sans-serif" font-size="12" text-anchor="middle" x="750" y="72">system fijo (sin variables) 🧊</text>
+<text fill="#e9d5ff" font-family="Inter,sans-serif" font-size="10.5" text-anchor="middle" x="750" y="88">idéntico byte a byte</text>
 <rect fill="#0e1b26" height="30" rx="8" stroke="#38bdf8" stroke-width="2" width="380" x="560" y="104"></rect>
-<text fill="#bfe6ff" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="750" y="124">messages + "hoje é {data}, user {nome}"</text>
-<text fill="#c084fc" font-family="Inter,sans-serif" font-size="12" font-weight="600" text-anchor="middle" x="750" y="164">→ prefixo estável, cache quente</text>
+<text fill="#bfe6ff" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="750" y="124">messages + "hoy es {data}, usuario {nome}"</text>
+<text fill="#c084fc" font-family="Inter,sans-serif" font-size="12" font-weight="600" text-anchor="middle" x="750" y="164">→ prefijo estable, caché caliente</text>
 </svg>
-<p class="text-xs text-neutral-400 mt-3 px-1">Legenda: o dinâmico não some — ele <strong class="text-sky-400">muda de lugar</strong>. Sai da frente (system) e vai pro fim (messages), onde não quebra o prefixo.</p>
+<p class="text-xs text-neutral-400 mt-3 px-1">Leyenda: lo dinámico no desaparece — <strong class="text-sky-400">cambia de lugar</strong>. Sale de adelante (system) y va al final (messages), donde no rompe el prefijo.</p>
 </div>
 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Congela</div><p class="text-xs text-neutral-400">System sem variáveis</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Dinâmico</div><p class="text-xs text-neutral-400">Vai pro fim das messages</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Frente</div><p class="text-xs text-neutral-400">System é quase posição 0</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">1 byte</div><p class="text-xs text-neutral-400">Basta pra invalidar</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Congela</div><p class="text-xs text-neutral-400">System sin variables</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Dinámico</div><p class="text-xs text-neutral-400">Va al final de los messages</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Frente</div><p class="text-xs text-neutral-400">System está casi en la posición 0</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">1 byte</div><p class="text-xs text-neutral-400">Basta para invalidar</p></div>
 </div>
 <div class="flex justify-start mt-6">
 <button aria-pressed="false" class="inline-flex items-center gap-2 justify-start px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors" data-inema-read-toggle="" type="button">
 <span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
-<span class="inema-label-todo">Marcar como lido</span><span class="inema-label-done">Lido ✓</span>
+<span class="inema-label-todo">Marcar como leído</span><span class="inema-label-done">Leído ✓</span>
 </button>
 </div>
 </section>
@@ -318,22 +318,22 @@
 <div class="flex items-start justify-between gap-4 mb-6">
 <div class="flex items-center space-x-4">
 <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">2</span>
-<h2 class="text-2xl font-bold">🔤 Tools determinísticas</h2>
+<h2 class="text-2xl font-bold">🔤 Tools deterministas</h2>
 </div>
-<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Marcar dúvida neste tópico" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tenho dúvida</span></button>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Marcar duda en este tema" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tengo una duda</span></button>
 </div>
 <div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
-<p data-inema-block="m3-2-t2-p1">A lista de <code class="font-mono text-sm">tools</code> é renderizada na <strong class="text-purple-400">posição 0</strong> — antes de tudo. Se você a monta de um <code class="font-mono text-sm">set</code>/<code class="font-mono text-sm">dict</code> sem ordenar, a ordem varia entre requests e o cache <strong>nunca bate</strong>. Serialize sempre na mesma ordem: <strong class="text-purple-400">ordene por nome</strong>.</p>
+<p data-inema-block="m3-2-t2-p1">La lista de <code class="font-mono text-sm">tools</code> se muestra en la <strong class="text-purple-400">posición 0</strong> — antes que todo. Si la armas de una <code class="font-mono text-sm">set</code>/<code class="font-mono text-sm">dict</code> sin ordenar, el orden varía entre solicitudes y la caché <strong>nunca coincide</strong>. Serializa siempre en el mismo orden: <strong class="text-purple-400">ordena por nombre</strong>.</p>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
 <div class="bg-red-900/20 border border-red-500/30 rounded-xl p-5">
-<h4 class="font-bold text-red-400 mb-3">✗ Ordem variável</h4>
+<h4 class="font-bold text-red-400 mb-3">✗ Orden variable</h4>
 <pre class="font-mono text-xs bg-dark-900/70 border border-dark-600 rounded-lg p-3 overflow-x-auto text-neutral-200">tools = [t <span class="text-neutral-500">for</span> t <span class="text-neutral-500">in</span> registry]
 <span class="text-neutral-500"># registry é um set/dict</span>
 <span class="text-neutral-500"># ordem muda entre requests → miss</span></pre>
 </div>
 <div class="bg-emerald-900/20 border border-emerald-500/30 rounded-xl p-5">
-<h4 class="font-bold text-emerald-400 mb-3">✓ Ordem estável</h4>
+<h4 class="font-bold text-emerald-400 mb-3">✓ Orden estable</h4>
 <pre class="font-mono text-xs bg-dark-900/70 border border-dark-600 rounded-lg p-3 overflow-x-auto text-neutral-200">tools = <span class="text-purple-400">sorted</span>(registry, key=<span class="text-neutral-500">lambda</span> t: t[<span class="text-emerald-400">"name"</span>])
 <span class="text-neutral-500"># mesma ordem sempre → prefixo idêntico</span>
 <span class="text-neutral-500"># cache_read para de ser 0</span></pre>
@@ -342,15 +342,15 @@
 <!-- COPY-RUN (erro #30) — prompt de revisão pró-cache (system + tools) -->
 <div class="bg-dark-800 border border-purple-500/30 rounded-xl overflow-hidden mb-6">
 <div class="px-5 py-3 bg-purple-500/10 border-b border-purple-500/30 flex items-center gap-2">
-<span aria-hidden="true">▶️</span><span class="font-semibold text-purple-400">Prompt pronto — revisão pró-cache (system + tools)</span>
+<span aria-hidden="true">▶️</span><span class="font-semibold text-purple-400">Prompt listo — revisión para optimizar el caché (system + tools)</span>
 </div>
 <div class="p-5 space-y-4">
 <div>
 <p class="text-sm font-semibold text-purple-400 mb-1">Objetivo</p>
-<p class="text-sm text-neutral-300">Fazer o Claude Code apontar o que, no seu system prompt e na montagem das <code class="font-mono text-xs">tools</code>, está impedindo o cache — e reescrever pra maximizar o hit.</p>
+<p class="text-sm text-neutral-300">Hacer que Claude Code señale qué, en tu system prompt y en el montaje de las <code class="font-mono text-xs">tools</code>, está impidiendo el caché, y reescribir para maximizar el hit.</p>
 </div>
 <div>
-<p class="text-sm font-semibold text-purple-400 mb-1">Prompt (cole no Claude Code)</p>
+<p class="text-sm font-semibold text-purple-400 mb-1">Prompt (pégalo en Claude Code)</p>
 <pre class="font-mono text-xs sm:text-sm bg-dark-900/70 border border-dark-600 rounded-lg p-4 overflow-x-auto whitespace-pre-wrap text-neutral-200">Revise meu system prompt e a montagem de `tools` em &lt;caminho/do/arquivo&gt;.
 Aponte o que está impedindo o prompt caching:
 1) interpolação dinâmica no system (data/hora, nome do usuário, modo,
@@ -361,21 +361,21 @@ messages; (b) serialize as tools em ordem estável (ordene por nome).
 Mostre o diff e explique por que cada mudança preserva o prefixo.</pre>
 </div>
 <div>
-<p class="text-sm font-semibold text-purple-400 mb-1">Como verificar</p>
-<p class="text-sm text-neutral-300">Rode duas requisições iguais depois da mudança e confira o <code class="font-mono text-xs">usage</code>: <code class="font-mono text-xs">cache_read_input_tokens</code> deve deixar de ser 0 a partir da 2ª. Se ainda vier 0, sobrou um invalidator no prefixo (veja o tópico 5).</p>
+<p class="text-sm font-semibold text-purple-400 mb-1">Cómo verificar</p>
+<p class="text-sm text-neutral-300">Haz dos solicitudes iguales después del cambio y revisa el <code class="font-mono text-xs">usage</code>: <code class="font-mono text-xs">cache_read_input_tokens</code> debe dejar de ser 0 a partir de la 2.ª. Si aún aparece 0, quedó un invalidator en el prefijo (consulta el tema 5).</p>
 </div>
 </div>
 </div>
 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Posição 0</div><p class="text-xs text-neutral-400">Tools vêm antes de tudo</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">sorted()</div><p class="text-xs text-neutral-400">Ordene por nome</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">set/dict</div><p class="text-xs text-neutral-400">Ordem varia = miss</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Estável</div><p class="text-xs text-neutral-400">Mesmos bytes = hit</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Posición 0</div><p class="text-xs text-neutral-400">Tools van antes que todo</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">sorted()</div><p class="text-xs text-neutral-400">Ordena por nombre</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">set/dict</div><p class="text-xs text-neutral-400">El orden varía = miss</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Estable</div><p class="text-xs text-neutral-400">Mismos bytes = hit</p></div>
 </div>
 <div class="flex justify-start mt-6">
 <button aria-pressed="false" class="inline-flex items-center gap-2 justify-start px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors" data-inema-read-toggle="" type="button">
 <span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
-<span class="inema-label-todo">Marcar como lido</span><span class="inema-label-done">Lido ✓</span>
+<span class="inema-label-todo">Marcar como leído</span><span class="inema-label-done">Leído ✓</span>
 </button>
 </div>
 </section>
@@ -384,16 +384,16 @@ Mostre o diff e explique por que cada mudança preserva o prefixo.</pre>
 <div class="flex items-start justify-between gap-4 mb-6">
 <div class="flex items-center space-x-4">
 <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">3</span>
-<h2 class="text-2xl font-bold">🚫 Não trocar modelo no meio</h2>
+<h2 class="text-2xl font-bold">🚫 No cambiar de modelo a mitad de camino</h2>
 </div>
-<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Marcar dúvida neste tópico" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tenho dúvida</span></button>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Marcar duda en este tema" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tengo una duda</span></button>
 </div>
 <div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
-<p data-inema-block="m3-2-t3-p1">Cache é <strong class="text-purple-400">por modelo</strong>. Trocar de modelo no meio invalida tudo — o prefixo cacheado de um modelo não serve pro outro. Precisa de um modelo mais barato pra uma subtarefa? <strong class="text-purple-400">Use um subagente</strong>, mantendo o loop principal num modelo só.</p>
+<p data-inema-block="m3-2-t3-p1">La caché es <strong class="text-purple-400">por modelo</strong>. Cambiar de modelo a mitad de camino lo invalida todo: el prefijo almacenado en caché de un modelo no sirve para el otro. ¿Necesitas un modelo más barato para una subtarea? <strong class="text-purple-400">Usa un subagente</strong>, manteniendo el loop principal en un solo modelo.</p>
 </div>
 <!-- SVG: um modelo por loop -->
 <div class="rounded-2xl border border-purple-500/30 bg-dark-900/40 p-3 sm:p-4 mb-6 overflow-hidden">
-<svg aria-label="No loop principal, trocar do modelo A para o modelo B invalida o cache. A solução é manter o loop principal num único modelo e delegar a subtarefa mais barata a um subagente, que roda em paralelo com o próprio modelo." class="w-full h-auto" role="img" viewbox="0 0 1000 220">
+<svg aria-label="En el loop principal, cambiar del modelo A al modelo B invalida el caché. La solución es mantener el loop principal en un solo modelo y delegar la subtarea más barata a un subagente, que se ejecuta en paralelo con su propio modelo." class="w-full h-auto" role="img" viewbox="0 0 1000 220">
 <defs>
 <pattern height="32" id="m32c-grid" patternunits="userSpaceOnUse" width="32"><circle cx="1.3" cy="1.3" fill="#a855f7" opacity="0.12" r="1.3"></circle></pattern>
 <filter height="180%" id="m32c-glow" width="180%" x="-40%" y="-40%"><fegaussianblur result="b" stddeviation="1.8"></fegaussianblur><femerge><femergenode in="b"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge></filter>
@@ -401,7 +401,7 @@ Mostre o diff e explique por que cada mudança preserva o prefixo.</pre>
 <marker id="m32c-ac" markerheight="9" markerwidth="9" orient="auto" refx="6.5" refy="4.5"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#38bdf8"></path></marker>
 </defs>
 <rect fill="url(#m32c-grid)" height="220" width="1000" x="0" y="0"></rect>
-<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="13" font-weight="600" x="40" y="36">Loop principal — um modelo só (cache quente)</text>
+<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="13" font-weight="600" x="40" y="36">Bucle principal — un solo modelo (caché caliente)</text>
 <g filter="url(#m32c-glow)"><rect fill="#1a1230" height="52" rx="12" stroke="url(#m32c-ap)" stroke-width="2.5" width="150" x="40" y="52"></rect></g>
 <rect fill="#1a1230" height="52" rx="12" stroke="#c084fc" stroke-width="2.5" width="150" x="40" y="52"></rect>
 <text fill="#c084fc" font-family="Inter,sans-serif" font-size="13" font-weight="700" text-anchor="middle" x="115" y="83">modelo A</text>
@@ -413,31 +413,31 @@ Mostre o diff e explique por que cada mudança preserva o prefixo.</pre>
 <text fill="#c084fc" font-family="Inter,sans-serif" font-size="13" font-weight="600" text-anchor="middle" x="595" y="83">modelo A</text>
 <!-- subagente ciano -->
 <path d="M355,104 C355,150 470,150 500,158" fill="none" marker-end="url(#m32c-ac)" opacity="0.65" stroke="#38bdf8" stroke-width="2"></path>
-<text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="11" x="360" y="140">delega subtarefa</text>
+<text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="11" x="360" y="140">delega una subtarea</text>
 <rect fill="#0e1b26" height="46" rx="12" stroke="#38bdf8" stroke-width="2" width="230" x="500" y="150"></rect>
-<text fill="#bfe6ff" font-family="Inter,sans-serif" font-size="12" font-weight="600" text-anchor="middle" x="615" y="170">subagente · modelo barato</text>
-<text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="10.5" text-anchor="middle" x="615" y="187">cache próprio, não toca o do pai</text>
+<text fill="#bfe6ff" font-family="Inter,sans-serif" font-size="12" font-weight="600" text-anchor="middle" x="615" y="170">subagente · modelo económico</text>
+<text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="10.5" text-anchor="middle" x="615" y="187">caché propia, no toca la del padre</text>
 <!-- alerta trocar -->
 <rect fill="#2a0f16" height="52" rx="12" stroke="#f87171" stroke-width="2" width="190" x="770" y="52"></rect>
-<text fill="#fca5a5" font-family="Inter,sans-serif" font-size="12" font-weight="600" text-anchor="middle" x="865" y="76">trocar p/ modelo B</text>
-<text fill="#fecaca" font-family="Inter,sans-serif" font-size="10.5" text-anchor="middle" x="865" y="93">no loop → reset total</text>
+<text fill="#fca5a5" font-family="Inter,sans-serif" font-size="12" font-weight="600" text-anchor="middle" x="865" y="76">cambiar al modelo B</text>
+<text fill="#fecaca" font-family="Inter,sans-serif" font-size="10.5" text-anchor="middle" x="865" y="93">en el loop → reset total</text>
 </svg>
-<p class="text-xs text-neutral-400 mt-3 px-1">Legenda: o loop <strong class="text-purple-400">roxo</strong> fica num modelo só; o <strong class="text-sky-400">subagente</strong> ciano usa outro modelo sem tocar no cache do pai.</p>
+<p class="text-xs text-neutral-400 mt-3 px-1">Leyenda: el loop <strong class="text-purple-400">morado</strong> queda en un solo modelo; el <strong class="text-sky-400">subagente</strong> cian usa otro modelo sin tocar la caché del padre.</p>
 </div>
 <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
-<h3 class="text-lg font-semibold text-blue-400 mb-2 flex items-center"><span aria-hidden="true" class="mr-2">🧩</span> Por que subagente resolve</h3>
-<p class="text-neutral-300 text-sm">O subagente tem o próprio prefixo e o próprio cache. Ele roda a subtarefa no modelo barato e devolve o resultado como texto — o loop principal continua no mesmo modelo, com o cache intacto.</p>
+<h3 class="text-lg font-semibold text-blue-400 mb-2 flex items-center"><span aria-hidden="true" class="mr-2">🧩</span> Por qué lo resuelve un subagente</h3>
+<p class="text-neutral-300 text-sm">El subagente tiene su propio prefijo y su propia caché. Ejecuta la subtarea con el modelo más económico y devuelve el resultado como texto; el bucle principal sigue usando el mismo modelo, con la caché intacta.</p>
 </div>
 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Por modelo</div><p class="text-xs text-neutral-400">Cache não cruza modelos</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Trocar = reset</div><p class="text-xs text-neutral-400">Invalida tudo</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Subagente</div><p class="text-xs text-neutral-400">Modelo barato à parte</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Um por loop</div><p class="text-xs text-neutral-400">Mantém o cache quente</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Por modelo</div><p class="text-xs text-neutral-400">La caché no se comparte entre modelos</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Cambiar = reset</div><p class="text-xs text-neutral-400">Invalida todo</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Subagente</div><p class="text-xs text-neutral-400">Modelo barato aparte</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Uno por loop</div><p class="text-xs text-neutral-400">Mantiene la caché caliente</p></div>
 </div>
 <div class="flex justify-start mt-6">
 <button aria-pressed="false" class="inline-flex items-center gap-2 justify-start px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors" data-inema-read-toggle="" type="button">
 <span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
-<span class="inema-label-todo">Marcar como lido</span><span class="inema-label-done">Lido ✓</span>
+<span class="inema-label-todo">Marcar como leído</span><span class="inema-label-done">Leído ✓</span>
 </button>
 </div>
 </section>
@@ -446,16 +446,16 @@ Mostre o diff e explique por que cada mudança preserva o prefixo.</pre>
 <div class="flex items-start justify-between gap-4 mb-6">
 <div class="flex items-center space-x-4">
 <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">4</span>
-<h2 class="text-2xl font-bold">🌿 Fork reusa o prefixo do pai</h2>
+<h2 class="text-2xl font-bold">🌿 Fork reutiliza el prefijo del padre</h2>
 </div>
-<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Marcar dúvida neste tópico" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tenho dúvida</span></button>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Marcar duda en este tema" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tengo una duda</span></button>
 </div>
 <div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
-<p data-inema-block="m3-2-t4-p1">Uma operação lateral — um resumo, um subagente — que remonta <code class="font-mono text-sm">system</code>/<code class="font-mono text-sm">tools</code>/<code class="font-mono text-sm">model</code> diferentes <strong>perde o cache do pai</strong>. Para reaproveitar o prefixo quente, o fork precisa <strong class="text-purple-400">copiar system/tools/model verbatim</strong> e só anexar o específico no fim.</p>
+<p data-inema-block="m3-2-t4-p1">Una operación lateral — un resumen, un subagente — que vuelve a armar <code class="font-mono text-sm">system</code>/<code class="font-mono text-sm">tools</code>/<code class="font-mono text-sm">model</code> diferentes <strong>pierde la caché del padre</strong>. Para reutilizar el prefijo caliente, el fork necesita <strong class="text-purple-400">copiar system/tools/model verbatim</strong> y solo anexar lo específico al final.</p>
 </div>
 <!-- SVG: fork reusa o pai -->
 <div class="rounded-2xl border border-purple-500/30 bg-dark-900/40 p-3 sm:p-4 mb-6 overflow-hidden">
-<svg aria-label="O prefixo do pai é formado por tools, system e modelo. Um fork bom copia esse prefixo verbatim e anexa apenas a instrução específica no fim, reusando o cache quente. Um fork ruim remonta tools, system e modelo diferentes e paga o prefixo do zero." class="w-full h-auto" role="img" viewbox="0 0 1000 250">
+<svg aria-label="El prefijo del padre está formado por tools, system y el modelo. Un buen fork copia ese prefijo verbatim y añade solo la instrucción específica al final, reutilizando la caché activa. Un mal fork vuelve a construir tools, system y un modelo diferentes, y paga el prefijo desde cero." class="w-full h-auto" role="img" viewbox="0 0 1000 250">
 <defs>
 <pattern height="32" id="m32d-grid" patternunits="userSpaceOnUse" width="32"><circle cx="1.3" cy="1.3" fill="#a855f7" opacity="0.12" r="1.3"></circle></pattern>
 <filter height="180%" id="m32d-glow" width="180%" x="-40%" y="-40%"><fegaussianblur result="b" stddeviation="1.8"></fegaussianblur><femerge><femergenode in="b"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge></filter>
@@ -464,52 +464,52 @@ Mostre o diff e explique por que cada mudança preserva o prefixo.</pre>
 </defs>
 <rect fill="url(#m32d-grid)" height="250" width="1000" x="0" y="0"></rect>
 <!-- pai -->
-<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="13" font-weight="600" text-anchor="middle" x="240" y="34">PAI — prefixo quente</text>
+<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="13" font-weight="600" text-anchor="middle" x="240" y="34">PADRE — prefijo caliente</text>
 <g filter="url(#m32d-glow)"><rect fill="#1a1230" height="60" rx="14" stroke="#c084fc" stroke-width="2.5" width="240" x="120" y="48"></rect></g>
 <text fill="#c084fc" font-family="Inter,sans-serif" font-size="12.5" font-weight="700" text-anchor="middle" x="240" y="72">tools → system → model</text>
-<text fill="#e9d5ff" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="240" y="92">já cacheado</text>
+<text fill="#e9d5ff" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="240" y="92">ya está en caché</text>
 <!-- fork bom -->
 <path d="M240,108 C240,140 500,140 560,150" fill="none" marker-end="url(#m32d-ac)" opacity="0.7" stroke="#38bdf8" stroke-width="2"></path>
-<text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="11" font-weight="600" text-anchor="middle" x="470" y="132">✓ copia verbatim + anexa no fim</text>
+<text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="11" font-weight="600" text-anchor="middle" x="470" y="132">✓ copia verbatim + añade al final</text>
 <rect fill="#0e1b26" height="60" rx="12" stroke="#38bdf8" stroke-width="2" width="380" x="560" y="150"></rect>
-<text fill="#bfe6ff" font-family="Inter,sans-serif" font-size="12" font-weight="600" text-anchor="middle" x="750" y="174">tools → system → model (idênticos) + tarefa</text>
-<text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="10.5" text-anchor="middle" x="750" y="193">reusa o cache do pai · só grava o bloco novo</text>
+<text fill="#bfe6ff" font-family="Inter,sans-serif" font-size="12" font-weight="600" text-anchor="middle" x="750" y="174">tools → system → model (idénticos) + tarea</text>
+<text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="10.5" text-anchor="middle" x="750" y="193">reutiliza la caché del padre · solo guarda el bloque nuevo</text>
 <!-- fork ruim -->
 <path d="M240,108 C240,180 130,190 110,204" fill="none" marker-end="url(#m32d-ar)" opacity="0.6" stroke="#f87171" stroke-width="2"></path>
 <rect fill="#2a0f16" height="44" rx="12" stroke="#f87171" stroke-width="2" width="360" x="40" y="196"></rect>
-<text fill="#fca5a5" font-family="Inter,sans-serif" font-size="12" font-weight="600" text-anchor="middle" x="220" y="216">✗ remonta system/tools/model diferentes</text>
-<text fill="#fecaca" font-family="Inter,sans-serif" font-size="10.5" text-anchor="middle" x="220" y="232">paga o prefixo do zero</text>
+<text fill="#fca5a5" font-family="Inter,sans-serif" font-size="12" font-weight="600" text-anchor="middle" x="220" y="216">✗ vuelve a ensamblar system/tools/model diferentes</text>
+<text fill="#fecaca" font-family="Inter,sans-serif" font-size="10.5" text-anchor="middle" x="220" y="232">paga el prefijo desde cero</text>
 </svg>
-<p class="text-xs text-neutral-400 mt-3 px-1">Legenda: o fork <strong class="text-sky-400">ciano</strong> herda o prefixo do pai (só grava o sufixo); o fork <strong class="text-red-400">vermelho</strong> remonta e paga tudo de novo.</p>
+<p class="text-xs text-neutral-400 mt-3 px-1">Leyenda: el fork <strong class="text-sky-400">cian</strong> hereda el prefijo del padre (solo guarda el sufijo); el fork <strong class="text-red-400">rojo</strong> lo reconstruye y vuelve a cobrar todo.</p>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
-<h4 class="font-bold text-emerald-400 mb-4">✓ Fork que reusa</h4>
+<h4 class="font-bold text-emerald-400 mb-4">✓ Fork que reutiliza</h4>
 <ul class="space-y-2 text-neutral-300 text-sm">
 <li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>Copia <code class="font-mono text-xs">system</code> byte a byte</span></li>
-<li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>Mantém a mesma lista de <code class="font-mono text-xs">tools</code> e o mesmo <code class="font-mono text-xs">model</code></span></li>
-<li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>Anexa a instrução específica só no fim</span></li>
+<li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>Mantiene la misma lista de <code class="font-mono text-xs">tools</code> y el mismo <code class="font-mono text-xs">model</code></span></li>
+<li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>Anexa la instrucción específica solo al final</span></li>
 </ul>
 </div>
 <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
-<h4 class="font-bold text-red-400 mb-4">✗ Fork que perde</h4>
+<h4 class="font-bold text-red-400 mb-4">✗ Fork que pierde</h4>
 <ul class="space-y-2 text-neutral-300 text-sm">
-<li class="flex items-start gap-2"><span class="text-red-400">✗</span><span>Escreve um system novo "enxuto" pro resumo</span></li>
-<li class="flex items-start gap-2"><span class="text-red-400">✗</span><span>Passa outro conjunto de tools ou outro modelo</span></li>
-<li class="flex items-start gap-2"><span class="text-red-400">✗</span><span>Resultado: prefixo diferente, cache do zero</span></li>
+<li class="flex items-start gap-2"><span class="text-red-400">✗</span><span>Escribe un system nuevo «conciso» para el resumen</span></li>
+<li class="flex items-start gap-2"><span class="text-red-400">✗</span><span>Pasa otro conjunto de tools u otro modelo</span></li>
+<li class="flex items-start gap-2"><span class="text-red-400">✗</span><span>Resultado: prefijo diferente, caché desde cero</span></li>
 </ul>
 </div>
 </div>
 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Verbatim</div><p class="text-xs text-neutral-400">Copie system/tools/model</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">No fim</div><p class="text-xs text-neutral-400">Anexe o específico</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Herda</div><p class="text-xs text-neutral-400">Reusa o cache do pai</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Remontar</div><p class="text-xs text-neutral-400">= pagar do zero</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Verbatim</div><p class="text-xs text-neutral-400">Copia system/tools/model</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Al final</div><p class="text-xs text-neutral-400">Anexa lo específico</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Hereda</div><p class="text-xs text-neutral-400">Reutiliza el caché del padre</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Volver a montar</div><p class="text-xs text-neutral-400">= pagar desde cero</p></div>
 </div>
 <div class="flex justify-start mt-6">
 <button aria-pressed="false" class="inline-flex items-center gap-2 justify-start px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors" data-inema-read-toggle="" type="button">
 <span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
-<span class="inema-label-todo">Marcar como lido</span><span class="inema-label-done">Lido ✓</span>
+<span class="inema-label-todo">Marcar como leído</span><span class="inema-label-done">Leído ✓</span>
 </button>
 </div>
 </section>
@@ -518,20 +518,20 @@ Mostre o diff e explique por que cada mudança preserva o prefixo.</pre>
 <div class="flex items-start justify-between gap-4 mb-6">
 <div class="flex items-center space-x-4">
 <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">5</span>
-<h2 class="text-2xl font-bold">🔎 Checklist de silent invalidators</h2>
+<h2 class="text-2xl font-bold">🔎 Lista de verificación de invalidadores silenciosos</h2>
 </div>
-<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Marcar dúvida neste tópico" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tenho dúvida</span></button>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Marcar duda en este tema" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tengo una duda</span></button>
 </div>
 <div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
-<p data-inema-block="m3-2-t5-p1">Um <strong class="text-purple-400">silent invalidator</strong> não dá erro — só faz <code class="font-mono text-sm">cache_read_input_tokens</code> ficar sempre 0. Antes de culpar o modelo, varra tudo que alimenta o prefixo e cace estes suspeitos.</p>
+<p data-inema-block="m3-2-t5-p1">Uno <strong class="text-purple-400">invalidator silencioso</strong> no da error — solo hace <code class="font-mono text-sm">cache_read_input_tokens</code> quedar siempre en 0. Antes de culpar al modelo, revisa todo lo que alimenta el prefijo y busca a estos sospechosos.</p>
 </div>
 <!-- SVG: lupa varrendo o prefixo -->
 <div class="rounded-2xl border border-purple-500/30 bg-dark-900/40 p-3 sm:p-4 mb-6 overflow-hidden">
-<svg aria-label="Uma varredura percorre o prefixo formado por tools, system e messages procurando fontes de variação: relógio, identificadores aleatórios, serialização sem ordenação e conjuntos não ordenados." class="w-full h-auto" role="img" viewbox="0 0 1000 170">
+<svg aria-label="Un análisis recorre el prefijo formado por tools, system y messages en busca de fuentes de variación: reloj, identificadores aleatorios, serialización sin ordenar y conjuntos desordenados." class="w-full h-auto" role="img" viewbox="0 0 1000 170">
 <defs><pattern height="32" id="m32e-grid" patternunits="userSpaceOnUse" width="32"><circle cx="1.3" cy="1.3" fill="#a855f7" opacity="0.12" r="1.3"></circle></pattern>
 <marker id="m32e-ac" markerheight="9" markerwidth="9" orient="auto" refx="6.5" refy="4.5"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#38bdf8"></path></marker></defs>
 <rect fill="url(#m32e-grid)" height="170" width="1000" x="0" y="0"></rect>
-<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="13" font-weight="600" x="40" y="34">Varra o que entra no prefixo</text>
+<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="13" font-weight="600" x="40" y="34">Revisa lo que entra en el prefijo</text>
 <g font-family="Inter,sans-serif" font-size="12">
 <rect fill="#1a1230" height="40" rx="10" stroke="#c084fc" stroke-width="2" width="150" x="40" y="50"></rect><text fill="#c084fc" font-weight="600" text-anchor="middle" x="115" y="75">tools</text>
 <rect fill="#1a1230" height="40" rx="10" stroke="#c084fc" stroke-width="2" width="150" x="210" y="50"></rect><text fill="#c084fc" font-weight="600" text-anchor="middle" x="285" y="75">system</text>
@@ -540,36 +540,36 @@ Mostre o diff e explique por que cada mudança preserva o prefixo.</pre>
 <circle class="t3-a" cx="640" cy="70" fill="none" r="26" stroke="#38bdf8" stroke-width="3"></circle>
 <line class="t3-a" stroke="#38bdf8" stroke-linecap="round" stroke-width="4" x1="660" x2="686" y1="90" y2="116"></line>
 <path d="M530,70 L604,70" fill="none" marker-end="url(#m32e-ac)" opacity="0.6" stroke="#38bdf8" stroke-width="2"></path>
-<text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="12" font-weight="600" x="770" y="60">procurando variação</text>
-<text fill="#e5e7eb" font-family="Inter,sans-serif" font-size="11" x="770" y="80">relógio · uuid · sort · set</text>
+<text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="12" font-weight="600" x="770" y="60">buscando variación</text>
+<text fill="#e5e7eb" font-family="Inter,sans-serif" font-size="11" x="770" y="80">reloj · uuid · sort · set</text>
 </svg>
-<p class="text-xs text-neutral-400 mt-3 px-1">Legenda: qualquer fonte de variação no que vira <code class="font-mono text-xs">tools</code>/<code class="font-mono text-xs">system</code> muda o prefixo — e derruba o cache em silêncio.</p>
+<p class="text-xs text-neutral-400 mt-3 px-1">Leyenda: cualquier fuente de variación en lo que se convierte <code class="font-mono text-xs">tools</code>/<code class="font-mono text-xs">system</code> cambia el prefijo y derriba la caché en silencio.</p>
 </div>
 <div class="bg-dark-800 border border-dark-600 rounded-xl p-6 mb-6">
-<h3 class="text-lg font-semibold text-purple-400 mb-4">Os 6 suspeitos de sempre</h3>
+<h3 class="text-lg font-semibold text-purple-400 mb-4">Los 6 sospechosos de siempre</h3>
 <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-neutral-300">
-<li class="flex items-start gap-2"><span class="text-purple-400 mt-0.5">☐</span><span><code class="font-mono text-xs">datetime.now()</code> / <code class="font-mono text-xs">Date.now()</code> no system</span></li>
-<li class="flex items-start gap-2"><span class="text-purple-400 mt-0.5">☐</span><span><code class="font-mono text-xs">uuid</code> ou id aleatório no prefixo</span></li>
-<li class="flex items-start gap-2"><span class="text-purple-400 mt-0.5">☐</span><span><code class="font-mono text-xs">json.dumps</code> sem <code class="font-mono text-xs">sort_keys=True</code></span></li>
-<li class="flex items-start gap-2"><span class="text-purple-400 mt-0.5">☐</span><span>Iterar um <code class="font-mono text-xs">set</code> (ordem não garantida)</span></li>
-<li class="flex items-start gap-2"><span class="text-purple-400 mt-0.5">☐</span><span><code class="font-mono text-xs">tools</code> montadas por usuário/modo</span></li>
-<li class="flex items-start gap-2"><span class="text-purple-400 mt-0.5">☐</span><span>Seção condicional no system (<code class="font-mono text-xs">if flag: system += …</code>)</span></li>
+<li class="flex items-start gap-2"><span class="text-purple-400 mt-0.5">☐</span><span><code class="font-mono text-xs">datetime.now()</code> / <code class="font-mono text-xs">Date.now()</code> en system</span></li>
+<li class="flex items-start gap-2"><span class="text-purple-400 mt-0.5">☐</span><span><code class="font-mono text-xs">uuid</code> o un id aleatorio en el prefijo</span></li>
+<li class="flex items-start gap-2"><span class="text-purple-400 mt-0.5">☐</span><span><code class="font-mono text-xs">json.dumps</code> sin <code class="font-mono text-xs">sort_keys=True</code></span></li>
+<li class="flex items-start gap-2"><span class="text-purple-400 mt-0.5">☐</span><span>Iterar un <code class="font-mono text-xs">set</code> (orden no garantizado)</span></li>
+<li class="flex items-start gap-2"><span class="text-purple-400 mt-0.5">☐</span><span><code class="font-mono text-xs">tools</code> configurados por usuario/modo</span></li>
+<li class="flex items-start gap-2"><span class="text-purple-400 mt-0.5">☐</span><span>Sección condicional en el system (<code class="font-mono text-xs">if flag: system += …</code>)</span></li>
 </ul>
 </div>
 <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
-<h3 class="text-lg font-semibold text-primary mb-2 flex items-center"><span aria-hidden="true" class="mr-2">💡</span> Sintoma → causa</h3>
-<p class="text-neutral-300 text-sm"><code class="font-mono text-xs">cache_read_input_tokens</code> sempre 0 em requests repetidos = tem um invalidator. Faça o diff dos bytes do prefixo entre dois requests iguais e o byte que muda é o culpado (o tópico 4 do módulo 3.3 tem o prompt pronto pra isso).</p>
+<h3 class="text-lg font-semibold text-primary mb-2 flex items-center"><span aria-hidden="true" class="mr-2">💡</span> Síntoma → causa</h3>
+<p class="text-neutral-300 text-sm"><code class="font-mono text-xs">cache_read_input_tokens</code> siempre 0 en requests repetidos = hay un invalidador. Compara con diff los bytes del prefijo entre dos requests iguales y el byte que cambia es el culpable (el tema 4 del módulo 3.3 tiene el prompt listo para eso).</p>
 </div>
 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Silencioso</div><p class="text-xs text-neutral-400">Não dá erro</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">read = 0</div><p class="text-xs text-neutral-400">O sintoma único</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">6 suspeitos</div><p class="text-xs text-neutral-400">Varra o prefixo</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Diff</div><p class="text-xs text-neutral-400">Acha o byte culpado</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Silencioso</div><p class="text-xs text-neutral-400">No da error</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">leer = 0</div><p class="text-xs text-neutral-400">El único síntoma</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">6 sospechosos</div><p class="text-xs text-neutral-400">Revisa el prefijo</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Diff</div><p class="text-xs text-neutral-400">Encuentra el byte responsable</p></div>
 </div>
 <div class="flex justify-start mt-6">
 <button aria-pressed="false" class="inline-flex items-center gap-2 justify-start px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors" data-inema-read-toggle="" type="button">
 <span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
-<span class="inema-label-todo">Marcar como lido</span><span class="inema-label-done">Lido ✓</span>
+<span class="inema-label-todo">Marcar como leído</span><span class="inema-label-done">Leído ✓</span>
 </button>
 </div>
 </section>
@@ -578,86 +578,86 @@ Mostre o diff e explique por que cada mudança preserva o prefixo.</pre>
 <div class="flex items-start justify-between gap-4 mb-6">
 <div class="flex items-center space-x-4">
 <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">6</span>
-<h2 class="text-2xl font-bold">🔥 Pré-aquecimento e TTL 1h</h2>
+<h2 class="text-2xl font-bold">🔥 Precalentamiento y TTL 1h</h2>
 </div>
-<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Marcar dúvida neste tópico" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tenho dúvida</span></button>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Marcar duda en este tema" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tengo una duda</span></button>
 </div>
 <div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
-<p data-inema-block="m3-2-t6-p1">Uma requisição com <code class="font-mono text-sm">max_tokens: 0</code> ao subir o app <strong class="text-purple-400">grava o cache do prefixo e retorna na hora</strong> — tira a latência do 1º request real. Só vale se três coisas forem verdade; e, pra tráfego com pausas longas, existe o <strong class="text-purple-400">TTL de 1h</strong> (write ~2×).</p>
+<p data-inema-block="m3-2-t6-p1">Una solicitud con <code class="font-mono text-sm">max_tokens: 0</code> al iniciar la app <strong class="text-purple-400">guarda el caché del prefijo y regresa de inmediato</strong> — elimina la latencia del primer request real. Solo sirve si se cumplen tres condiciones; y, para el tráfico con pausas largas, existe también el <strong class="text-purple-400">TTL de 1h</strong> (escritura ~2×).</p>
 </div>
 <!-- SVG: timeline de pré-aquecimento -->
 <div class="rounded-2xl border border-purple-500/30 bg-dark-900/40 p-3 sm:p-4 mb-6 overflow-hidden">
-<svg aria-label="Linha do tempo: ao subir o app, uma requisição com max_tokens zero grava o cache do prefixo antes de qualquer usuário; quando o primeiro usuário chega, o prefixo já está quente e a resposta é rápida." class="w-full h-auto" role="img" viewbox="0 0 1000 180">
+<svg aria-label="Línea de tiempo: al iniciar la app, una solicitud con max_tokens cero guarda la caché del prefijo antes de que llegue cualquier usuario; cuando llega el primer usuario, el prefijo ya está caliente y la respuesta es rápida." class="w-full h-auto" role="img" viewbox="0 0 1000 180">
 <defs><pattern height="32" id="m32f-grid" patternunits="userSpaceOnUse" width="32"><circle cx="1.3" cy="1.3" fill="#a855f7" opacity="0.12" r="1.3"></circle></pattern>
 <filter height="180%" id="m32f-glow" width="180%" x="-40%" y="-40%"><fegaussianblur result="b" stddeviation="1.8"></fegaussianblur><femerge><femergenode in="b"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge></filter>
 <marker id="m32f-ap" markerheight="9" markerwidth="9" orient="auto" refx="6.5" refy="4.5"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#c084fc"></path></marker></defs>
 <rect fill="url(#m32f-grid)" height="180" width="1000" x="0" y="0"></rect>
 <line marker-end="url(#m32f-ap)" stroke="#4b5563" stroke-width="2" x1="60" x2="940" y1="100" y2="100"></line>
-<text fill="#9ca3af" font-family="Inter,sans-serif" font-size="11" x="900" y="128">tempo</text>
+<text fill="#9ca3af" font-family="Inter,sans-serif" font-size="11" x="900" y="128">tiempo</text>
 <!-- boot -->
 <circle cx="180" cy="100" fill="#c084fc" r="8"></circle>
-<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="12" font-weight="600" text-anchor="middle" x="180" y="72">app sobe</text>
+<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="12" font-weight="600" text-anchor="middle" x="180" y="72">la app inicia</text>
 <!-- warm write -->
 <g filter="url(#m32f-glow)"><rect fill="#1a1230" height="48" rx="12" stroke="#c084fc" stroke-width="2.5" width="220" x="360" y="76"></rect></g>
 <text fill="#c084fc" font-family="Inter,sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="470" y="98">max_tokens: 0</text>
-<text fill="#e9d5ff" font-family="Inter,sans-serif" font-size="10.5" text-anchor="middle" x="470" y="115">grava o cache · retorna na hora</text>
+<text fill="#e9d5ff" font-family="Inter,sans-serif" font-size="10.5" text-anchor="middle" x="470" y="115">guarda el caché · regresa de inmediato</text>
 <!-- 1st user -->
 <circle cx="800" cy="100" fill="#38bdf8" r="8"></circle>
-<text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="12" font-weight="600" text-anchor="middle" x="800" y="72">1º usuário</text>
-<text fill="#bfe6ff" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="800" y="148">prefixo já quente → resposta rápida</text>
+<text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="12" font-weight="600" text-anchor="middle" x="800" y="72">1.er usuario</text>
+<text fill="#bfe6ff" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="800" y="148">prefijo ya caliente → respuesta rápida</text>
 </svg>
-<p class="text-xs text-neutral-400 mt-3 px-1">Legenda: o pré-aquecimento paga o write <strong>antes</strong> do tráfego, pra o primeiro usuário não sentir a latência da gravação.</p>
+<p class="text-xs text-neutral-400 mt-3 px-1">Leyenda: el precalentamiento paga el write <strong>antes</strong> del tráfico, para que el primer usuario no note la latencia de la escritura.</p>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
-<h4 class="font-bold text-emerald-400 mb-4">✓ Pré-aquecer vale quando</h4>
+<h4 class="font-bold text-emerald-400 mb-4">✓ Precargar vale cuando</h4>
 <ul class="space-y-2 text-neutral-300 text-sm">
-<li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>A 1ª latência é visível pro usuário</span></li>
-<li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>O prefixo é grande (vale a gravação)</span></li>
-<li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>Há um momento antes do tráfego (boot/deploy)</span></li>
+<li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>La 1.ª latencia es visible para el usuario</span></li>
+<li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>El prefijo es grande (vale la pena guardarlo)</span></li>
+<li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>Hay un momento antes del tráfico (boot/deploy)</span></li>
 </ul>
 </div>
 <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
 <h4 class="font-bold text-blue-400 mb-4">TTL de 1h</h4>
 <ul class="space-y-2 text-neutral-300 text-sm">
-<li class="flex items-start gap-2"><span class="text-blue-400">•</span><span>Write mais caro (~2× em vez de ~1,25×)</span></li>
-<li class="flex items-start gap-2"><span class="text-blue-400">•</span><span>Vale pra tráfego com gaps &gt; 5 min</span></li>
-<li class="flex items-start gap-2"><span class="text-blue-400">•</span><span>Segura o cache quente entre pausas longas</span></li>
+<li class="flex items-start gap-2"><span class="text-blue-400">•</span><span>Write más caro (~2× en lugar de ~1,25×)</span></li>
+<li class="flex items-start gap-2"><span class="text-blue-400">•</span><span>Aplica al tráfico con gaps &gt; 5 min</span></li>
+<li class="flex items-start gap-2"><span class="text-blue-400">•</span><span>Mantiene caliente el caché durante pausas largas</span></li>
 </ul>
 </div>
 </div>
 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">max_tokens: 0</div><p class="text-xs text-neutral-400">Grava sem gerar resposta</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Antes do tráfego</div><p class="text-xs text-neutral-400">Boot/deploy</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">TTL 1h</div><p class="text-xs text-neutral-400">Gaps &gt; 5 min</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">max_tokens: 0</div><p class="text-xs text-neutral-400">Registra sin generar una respuesta</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Antes del tráfico</div><p class="text-xs text-neutral-400">Boot/deploy</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">TTL 1h</div><p class="text-xs text-neutral-400">Brechas &gt; 5 min</p></div>
 <div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">~2×</div><p class="text-xs text-neutral-400">Write de 1h</p></div>
 </div>
 <div class="flex justify-start mt-6">
 <button aria-pressed="false" class="inline-flex items-center gap-2 justify-start px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors" data-inema-read-toggle="" type="button">
 <span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
-<span class="inema-label-todo">Marcar como lido</span><span class="inema-label-done">Lido ✓</span>
+<span class="inema-label-todo">Marcar como leído</span><span class="inema-label-done">Leído ✓</span>
 </button>
 </div>
 </section>
 <!-- ===== RESUMO ===== -->
 <section class="mb-12">
 <div class="bg-gradient-to-br from-purple-900/40 via-dark-800 to-dark-800 rounded-xl border border-purple-500/30 p-8">
-<h2 class="text-2xl font-bold mb-6 flex items-center"><span aria-hidden="true" class="mr-3">📌</span> Resumo do módulo</h2>
+<h2 class="text-2xl font-bold mb-6 flex items-center"><span aria-hidden="true" class="mr-3">📌</span> Resumen del módulo</h2>
 <div class="space-y-4 mb-8">
-<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">System congelado</strong><span class="text-neutral-400"> — nada de data/hora/nome; dinâmico vai pro fim das messages.</span></div></div>
-<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">Tools determinísticas</strong><span class="text-neutral-400"> — ordene por nome; set/dict sem sort = miss.</span></div></div>
-<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">Um modelo por loop</strong><span class="text-neutral-400"> — trocar modelo reseta; use subagente pra subtarefa barata.</span></div></div>
-<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">Fork copia o pai</strong><span class="text-neutral-400"> — system/tools/model verbatim + específico no fim.</span></div></div>
-<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">Checklist de invalidators</strong><span class="text-neutral-400"> — relógio, uuid, sort, set, tools por usuário, condicional no system.</span></div></div>
-<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">Pré-aquecimento e TTL 1h</strong><span class="text-neutral-400"> — <code class="font-mono text-xs">max_tokens: 0</code> no boot; 1h pra gaps longos.</span></div></div>
+<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">System congelado</strong><span class="text-neutral-400"> — nada de fecha/hora/nombre; lo dinámico va al final de las messages.</span></div></div>
+<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">Tools deterministas</strong><span class="text-neutral-400"> — ordena por nombre; set/dict sin sort = miss.</span></div></div>
+<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">Un modelo por loop</strong><span class="text-neutral-400"> — cambiar de modelo reinicia; usa un subagente para una subtarea de bajo costo.</span></div></div>
+<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">Fork copia al padre</strong><span class="text-neutral-400"> — system/tools/model verbatim + específico al final.</span></div></div>
+<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">Lista de verificación de invalidadores</strong><span class="text-neutral-400"> — reloj, uuid, sort, set, tools por usuario, condicional en system.</span></div></div>
+<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">Calentamiento y TTL de 1h</strong><span class="text-neutral-400"> — <code class="font-mono text-xs">max_tokens: 0</code> en el boot; 1 h para gaps largos.</span></div></div>
 </div>
 <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
-<h3 class="font-semibold text-purple-400 mb-1">Próximo módulo</h3>
-<p class="text-neutral-300 text-sm">3.3 — Prompts prontos (copy-run): o kit de 6 prompts pra auditar e corrigir cache no Claude Code.</p>
+<h3 class="font-semibold text-purple-400 mb-1">Siguiente módulo</h3>
+<p class="text-neutral-300 text-sm">3.3 — Prompts listos (copiar y ejecutar): el kit de 6 prompts para auditar y corregir la caché en Claude Code.</p>
 </div>
 <div class="flex flex-col sm:flex-row gap-4">
 <a class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors" href="modulo-3-1.html">← Anterior: 3.1</a>
-<a class="flex-1 text-center px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-500 transition-colors" href="modulo-3-3.html">Próximo: 3.3 →</a>
+<a class="flex-1 text-center px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-500 transition-colors" href="modulo-3-3.html">Siguiente: 3.3 →</a>
 </div>
 </div>
 </section>
@@ -666,10 +666,10 @@ Mostre o diff e explique por que cada mudança preserva o prefixo.</pre>
 <!-- FOOTER -->
 <footer class="border-t border-dark-600 py-8">
 <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
-<p>cccache — Prompt Caching no Claude Code · Curso <a class="text-sky-400 hover:text-sky-300" href="https://inema.club" rel="noopener" target="_blank">INEMA.CLUB</a> · 2026</p>
+<p>cccache — Prompt Caching en Claude Code · Curso <a class="text-sky-400 hover:text-sky-300" href="https://inema.club" rel="noopener" target="_blank">INEMA.CLUB</a> · 2026</p>
 </div>
 </footer>
-<script src="../../assets/learn.js"></script>
+<script src="../../../assets/learn.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
       if (window.INEMA && typeof INEMA.init === 'function') { INEMA.init(); }

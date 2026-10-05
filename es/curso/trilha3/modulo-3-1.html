@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 
-<html class="dark" lang="pt-BR">
+<html class="dark" lang="es">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta content="cccache" name="inema-course"/>
-<title>Módulo 3.1 — Cache vs Compactação | cccache · INEMA.CLUB</title>
+<title>Módulo 3.1 — Caché vs. compactación | cccache · INEMA.CLUB</title>
 <!-- 1) ANTI-FOUC -->
 <script>
     (function () {
@@ -144,10 +144,10 @@
     .num-table th { background: rgba(124,58,237,0.12); color: #c084fc; font-weight: 600; }
     html:not(.dark) .num-table th { color: #7c3aed; }
   </style>
-<link href="../../assets/learn.css" rel="stylesheet"/>
+<link href="../../../assets/learn.css" rel="stylesheet"/>
 <link href="https://inematds.github.io/cccache/curso/trilha3/modulo-3-1.html" hreflang="pt-BR" rel="alternate"/><link href="https://inematds.github.io/cccache/en/curso/trilha3/modulo-3-1.html" hreflang="en" rel="alternate"/><link href="https://inematds.github.io/cccache/es/curso/trilha3/modulo-3-1.html" hreflang="es" rel="alternate"/></head>
-<body class="bg-dark-900 text-neutral-100 min-h-screen"><div class="inema-lang" style="position:fixed;right:14px;bottom:14px;z-index:9999;display:flex;gap:2px;padding:4px;border-radius:10px;background:rgba(12,12,16,.82);border:1px solid rgba(226,162,59,.45);font:600 12px/1 Sora,Inter,system-ui,sans-serif;backdrop-filter:blur(8px)" translate="no"><a href="modulo-3-1.html" hreflang="pt-BR" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#1a1206;background:#E2A23B">PT</a><a href="../../en/curso/trilha3/modulo-3-1.html" hreflang="en" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">EN</a><a href="../../es/curso/trilha3/modulo-3-1.html" hreflang="es" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">ES</a></div>
-<a class="inema-skip" href="#conteudo">Pular para o conteúdo</a>
+<body class="bg-dark-900 text-neutral-100 min-h-screen"><div class="inema-lang" style="position:fixed;right:14px;bottom:14px;z-index:9999;display:flex;gap:2px;padding:4px;border-radius:10px;background:rgba(12,12,16,.82);border:1px solid rgba(226,162,59,.45);font:600 12px/1 Sora,Inter,system-ui,sans-serif;backdrop-filter:blur(8px)" translate="no"><a href="../../../curso/trilha3/modulo-3-1.html" hreflang="pt-BR" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">PT</a><a href="../../../en/curso/trilha3/modulo-3-1.html" hreflang="en" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">EN</a><a href="modulo-3-1.html" hreflang="es" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#1a1206;background:#E2A23B">ES</a></div>
+<a class="inema-skip" href="#conteudo">Saltar al contenido</a>
 <!-- ================= NAVIGATION ================= -->
 <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
 <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -163,59 +163,59 @@
 <div class="flex items-center space-x-1 sm:space-x-2">
 <a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors" href="../trilha1/index.html"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
 <a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors" href="../trilha2/index.html"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Técnico</span></a>
-<a aria-current="page" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-purple-400 bg-purple-500/10" href="index.html"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Boas práticas</span></a>
+<a aria-current="page" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-purple-400 bg-purple-500/10" href="index.html"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Buenas prácticas</span></a>
 <button class="hidden md:inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-neutral-300 hover:text-neutral-100 hover:bg-dark-700 transition-colors text-sm" data-inema-journey-open="" type="button">
-<span aria-hidden="true">◷</span><span>Minha jornada</span>
+<span aria-hidden="true">◷</span><span>Mi recorrido</span>
 <span class="inema-journey-badge hidden" data-count="0" data-inema-journey-badge=""></span>
 </button>
 <div class="nav-appearance-wrap">
 <button aria-expanded="false" aria-haspopup="true" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-neutral-300 hover:text-neutral-100 hover:bg-dark-700 transition-colors text-sm" data-inema-appearance-toggle="[data-inema-appearance]" type="button">
-<span aria-hidden="true">◑</span><span class="hidden sm:inline">Aparência</span>
+<span aria-hidden="true">◑</span><span class="hidden sm:inline">Apariencia</span>
 </button>
-<div aria-label="Aparência e leitura" class="inema-appearance-pop" data-inema-appearance="" role="group">
+<div aria-label="Apariencia y lectura" class="inema-appearance-pop" data-inema-appearance="" role="group">
 <p class="inema-seg-label">Tema</p>
 <div class="inema-segment">
-<button data-inema-set-theme="inema-dark" type="button">Escuro</button>
+<button data-inema-set-theme="inema-dark" type="button">Oscuro</button>
 <button data-inema-set-theme="claro" type="button">Claro</button>
-<button data-inema-set-theme="sepia" type="button">Sépia</button>
-<button data-inema-set-theme="foco" type="button">Foco</button>
+<button data-inema-set-theme="sepia" type="button">Sepia</button>
+<button data-inema-set-theme="foco" type="button">Enfoque</button>
 <button data-inema-set-theme="contraste" type="button">Alto contraste</button>
 </div>
-<p class="inema-seg-label">Fonte</p>
+<p class="inema-seg-label">Fuente</p>
 <div class="inema-segment">
 <button data-inema-set-font="inter" type="button">Inter</button>
 <button data-inema-set-font="system" type="button">Sistema</button>
-<button data-inema-set-font="leitura" type="button">Leitura</button>
+<button data-inema-set-font="leitura" type="button">Lectura</button>
 </div>
-<p class="inema-seg-label">Tamanho</p>
+<p class="inema-seg-label">Tamaño</p>
 <div class="inema-segment">
 <button data-inema-set-fontscale="100" type="button">A</button>
 <button data-inema-set-fontscale="112" type="button">A+</button>
 <button data-inema-set-fontscale="125" type="button">A++</button>
 </div>
-<p class="inema-seg-label">Largura da linha</p>
+<p class="inema-seg-label">Ancho de línea</p>
 <div class="inema-segment">
-<button data-inema-set-linewidth="60" type="button">Estreito</button>
-<button data-inema-set-linewidth="68" type="button">Médio</button>
-<button data-inema-set-linewidth="75" type="button">Largo</button>
+<button data-inema-set-linewidth="60" type="button">Estrecho</button>
+<button data-inema-set-linewidth="68" type="button">Medio</button>
+<button data-inema-set-linewidth="75" type="button">Ancho</button>
 </div>
-<p class="inema-seg-label">Entrelinha</p>
+<p class="inema-seg-label">Interlineado</p>
 <div class="inema-segment">
 <button data-inema-set-leading="1.45" type="button">Compacto</button>
-<button data-inema-set-leading="1.7" type="button">Confortável</button>
+<button data-inema-set-leading="1.7" type="button">Cómodo</button>
 </div>
 <p class="inema-seg-label">Acento</p>
-<div aria-label="Cor de acento" class="inema-accent-grid" role="group">
+<div aria-label="Color de acento" class="inema-accent-grid" role="group">
 <button aria-label="Esmeralda" data-inema-set-accent="emerald" type="button"></button>
 <button aria-label="Azul" data-inema-set-accent="blue" type="button"></button>
-<button aria-label="Roxo" data-inema-set-accent="purple" type="button"></button>
-<button aria-label="Âmbar" data-inema-set-accent="amber" type="button"></button>
+<button aria-label="Morado" data-inema-set-accent="purple" type="button"></button>
+<button aria-label="Ámbar" data-inema-set-accent="amber" type="button"></button>
 <button aria-label="Turquesa" data-inema-set-accent="teal" type="button"></button>
 <button aria-label="Rosa" data-inema-set-accent="rose" type="button"></button>
 </div>
 </div>
 </div>
-<button aria-label="Alternar claro/escuro" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-1" id="theme-toggle">
+<button aria-label="Alternar entre claro y oscuro" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-1" id="theme-toggle">
 <svg aria-hidden="true" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-dark-icon" viewbox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
 <svg aria-hidden="true" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-light-icon" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd"></path></svg>
 </button>
@@ -224,9 +224,9 @@
 </div>
 </nav>
 <!-- Breadcrumb -->
-<nav aria-label="Trilha de navegação" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+<nav aria-label="Ruta de navegación" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
 <div class="flex items-center flex-wrap gap-2 text-sm text-neutral-400">
-<a class="hover:text-purple-400" href="../../index.html">Início</a><span aria-hidden="true">/</span>
+<a class="hover:text-purple-400" href="../../index.html">Inicio</a><span aria-hidden="true">/</span>
 <a class="hover:text-purple-400" href="index.html">Trilha 3</a><span aria-hidden="true">/</span>
 <span class="text-purple-400">Módulo 3.1</span>
 </div>
@@ -235,35 +235,35 @@
 <header class="bg-gradient-to-br from-purple-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
 <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 <span class="inline-block px-3 py-1 bg-purple-500/20 text-purple-400 text-xs font-semibold rounded-full mb-4">MÓDULO 3.1</span>
-<h1 class="text-3xl sm:text-4xl font-bold mb-4">⚖️ Cache vs Compactação</h1>
-<p class="text-lg text-neutral-300 max-w-3xl">Cache e compactação parecem competir, mas otimizam coisas diferentes: um mexe no <strong class="text-purple-400">preço por token</strong>, o outro em <strong class="text-purple-400">quantos tokens</strong> você carrega. Quem entende os dois eixos decide certo — e para de pagar contexto gigante turno após turno.</p>
+<h1 class="text-3xl sm:text-4xl font-bold mb-4">⚖️ Caché vs. compactación</h1>
+<p class="text-lg text-neutral-300 max-w-3xl">La caché y la compactación parecen competir, pero optimizan cosas distintas: una modifica el <strong class="text-purple-400">precio por token</strong>, el otro en <strong class="text-purple-400">cuántos tokens</strong> tú cargas. Quien entiende ambos ejes toma la decisión correcta y deja de pagar por un contexto enorme turno tras turno.</p>
 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 max-w-2xl">
-<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">6</div><div class="text-xs text-neutral-400">Temas</div></div>
 <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">~40</div><div class="text-xs text-neutral-400">Minutos</div></div>
-<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">Avançado</div><div class="text-xs text-neutral-400">Nível</div></div>
-<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">Decisão</div><div class="text-xs text-neutral-400">Tipo</div></div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">Avanzado</div><div class="text-xs text-neutral-400">Nivel</div></div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">Decisión</div><div class="text-xs text-neutral-400">Tipo</div></div>
 </div>
 </div>
 </header>
 <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:flex lg:gap-8" id="conteudo">
 <!-- TOC -->
-<nav aria-label="Índice da página" class="hidden lg:block sticky top-20 self-start w-56 shrink-0" data-inema-toc="">
-<p class="text-xs uppercase tracking-wide text-neutral-500 mb-2">Neste módulo</p>
-<p class="text-sm text-neutral-400 mb-3"><span data-inema-section-counter="">Seção 1 de 6</span></p>
+<nav aria-label="Índice de la página" class="hidden lg:block sticky top-20 self-start w-56 shrink-0" data-inema-toc="">
+<p class="text-xs uppercase tracking-wide text-neutral-500 mb-2">En este módulo</p>
+<p class="text-sm text-neutral-400 mb-3"><span data-inema-section-counter="">Sección 1 de 6</span></p>
 <ol class="space-y-1 text-sm">
-<li><a class="inema-toc-link" href="#topico-1">1. Dois eixos diferentes</a></li>
-<li><a class="inema-toc-link" href="#topico-2">2. Cacheado ainda é caro</a></li>
-<li><a class="inema-toc-link" href="#topico-3">3. O teto de 1M</a></li>
-<li><a class="inema-toc-link" href="#topico-4">4. Os números da compactação</a></li>
-<li><a class="inema-toc-link" href="#topico-5">5. Qualidade e latência</a></li>
-<li><a class="inema-toc-link" href="#topico-6">6. Quando compactar</a></li>
+<li><a class="inema-toc-link" href="#topico-1">1. Dos ejes diferentes</a></li>
+<li><a class="inema-toc-link" href="#topico-2">2. Aunque esté en caché, sigue siendo caro</a></li>
+<li><a class="inema-toc-link" href="#topico-3">3. El límite de 1M</a></li>
+<li><a class="inema-toc-link" href="#topico-4">4. Los números de la compactación</a></li>
+<li><a class="inema-toc-link" href="#topico-5">5. Calidad y latencia</a></li>
+<li><a class="inema-toc-link" href="#topico-6">6. Cuándo compactar</a></li>
 </ol>
 <div class="mt-5 pt-4 border-t border-dark-600">
-<div aria-label="Progresso do módulo 3.1" class="inema-meter" data-inema-meter="modulo-3-1">
+<div aria-label="Progreso del módulo 3.1" class="inema-meter" data-inema-meter="modulo-3-1">
 <div class="inema-bar"><div class="inema-bar__fill" data-inema-meter-fill=""></div></div>
 <span class="text-xs text-purple-400 font-semibold" data-inema-meter-pct="">0%</span>
 </div>
-<p class="text-xs text-neutral-500 mt-1"><span data-inema-meter-frac="">0 de 6</span> lidos</p>
+<p class="text-xs text-neutral-500 mt-1"><span data-inema-meter-frac="">0 de 6</span> leídos</p>
 </div>
 </nav>
 <!-- Conteúdo -->
@@ -273,17 +273,17 @@
 <div class="flex items-start justify-between gap-4 mb-6">
 <div class="flex items-center space-x-4">
 <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">1</span>
-<h2 class="text-2xl font-bold">↔️ Dois eixos diferentes</h2>
+<h2 class="text-2xl font-bold">↔️ Dos ejes diferentes</h2>
 </div>
-<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Marcar dúvida neste tópico" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tenho dúvida</span></button>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Marcar duda en este tema" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tengo una duda</span></button>
 </div>
 <div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
-<p data-inema-block="m3-1-t1-p1"><strong class="text-purple-400">Cache</strong> otimiza o <strong>preço por token</strong> do contexto. <strong class="text-purple-400">Compactar</strong> otimiza <strong>quantos tokens</strong> você carrega. São dois eixos que não competem no mesmo lugar — e é por isso que você quer os dois.</p>
-<p data-inema-block="m3-1-t1-p2"><em>Compactar</em> = resumir o histórico numa versão menor; no Claude Code, o comando é <code class="font-mono text-sm">/compact</code>. Ele não muda o preço por token; ele muda o <em>tamanho</em> do que você reenvia.</p>
+<p data-inema-block="m3-1-t1-p1"><strong class="text-purple-400">Caché</strong> optimiza el <strong>precio por token</strong> del contexto. <strong class="text-purple-400">Compactar</strong> optimiza <strong>cuántos tokens</strong> tú cargas. Son dos ejes que no compiten en el mismo lugar, y por eso quieres ambos.</p>
+<p data-inema-block="m3-1-t1-p2"><em>Compactar</em> = resumir el historial en una versión más corta; en Claude Code, el comando es <code class="font-mono text-sm">/compact</code>. No cambia el precio por token; cambia el <em>tamaño</em> de lo que vuelves a enviar.</p>
 </div>
 <!-- SVG: dois eixos -->
 <div class="rounded-2xl border border-purple-500/30 bg-dark-900/40 p-3 sm:p-4 mb-6 overflow-hidden">
-<svg aria-label="Um plano com dois eixos: o vertical é o preço por token, reduzido pelo cache; o horizontal é a quantidade de tokens, reduzida pela compactação. O cache move o ponto para baixo; a compactação move o ponto para a esquerda." class="w-full h-auto" role="img" viewbox="0 0 1000 300">
+<svg aria-label="Un plan con dos ejes: el vertical es el precio por token, reducido por el cache; el horizontal es la cantidad de tokens, reducida por la compactación. El cache mueve el punto hacia abajo; la compactación lo mueve hacia la izquierda." class="w-full h-auto" role="img" viewbox="0 0 1000 300">
 <defs>
 <lineargradient id="m31a-grad" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#c084fc"></stop><stop offset="1" stop-color="#a855f7"></stop></lineargradient>
 <filter height="180%" id="m31a-glow" width="180%" x="-40%" y="-40%"><fegaussianblur result="b" stddeviation="1.8"></fegaussianblur><femerge><femergenode in="b"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge></filter>
@@ -294,38 +294,38 @@
 <rect fill="url(#m31a-grid)" height="300" width="1000" x="0" y="0"></rect>
 <path d="M130,255 L130,40" fill="none" marker-end="url(#m31a-ap)" opacity="0.7" stroke="#c084fc" stroke-width="2"></path>
 <path d="M130,255 L910,255" fill="none" marker-end="url(#m31a-ac)" opacity="0.7" stroke="#38bdf8" stroke-width="2"></path>
-<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="12.5" font-weight="600" transform="rotate(-90 52 150)" x="52" y="150">preço/token (cache ↓)</text>
-<text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="12.5" font-weight="600" text-anchor="middle" x="520" y="290">quantidade de tokens (compactar ←)</text>
+<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="12.5" font-weight="600" transform="rotate(-90 52 150)" x="52" y="150">precio/token (caché ↓)</text>
+<text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="12.5" font-weight="600" text-anchor="middle" x="520" y="290">cantidad de tokens (compactar ←)</text>
 <g font-family="Inter,sans-serif">
 <rect fill="#1a1230" height="50" rx="12" stroke="#c084fc" stroke-width="2" width="180" x="700" y="58"></rect>
-<text fill="#c084fc" font-size="12.5" font-weight="600" text-anchor="middle" x="790" y="79">contexto cheio</text>
-<text fill="#e9d5ff" font-size="11.5" text-anchor="middle" x="790" y="97">muitos tokens · 1×</text>
+<text fill="#c084fc" font-size="12.5" font-weight="600" text-anchor="middle" x="790" y="79">contexto lleno</text>
+<text fill="#e9d5ff" font-size="11.5" text-anchor="middle" x="790" y="97">muchos tokens · 1×</text>
 </g>
 <path d="M790,108 L790,182" fill="none" marker-end="url(#m31a-ap)" opacity="0.75" stroke="#c084fc" stroke-width="2"></path>
-<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="11" x="804" y="150">cache</text>
+<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="11" x="804" y="150">caché</text>
 <g font-family="Inter,sans-serif">
 <rect fill="#1a1230" height="48" opacity="0.9" rx="12" stroke="#c084fc" stroke-width="2" width="180" x="700" y="190"></rect>
-<text fill="#c084fc" font-size="12.5" font-weight="600" text-anchor="middle" x="790" y="210">só cache</text>
-<text fill="#e9d5ff" font-size="11.5" text-anchor="middle" x="790" y="228">muitos tokens · 0,1×</text>
+<text fill="#c084fc" font-size="12.5" font-weight="600" text-anchor="middle" x="790" y="210">solo caché</text>
+<text fill="#e9d5ff" font-size="11.5" text-anchor="middle" x="790" y="228">muchos tokens · 0,1×</text>
 </g>
 <path d="M700,214 L406,214" fill="none" marker-end="url(#m31a-ac)" opacity="0.7" stroke="#38bdf8" stroke-width="2"></path>
 <text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="545" y="205">compactar</text>
 <g filter="url(#m31a-glow)"><rect fill="#1a1230" height="54" rx="14" stroke="url(#m31a-grad)" stroke-width="2.5" width="204" x="200" y="188"></rect></g>
-<text fill="#c084fc" font-family="Inter,sans-serif" font-size="12.5" font-weight="700" text-anchor="middle" x="302" y="210">cache + compacto</text>
-<text fill="#e9d5ff" font-family="Inter,sans-serif" font-size="11.5" text-anchor="middle" x="302" y="228">poucos tokens · 0,1×</text>
+<text fill="#c084fc" font-family="Inter,sans-serif" font-size="12.5" font-weight="700" text-anchor="middle" x="302" y="210">caché + compacto</text>
+<text fill="#e9d5ff" font-family="Inter,sans-serif" font-size="11.5" text-anchor="middle" x="302" y="228">pocos tokens · 0,1×</text>
 </svg>
-<p class="text-xs text-neutral-400 mt-3 px-1">Legenda: o cache <strong class="text-purple-400">só desce</strong> (preço); a compactação <strong class="text-sky-400">só anda pra esquerda</strong> (quantidade). Um não faz o trabalho do outro.</p>
+<p class="text-xs text-neutral-400 mt-3 px-1">Leyenda: la caché <strong class="text-purple-400">solo baja</strong> (precio); la compactación <strong class="text-sky-400">solo avanza hacia la izquierda</strong> (cantidad). Una no hace el trabajo de la otra.</p>
 </div>
 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Cache</div><p class="text-xs text-neutral-400">Mexe no preço por token</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Compactar</div><p class="text-xs text-neutral-400">Mexe na quantidade de tokens</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">/compact</div><p class="text-xs text-neutral-400">Resume o histórico no Claude Code</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Os dois</div><p class="text-xs text-neutral-400">Eixos ortogonais, não rivais</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Caché</div><p class="text-xs text-neutral-400">Cambia el precio por token</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Compactar</div><p class="text-xs text-neutral-400">Cambia la cantidad de tokens</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">/compact</div><p class="text-xs text-neutral-400">Resume el historial en Claude Code</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Los dos</div><p class="text-xs text-neutral-400">Ejes ortogonales, no rivales</p></div>
 </div>
 <div class="flex justify-start mt-6">
 <button aria-pressed="false" class="inline-flex items-center gap-2 justify-start px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors" data-inema-read-toggle="" type="button">
 <span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
-<span class="inema-label-todo">Marcar como lido</span><span class="inema-label-done">Lido ✓</span>
+<span class="inema-label-todo">Marcar como leído</span><span class="inema-label-done">Leído ✓</span>
 </button>
 </div>
 </section>
@@ -334,49 +334,49 @@
 <div class="flex items-start justify-between gap-4 mb-6">
 <div class="flex items-center space-x-4">
 <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">2</span>
-<h2 class="text-2xl font-bold">💰 Contexto grande cacheado ainda é caro</h2>
+<h2 class="text-2xl font-bold">💰 Un contexto grande cacheado sigue siendo caro</h2>
 </div>
-<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Marcar dúvida neste tópico" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tenho dúvida</span></button>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Marcar duda en este tema" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tengo una duda</span></button>
 </div>
 <div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
-<p data-inema-block="m3-1-t2-p1">O desconto do cache engana. Cache barateia <em>por token</em>, mas 400k tokens lidos a <strong class="text-purple-400">0,1×</strong> ainda equivalem a <strong class="text-purple-400">~40k de input cheio</strong> por turno — e isso <strong>todo turno</strong>, enquanto o contexto ficar desse tamanho.</p>
+<p data-inema-block="m3-1-t2-p1">El descuento de la caché engaña. La caché abarata <em>por token</em>, pero 400k tokens leídos a <strong class="text-purple-400">0,1×</strong> todavía equivalen a <strong class="text-purple-400">~40k de input completo</strong> por turno, y eso <strong>cada turno</strong>, mientras el contexto siga teniendo este tamaño.</p>
 </div>
 <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
-<h3 class="text-lg font-semibold text-purple-400 mb-3 flex items-center"><span aria-hidden="true" class="mr-2">🧮</span> A conta que assusta</h3>
-<p class="text-neutral-300 mb-3">400.000 tokens × 0,1× = <strong class="text-purple-400">40.000 tokens-equivalentes de input cheio</strong>, pagos a cada mensagem. O hit alto (99%) não muda isso: o volume é grande.</p>
-<div class="font-mono text-sm bg-dark-900/60 rounded-lg p-4 text-neutral-300 overflow-x-auto">400k lido @ 0,1×  ≈  40k-equiv / turno<br/>× cada turno da conversa  =  soma que cresce sem parar</div>
+<h3 class="text-lg font-semibold text-purple-400 mb-3 flex items-center"><span aria-hidden="true" class="mr-2">🧮</span> El cálculo que asusta</h3>
+<p class="text-neutral-300 mb-3">400.000 tokens × 0,1× = <strong class="text-purple-400">40.000 tokens equivalentes de input completo</strong>, pagados en cada mensaje. El hit alto (99%) no cambia eso: el volumen es grande.</p>
+<div class="font-mono text-sm bg-dark-900/60 rounded-lg p-4 text-neutral-300 overflow-x-auto">400k leídos @ 0,1×  ≈  40k-equiv / turno<br/>× cada turno de la conversación = suma que crece sin parar</div>
 </div>
 <!-- SVG: 0.1x de muito ainda é muito -->
 <div class="rounded-2xl border border-purple-500/30 bg-dark-900/40 p-3 sm:p-4 mb-6 overflow-hidden">
-<svg aria-label="Barra de 400 mil tokens a preço cheio, e a mesma barra reduzida a um décimo pelo cache; mesmo a um décimo, o bloco resultante equivale a 40 mil tokens de input cheio." class="w-full h-auto" role="img" viewbox="0 0 1000 200">
+<svg aria-label="Barra de 400 mil tokens a precio completo y la misma barra reducida a una décima parte por el caché; incluso a una décima parte, el bloque resultante equivale a 40 mil tokens de input a precio completo." class="w-full h-auto" role="img" viewbox="0 0 1000 200">
 <defs><pattern height="32" id="m31b-grid" patternunits="userSpaceOnUse" width="32"><circle cx="1.3" cy="1.3" fill="#a855f7" opacity="0.12" r="1.3"></circle></pattern>
 <marker id="m31b-ap" markerheight="9" markerwidth="9" orient="auto" refx="6.5" refy="4.5"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#c084fc"></path></marker></defs>
 <rect fill="url(#m31b-grid)" height="200" width="1000" x="0" y="0"></rect>
-<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="13" font-weight="600" x="40" y="40">400k @ 1× (sem cache)</text>
+<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="13" font-weight="600" x="40" y="40">400k @ 1× (sin caché)</text>
 <rect fill="#1a1230" height="34" rx="8" stroke="#c084fc" stroke-width="2" width="760" x="40" y="52"></rect>
-<text fill="#e9d5ff" font-family="Inter,sans-serif" font-size="12.5" text-anchor="middle" x="420" y="74">400.000 tokens-equivalentes</text>
+<text fill="#e9d5ff" font-family="Inter,sans-serif" font-size="12.5" text-anchor="middle" x="420" y="74">400.000 tokens equivalentes</text>
 <path d="M420,90 L420,120" fill="none" marker-end="url(#m31b-ap)" opacity="0.7" stroke="#c084fc" stroke-width="2"></path>
-<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="11" x="434" y="110">× 0,1 (cache)</text>
-<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="13" font-weight="600" x="40" y="146">400k @ 0,1× (com cache)</text>
+<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="11" x="434" y="110">× 0,1 (caché)</text>
+<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="13" font-weight="600" x="40" y="146">400k @ 0,1× (con caché)</text>
 <rect fill="#1a1230" height="30" rx="8" stroke="#c084fc" stroke-width="2" width="76" x="40" y="158"></rect>
-<text fill="#e9d5ff" font-family="Inter,sans-serif" font-size="12" x="132" y="178">≈ 40.000 tokens-equiv / turno — ainda grande</text>
+<text fill="#e9d5ff" font-family="Inter,sans-serif" font-size="12" x="132" y="178">≈ 40.000 tokens-equiv / turno — todavía grande</text>
 </svg>
-<p class="text-xs text-neutral-400 mt-3 px-1">Legenda: um décimo de <strong>muito</strong> continua sendo muito. Cache aperta o preço; não encolhe o contexto.</p>
+<p class="text-xs text-neutral-400 mt-3 px-1">Leyenda: una décima parte de <strong>mucho</strong> sigue siendo mucho. La caché reduce el precio; no achica el contexto.</p>
 </div>
 <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
-<h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center"><span aria-hidden="true" class="mr-2">📊</span> Leia a soma, não o campo</h3>
-<p class="text-neutral-300 text-sm">Se <code class="font-mono text-xs">input_tokens</code> mostra pouco mas a conta veio alta, o grosso está em <code class="font-mono text-xs">cache_read_input_tokens</code> a 0,1×. É barato por token, mas o total do prompt é a soma dos três campos.</p>
+<h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center"><span aria-hidden="true" class="mr-2">📊</span> Lee la suma, no el campo</h3>
+<p class="text-neutral-300 text-sm">Si <code class="font-mono text-xs">input_tokens</code> muestra poco, pero el cálculo dio alto; la mayor parte está en <code class="font-mono text-xs">cache_read_input_tokens</code> a 0,1×. Es barato por token, pero el total del prompt es la suma de los tres campos.</p>
 </div>
 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">0,1×</div><p class="text-xs text-neutral-400">O fator de leitura do cache</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">40k-equiv</div><p class="text-xs text-neutral-400">400k lido, todo turno</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Todo turno</div><p class="text-xs text-neutral-400">O custo se repete, não some</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Volume</div><p class="text-xs text-neutral-400">Barato ≠ pequeno</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">0,1×</div><p class="text-xs text-neutral-400">El factor de lectura de la caché</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">40k-equiv</div><p class="text-xs text-neutral-400">400k leídos, en cada turno</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Cada turno</div><p class="text-xs text-neutral-400">El costo se repite, no desaparece</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Volumen</div><p class="text-xs text-neutral-400">Barato ≠ pequeño</p></div>
 </div>
 <div class="flex justify-start mt-6">
 <button aria-pressed="false" class="inline-flex items-center gap-2 justify-start px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors" data-inema-read-toggle="" type="button">
 <span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
-<span class="inema-label-todo">Marcar como lido</span><span class="inema-label-done">Lido ✓</span>
+<span class="inema-label-todo">Marcar como leído</span><span class="inema-label-done">Leído ✓</span>
 </button>
 </div>
 </section>
@@ -385,48 +385,48 @@
 <div class="flex items-start justify-between gap-4 mb-6">
 <div class="flex items-center space-x-4">
 <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">3</span>
-<h2 class="text-2xl font-bold">🧱 O teto do contexto (1M)</h2>
+<h2 class="text-2xl font-bold">🧱 El límite del contexto (1M)</h2>
 </div>
-<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Marcar dúvida neste tópico" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tenho dúvida</span></button>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Marcar duda en este tema" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tengo una duda</span></button>
 </div>
 <div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
-<p data-inema-block="m3-1-t3-p1">Aqui o cache <strong>não ajuda</strong>. Ele deixa 900k tokens <em>baratos</em>, mas eles ainda ocupam <strong class="text-purple-400">900k de 1M</strong>. Uma hora você não continua a conversa sem <strong class="text-purple-400">compactar</strong> ou <code class="font-mono text-sm">/clear</code>. O teto é sobre quantidade — e só compactar/limpar libera espaço.</p>
+<p data-inema-block="m3-1-t3-p1">Aquí el caché <strong>no ayuda</strong>. Deja 900k tokens <em>baratos</em>, pero todavía ocupan <strong class="text-purple-400">900k de 1M</strong>. En algún momento no puedes continuar la conversación sin <strong class="text-purple-400">compactar</strong> o <code class="font-mono text-sm">/clear</code>. El límite se refiere a la cantidad, y solo compactar/limpiar libera espacio.</p>
 </div>
 <!-- SVG: teto de 1M -->
 <div class="rounded-2xl border border-purple-500/30 bg-dark-900/40 p-3 sm:p-4 mb-6 overflow-hidden">
-<svg aria-label="A janela de contexto tem capacidade de 1 milhão de tokens. Um contexto cacheado de 900 mil tokens é barato por token, mas ainda ocupa 900 mil dos 1 milhão de lugares, sobrando pouco espaço. Compactar para 20 mil libera a janela quase inteira." class="w-full h-auto" role="img" viewbox="0 0 1000 210">
+<svg aria-label="La ventana de contexto tiene capacidad para 1 millón de tokens. Un contexto cacheado de 900 mil tokens cuesta poco por token, pero aun así ocupa 900 mil de los 1 millón de espacios, por lo que queda poco espacio. Compactar a 20 mil libera casi toda la ventana." class="w-full h-auto" role="img" viewbox="0 0 1000 210">
 <defs><pattern height="32" id="m31c-grid" patternunits="userSpaceOnUse" width="32"><circle cx="1.3" cy="1.3" fill="#a855f7" opacity="0.12" r="1.3"></circle></pattern>
 <filter height="180%" id="m31c-glow" width="180%" x="-40%" y="-40%"><fegaussianblur result="b" stddeviation="1.8"></fegaussianblur><femerge><femergenode in="b"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge></filter></defs>
 <rect fill="url(#m31c-grid)" height="210" width="1000" x="0" y="0"></rect>
-<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="13" font-weight="600" x="40" y="36">Janela de contexto = 1.000.000 tokens</text>
+<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="13" font-weight="600" x="40" y="36">Ventana de contexto = 1.000.000 tokens</text>
 <!-- barra 1: cache 900k -->
-<text fill="#e9d5ff" font-family="Inter,sans-serif" font-size="12" x="40" y="70">contexto cacheado (barato, mas grande)</text>
+<text fill="#e9d5ff" font-family="Inter,sans-serif" font-size="12" x="40" y="70">contexto en caché (barato, pero grande)</text>
 <rect fill="#0e1622" height="30" rx="6" stroke="#4b5563" stroke-width="1.5" width="900" x="40" y="78"></rect>
 <rect fill="#1a1230" height="30" rx="6" stroke="#c084fc" stroke-width="2" width="810" x="40" y="78"></rect>
 <text fill="#e9d5ff" font-family="Inter,sans-serif" font-size="12" text-anchor="middle" x="445" y="98">900k ocupados @ 0,1×</text>
 <text fill="#9ca3af" font-family="Inter,sans-serif" font-size="10" text-anchor="middle" x="905" y="98">100k</text>
 <!-- barra 2: compactado 20k -->
-<text fill="#e9d5ff" font-family="Inter,sans-serif" font-size="12" x="40" y="146">depois de compactar</text>
+<text fill="#e9d5ff" font-family="Inter,sans-serif" font-size="12" x="40" y="146">después de compactar</text>
 <rect fill="#0e1622" height="30" rx="6" stroke="#4b5563" stroke-width="1.5" width="900" x="40" y="154"></rect>
 <g filter="url(#m31c-glow)"><rect fill="#1a1230" height="30" rx="6" stroke="#38bdf8" stroke-width="2" width="20" x="40" y="154"></rect></g>
-<text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="12" x="120" y="174">20k · janela quase toda livre</text>
+<text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="12" x="120" y="174">20k · ventana casi toda libre</text>
 </svg>
-<p class="text-xs text-neutral-400 mt-3 px-1">Legenda: barato ≠ pequeno. O limite de 1M conta <strong>lugares ocupados</strong>, não preço — só <strong class="text-sky-400">compactar</strong> abre espaço.</p>
+<p class="text-xs text-neutral-400 mt-3 px-1">Leyenda: barato ≠ pequeño. El límite de 1M cuenta <strong>lugares ocupados</strong>, no el precio: solo <strong class="text-sky-400">compactar</strong> abre espacio.</p>
 </div>
 <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6 mb-6">
-<h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center"><span aria-hidden="true" class="mr-2">🚧</span> O erro comum</h3>
-<p class="text-neutral-300 text-sm">Contar com o cache pra "aguentar" um contexto que só cresce. Ele segura o custo, não o tamanho. Perto do teto, a conversa trava — e aí é <code class="font-mono text-xs">/compact</code> ou <code class="font-mono text-xs">/clear</code>, não mais cache.</p>
+<h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center"><span aria-hidden="true" class="mr-2">🚧</span> El error común</h3>
+<p class="text-neutral-300 text-sm">Confiar en que el caché "aguante" un contexto que solo crece. Mantiene bajo el costo, no el tamaño. Cerca del límite, la conversación se traba, y entonces es <code class="font-mono text-xs">/compact</code> o <code class="font-mono text-xs">/clear</code>, ya no más caché.</p>
 </div>
 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">1M</div><p class="text-xs text-neutral-400">Teto de lugares na janela</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Barato ≠ pequeno</div><p class="text-xs text-neutral-400">Cache não abre espaço</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">/compact</div><p class="text-xs text-neutral-400">Reduz a ocupação</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">/clear</div><p class="text-xs text-neutral-400">Zera quando não precisa do histórico</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">1M</div><p class="text-xs text-neutral-400">Límite de lugares en la ventana</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Barato ≠ pequeño</div><p class="text-xs text-neutral-400">La caché no libera espacio</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">/compact</div><p class="text-xs text-neutral-400">Reduce la ocupación</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">/clear</div><p class="text-xs text-neutral-400">Se reinicia cuando ya no necesitas el historial</p></div>
 </div>
 <div class="flex justify-start mt-6">
 <button aria-pressed="false" class="inline-flex items-center gap-2 justify-start px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors" data-inema-read-toggle="" type="button">
 <span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
-<span class="inema-label-todo">Marcar como lido</span><span class="inema-label-done">Lido ✓</span>
+<span class="inema-label-todo">Marcar como leído</span><span class="inema-label-done">Leído ✓</span>
 </button>
 </div>
 </section>
@@ -435,29 +435,29 @@
 <div class="flex items-start justify-between gap-4 mb-6">
 <div class="flex items-center space-x-4">
 <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">4</span>
-<h2 class="text-2xl font-bold">📉 Os números da compactação</h2>
+<h2 class="text-2xl font-bold">📉 Las cifras de la compactación</h2>
 </div>
-<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Marcar dúvida neste tópico" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tenho dúvida</span></button>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Marcar duda en este tema" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tengo una duda</span></button>
 </div>
 <div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
-<p data-inema-block="m3-1-t4-p1">Compactar troca um <strong class="text-purple-400">write frio único</strong> por turnos muito mais leves. Sem compactar, você paga o contexto grande <strong>toda</strong> mensagem. Compactando, você paga uma gravação só e todos os turnos seguintes ficam baratos. Veja a conta lado a lado.</p>
+<p data-inema-block="m3-1-t4-p1">Compactar cambia un <strong class="text-purple-400">write frío único</strong> por turnos mucho más ligeros. Sin compactar, pagas el contexto grande <strong>cada</strong> mensaje. Al compactar, pagas una sola escritura y todos los turnos siguientes salen baratos. Compara los cálculos lado a lado.</p>
 </div>
 <!-- Tabela de números -->
 <div class="overflow-x-auto mb-6 rounded-xl border border-dark-600">
 <table class="num-table">
 <thead>
-<tr><th>Cenário</th><th>Custo inicial (uma vez)</th><th>Custo por turno</th><th>Payback</th></tr>
+<tr><th>Escenario</th><th>Costo inicial (una vez)</th><th>Costo por turno</th><th>Payback</th></tr>
 </thead>
 <tbody>
 <tr>
-<td class="font-semibold text-neutral-100">Sem compactar<br/><span class="text-xs text-neutral-400">400k no contexto</span></td>
+<td class="font-semibold text-neutral-100">Sin compactar<br/><span class="text-xs text-neutral-400">400k en el contexto</span></td>
 <td class="text-neutral-300">—</td>
-<td class="text-red-400 font-semibold">400k @ 0,1× ≈ <strong>40k-equiv</strong> · pra sempre</td>
-<td class="text-neutral-400">nunca melhora</td>
+<td class="text-red-400 font-semibold">400k @ 0,1× ≈ <strong>40k-equiv</strong> · para siempre</td>
+<td class="text-neutral-400">nunca mejora</td>
 </tr>
 <tr>
 <td class="font-semibold text-neutral-100">Compactando<br/><span class="text-xs text-neutral-400">para 20k</span></td>
-<td class="text-purple-400 font-semibold">1 write frio 20k @ 1,25× ≈ <strong>25k</strong></td>
+<td class="text-purple-400 font-semibold">1 write en frío 20k @ 1,25× ≈ <strong>25k</strong></td>
 <td class="text-emerald-400 font-semibold">20k @ 0,1× ≈ <strong>2k-equiv</strong> · por turno</td>
 <td class="text-emerald-400 font-semibold">~1 turno</td>
 </tr>
@@ -466,10 +466,10 @@
 </div>
 <!-- SVG: barras por turno -->
 <div class="rounded-2xl border border-purple-500/30 bg-dark-900/40 p-3 sm:p-4 mb-6 overflow-hidden">
-<svg aria-label="Comparação do custo por turno: sem compactar, cada turno custa cerca de 40 mil tokens-equivalentes, para sempre. Compactando, há um custo único de 25 mil no turno zero e depois cada turno custa cerca de 2 mil, cerca de vinte vezes mais leve." class="w-full h-auto" role="img" viewbox="0 0 1000 240">
+<svg aria-label="Comparación del costo por turno: sin compactar, cada turno cuesta cerca de 40 mil tokens equivalentes, para siempre. Al compactar, hay un costo único de 25 mil en el turno cero y después cada turno cuesta cerca de 2 mil, unas veinte veces menos." class="w-full h-auto" role="img" viewbox="0 0 1000 240">
 <defs><pattern height="32" id="m31d-grid" patternunits="userSpaceOnUse" width="32"><circle cx="1.3" cy="1.3" fill="#a855f7" opacity="0.12" r="1.3"></circle></pattern></defs>
 <rect fill="url(#m31d-grid)" height="240" width="1000" x="0" y="0"></rect>
-<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="13" font-weight="600" x="40" y="30">Custo por turno (tokens-equivalentes)</text>
+<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="13" font-weight="600" x="40" y="30">Costo por turno (tokens equivalentes)</text>
 <!-- linha base -->
 <line stroke="#4b5563" stroke-width="1.5" x1="120" x2="960" y1="200" y2="200"></line>
 <text fill="#9ca3af" font-family="Inter,sans-serif" font-size="10" x="60" y="205">0</text>
@@ -481,7 +481,7 @@
 <rect height="134" rx="3" width="46" x="310" y="66"></rect>
 <rect height="134" rx="3" width="46" x="390" y="66"></rect>
 </g>
-<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="12" font-weight="600" text-anchor="middle" x="293" y="222">Sem compactar · ~40k/turno pra sempre</text>
+<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="12" font-weight="600" text-anchor="middle" x="293" y="222">Sin compactar · ~40k/turno para siempre</text>
 <!-- compactando: 1 write frio alto + barras baixas (ciano) -->
 <rect fill="#38bdf8" height="82" opacity="0.9" rx="3" width="46" x="560" y="118"></rect>
 <text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="10" text-anchor="middle" x="583" y="110">25k</text>
@@ -491,24 +491,24 @@
 <rect height="7" rx="2" width="46" x="800" y="193"></rect>
 <rect height="7" rx="2" width="46" x="880" y="193"></rect>
 </g>
-<text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="12" font-weight="600" text-anchor="middle" x="743" y="222">Compactando · 1 write frio, depois ~2k/turno</text>
+<text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="12" font-weight="600" text-anchor="middle" x="743" y="222">Compactando · 1 escritura en frío, luego ~2k por turno</text>
 </svg>
-<p class="text-xs text-neutral-400 mt-3 px-1">Legenda: o único pico ciano (turno 0) é o write frio da compactação; depois dele, cada turno é ~20× mais leve que a barra roxa.</p>
+<p class="text-xs text-neutral-400 mt-3 px-1">Leyenda: el único pico cian (turno 0) es la escritura en frío de la compactación; después de él, cada turno es ~20× más ligero que la barra morada.</p>
 </div>
 <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
-<h3 class="text-lg font-semibold text-primary mb-2 flex items-center"><span aria-hidden="true" class="mr-2">💡</span> Dica prática</h3>
-<p class="text-neutral-300 text-sm">Pense em turnos à frente: se ainda faltam muitas mensagens, o write frio de 25k se dilui em nada perto de economizar 38k por turno. Se a conversa vai acabar agora, o write frio não compensa.</p>
+<h3 class="text-lg font-semibold text-primary mb-2 flex items-center"><span aria-hidden="true" class="mr-2">💡</span> Consejo práctico</h3>
+<p class="text-neutral-300 text-sm">Piensa en los turnos que vienen: si aún faltan muchos mensajes, la escritura fría de 25k se diluye y queda en nada frente a ahorrar 38k por turno. Si la conversación termina ahora, la escritura fría no compensa.</p>
 </div>
 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">1 write frio</div><p class="text-xs text-neutral-400">20k @ 1,25× ≈ 25k, uma vez</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">~2k/turno</div><p class="text-xs text-neutral-400">Depois de compactar</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">1 write en frío</div><p class="text-xs text-neutral-400">20k @ 1,25× ≈ 25k, una vez</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">~2k/turno</div><p class="text-xs text-neutral-400">Después de compactar</p></div>
 <div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">~1 turno</div><p class="text-xs text-neutral-400">Payback</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">~20×</div><p class="text-xs text-neutral-400">Mais leve por turno</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">~20×</div><p class="text-xs text-neutral-400">Más ligero por turno</p></div>
 </div>
 <div class="flex justify-start mt-6">
 <button aria-pressed="false" class="inline-flex items-center gap-2 justify-start px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors" data-inema-read-toggle="" type="button">
 <span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
-<span class="inema-label-todo">Marcar como lido</span><span class="inema-label-done">Lido ✓</span>
+<span class="inema-label-todo">Marcar como leído</span><span class="inema-label-done">Leído ✓</span>
 </button>
 </div>
 </section>
@@ -517,59 +517,59 @@
 <div class="flex items-start justify-between gap-4 mb-6">
 <div class="flex items-center space-x-4">
 <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">5</span>
-<h2 class="text-2xl font-bold">🧠 Qualidade e latência</h2>
+<h2 class="text-2xl font-bold">🧠 Calidad y latencia</h2>
 </div>
-<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Marcar dúvida neste tópico" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tenho dúvida</span></button>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Marcar duda en este tema" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tengo una duda</span></button>
 </div>
 <div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
-<p data-inema-block="m3-1-t5-p1">Compactar não é só custo. Contexto inchado <strong class="text-purple-400">espalha a atenção</strong> do modelo (o "context rot") — ele erra e enrola mais. E, mesmo lido do cache, <strong>400k levam mais tempo</strong> que 20k para o primeiro token (TTFT maior). Compactar melhora precisão <em>e</em> velocidade.</p>
+<p data-inema-block="m3-1-t5-p1">Compactar no es solo cuestión de costo. Un contexto inflado <strong class="text-purple-400">dispersa la atención</strong> del modelo (el "context rot") — se equivoca y da más rodeos. E incluso leído desde el caché, <strong>400k tardan más</strong> que 20k para el primer token (TTFT mayor). Compactar mejora la precisión <em>e</em> velocidad.</p>
 </div>
 <!-- SVG: context rot -->
 <div class="rounded-2xl border border-purple-500/30 bg-dark-900/40 p-3 sm:p-4 mb-6 overflow-hidden">
-<svg aria-label="À esquerda, um contexto largo de 400 mil tokens com a atenção do modelo espalhada em muitos pontos fracos. À direita, um contexto compacto de 20 mil tokens com a atenção concentrada e o tempo até o primeiro token menor." class="w-full h-auto" role="img" viewbox="0 0 1000 210">
+<svg aria-label="A la izquierda, un contexto amplio de 400 mil tokens con la atención del modelo dispersa en muchos puntos débiles. A la derecha, un contexto compacto de 20 mil tokens con la atención concentrada y menos tiempo hasta el primer token." class="w-full h-auto" role="img" viewbox="0 0 1000 210">
 <defs><pattern height="32" id="m31e-grid" patternunits="userSpaceOnUse" width="32"><circle cx="1.3" cy="1.3" fill="#a855f7" opacity="0.12" r="1.3"></circle></pattern>
 <filter height="180%" id="m31e-glow" width="180%" x="-40%" y="-40%"><fegaussianblur result="b" stddeviation="1.8"></fegaussianblur><femerge><femergenode in="b"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge></filter></defs>
 <rect fill="url(#m31e-grid)" height="210" width="1000" x="0" y="0"></rect>
 <line stroke="#4b5563" stroke-dasharray="7 7" stroke-width="1.5" x1="500" x2="500" y1="30" y2="180"></line>
-<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="13" font-weight="600" text-anchor="middle" x="250" y="36">400k — atenção espalhada</text>
+<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="13" font-weight="600" text-anchor="middle" x="250" y="36">400k — atención dispersa</text>
 <rect fill="#1a1230" height="70" opacity="0.6" rx="10" stroke="#c084fc" stroke-width="2" width="420" x="40" y="52"></rect>
 <g fill="#c084fc" opacity="0.55"><circle cx="80" cy="87" r="4"></circle><circle cx="140" cy="72" r="3"></circle><circle cx="200" cy="100" r="3"></circle><circle cx="265" cy="78" r="4"></circle><circle cx="330" cy="95" r="3"></circle><circle cx="400" cy="82" r="3"></circle></g>
-<text fill="#e9d5ff" font-family="Inter,sans-serif" font-size="11.5" text-anchor="middle" x="250" y="150">erra mais · TTFT maior</text>
-<text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="13" font-weight="600" text-anchor="middle" x="750" y="36">20k — atenção concentrada</text>
+<text fill="#e9d5ff" font-family="Inter,sans-serif" font-size="11.5" text-anchor="middle" x="250" y="150">se equivoca más · TTFT mayor</text>
+<text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="13" font-weight="600" text-anchor="middle" x="750" y="36">20k — atención concentrada</text>
 <g filter="url(#m31e-glow)"><rect fill="#0e1b26" height="54" rx="10" stroke="#38bdf8" stroke-width="2" width="200" x="640" y="60"></rect></g>
 <g fill="#38bdf8"><circle cx="720" cy="87" r="5"></circle><circle cx="760" cy="87" r="5"></circle></g>
-<text fill="#bfe6ff" font-family="Inter,sans-serif" font-size="11.5" text-anchor="middle" x="750" y="150">acerta mais · responde antes</text>
+<text fill="#bfe6ff" font-family="Inter,sans-serif" font-size="11.5" text-anchor="middle" x="750" y="150">acierta más · responde antes</text>
 </svg>
-<p class="text-xs text-neutral-400 mt-3 px-1">Legenda: menos tokens = atenção concentrada + primeiro token mais rápido. Compactar é ganho de qualidade, não só de conta.</p>
+<p class="text-xs text-neutral-400 mt-3 px-1">Leyenda: menos tokens = atención concentrada + primer token más rápido. Compactar es una mejora de calidad, no solo de costos.</p>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
 <h4 class="font-bold text-emerald-400 mb-4">✓ Contexto compacto</h4>
 <ul class="space-y-2 text-neutral-300 text-sm">
-<li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>Atenção concentrada no que importa</span></li>
-<li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>Menos "context rot", menos erro</span></li>
-<li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>Primeiro token mais rápido (TTFT menor)</span></li>
+<li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>Atención concentrada en lo que importa</span></li>
+<li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>Menos «context rot», menos errores</span></li>
+<li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>Primer token más rápido (TTFT menor)</span></li>
 </ul>
 </div>
 <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
-<h4 class="font-bold text-red-400 mb-4">✗ Contexto inchado</h4>
+<h4 class="font-bold text-red-400 mb-4">✗ Contexto inflado</h4>
 <ul class="space-y-2 text-neutral-300 text-sm">
-<li class="flex items-start gap-2"><span class="text-red-400">✗</span><span>Atenção diluída, respostas que enrolam</span></li>
-<li class="flex items-start gap-2"><span class="text-red-400">✗</span><span>Erros por perder o fio do que importa</span></li>
-<li class="flex items-start gap-2"><span class="text-red-400">✗</span><span>Mais lento mesmo lido do cache</span></li>
+<li class="flex items-start gap-2"><span class="text-red-400">✗</span><span>Atención dispersa, respuestas que dan vueltas</span></li>
+<li class="flex items-start gap-2"><span class="text-red-400">✗</span><span>Errores por perder el hilo de lo que importa</span></li>
+<li class="flex items-start gap-2"><span class="text-red-400">✗</span><span>Más lento incluso leído de la caché</span></li>
 </ul>
 </div>
 </div>
 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Context rot</div><p class="text-xs text-neutral-400">Atenção espalhada em excesso</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">TTFT</div><p class="text-xs text-neutral-400">Tempo até o 1º token</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Cache ≠ rápido</div><p class="text-xs text-neutral-400">Lido, mas ainda grande</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Dois ganhos</div><p class="text-xs text-neutral-400">Precisão + velocidade</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Context rot</div><p class="text-xs text-neutral-400">Atención demasiado dispersa</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">TTFT</div><p class="text-xs text-neutral-400">Tiempo hasta el 1.er token</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Caché ≠ rapidez</div><p class="text-xs text-neutral-400">Leído, pero todavía grande</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Dos beneficios</div><p class="text-xs text-neutral-400">Precisión + velocidad</p></div>
 </div>
 <div class="flex justify-start mt-6">
 <button aria-pressed="false" class="inline-flex items-center gap-2 justify-start px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors" data-inema-read-toggle="" type="button">
 <span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
-<span class="inema-label-todo">Marcar como lido</span><span class="inema-label-done">Lido ✓</span>
+<span class="inema-label-todo">Marcar como leído</span><span class="inema-label-done">Leído ✓</span>
 </button>
 </div>
 </section>
@@ -578,93 +578,93 @@
 <div class="flex items-start justify-between gap-4 mb-6">
 <div class="flex items-center space-x-4">
 <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">6</span>
-<h2 class="text-2xl font-bold">🎯 Quando compactar / quando NÃO</h2>
+<h2 class="text-2xl font-bold">🎯 Cuándo compactar / cuándo NO</h2>
 </div>
-<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Marcar dúvida neste tópico" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tenho dúvida</span></button>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Marcar duda en este tema" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">Tengo una duda</span></button>
 </div>
 <div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
-<p data-inema-block="m3-1-t6-p1">A régua é simples. <strong class="text-purple-400">Conversa pequena → NÃO compacte</strong>: você só perde o cache quente sem ganho (essa intuição está certa). <strong class="text-purple-400">Contexto grande, perto do teto ou com qualidade caindo → compacte</strong>: você troca 1 write frio único por turnos muito mais leves.</p>
+<p data-inema-block="m3-1-t6-p1">El criterio es simple. <strong class="text-purple-400">Conversación pequeña → NO compactes</strong>: simplemente pierdes el caché caliente sin obtener ningún beneficio (esa intuición es correcta). <strong class="text-purple-400">Contexto grande, cerca del límite o con la calidad en descenso → compacta</strong>: cambias 1 write en frío por turnos mucho más ligeros.</p>
 </div>
 <!-- SVG: fluxo de decisão -->
 <div class="rounded-2xl border border-purple-500/30 bg-dark-900/40 p-3 sm:p-4 mb-6 overflow-hidden">
-<svg aria-label="Árvore de decisão: a partir do estado do contexto, se a conversa é pequena, não compacte para preservar o cache quente; se o contexto é grande, está perto do teto ou a qualidade está caindo, compacte para turnos mais leves." class="w-full h-auto" role="img" viewbox="0 0 1000 260">
+<svg aria-label="Árbol de decisión: según el estado del contexto, si la conversación es corta, no la compactes para conservar la caché caliente; si el contexto es grande, está cerca del límite o la calidad está bajando, compacta para tener turnos más ligeros." class="w-full h-auto" role="img" viewbox="0 0 1000 260">
 <defs><pattern height="32" id="m31f-grid" patternunits="userSpaceOnUse" width="32"><circle cx="1.3" cy="1.3" fill="#a855f7" opacity="0.12" r="1.3"></circle></pattern>
 <filter height="180%" id="m31f-glow" width="180%" x="-40%" y="-40%"><fegaussianblur result="b" stddeviation="1.8"></fegaussianblur><femerge><femergenode in="b"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge></filter>
 <marker id="m31f-ag" markerheight="9" markerwidth="9" orient="auto" refx="6.5" refy="4.5"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#34d399"></path></marker>
 <marker id="m31f-ar" markerheight="9" markerwidth="9" orient="auto" refx="6.5" refy="4.5"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#f87171"></path></marker></defs>
 <rect fill="url(#m31f-grid)" height="260" width="1000" x="0" y="0"></rect>
 <g filter="url(#m31f-glow)"><rect fill="#1a1230" height="56" rx="14" stroke="#c084fc" stroke-width="2.5" width="220" x="390" y="30"></rect></g>
-<text fill="#c084fc" font-family="Inter,sans-serif" font-size="13" font-weight="700" text-anchor="middle" x="500" y="55">Como está o contexto?</text>
-<text fill="#e9d5ff" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="500" y="74">tamanho · teto · qualidade</text>
+<text fill="#c084fc" font-family="Inter,sans-serif" font-size="13" font-weight="700" text-anchor="middle" x="500" y="55">¿Cómo está el contexto?</text>
+<text fill="#e9d5ff" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="500" y="74">tamaño · límite · calidad</text>
 <!-- ramo NÃO (verde: pequeno) -->
 <path d="M410,86 C300,120 240,140 200,168" fill="none" marker-end="url(#m31f-ag)" opacity="0.7" stroke="#34d399" stroke-width="2"></path>
-<text fill="#6ee7b7" font-family="Inter,sans-serif" font-size="11.5" font-weight="600" x="250" y="130">conversa pequena</text>
+<text fill="#6ee7b7" font-family="Inter,sans-serif" font-size="11.5" font-weight="600" x="250" y="130">conversación pequeña</text>
 <rect fill="#0e2018" height="60" rx="12" stroke="#34d399" stroke-width="2" width="280" x="60" y="176"></rect>
-<text fill="#6ee7b7" font-family="Inter,sans-serif" font-size="12.5" font-weight="600" text-anchor="middle" x="200" y="200">NÃO compacte</text>
-<text fill="#c9f2df" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="200" y="220">preserva o cache quente</text>
+<text fill="#6ee7b7" font-family="Inter,sans-serif" font-size="12.5" font-weight="600" text-anchor="middle" x="200" y="200">NO compactes</text>
+<text fill="#c9f2df" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="200" y="220">conserva la caché activa</text>
 <!-- ramo SIM (roxo/vermelho alerta: grande) -->
 <path d="M590,86 C700,120 760,140 800,168" fill="none" marker-end="url(#m31f-ar)" opacity="0.7" stroke="#f87171" stroke-width="2"></path>
-<text fill="#fca5a5" font-family="Inter,sans-serif" font-size="11.5" font-weight="600" x="755" y="130">grande / no teto / caindo</text>
+<text fill="#fca5a5" font-family="Inter,sans-serif" font-size="11.5" font-weight="600" x="755" y="130">grande / en el límite / cayendo</text>
 <rect fill="#1a1230" height="60" rx="12" stroke="#c084fc" stroke-width="2" width="280" x="660" y="176"></rect>
-<text fill="#c084fc" font-family="Inter,sans-serif" font-size="12.5" font-weight="600" text-anchor="middle" x="800" y="200">COMPACTE</text>
-<text fill="#e9d5ff" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="800" y="220">1 write frio → turnos leves</text>
+<text fill="#c084fc" font-family="Inter,sans-serif" font-size="12.5" font-weight="600" text-anchor="middle" x="800" y="200">COMPACTA</text>
+<text fill="#e9d5ff" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="800" y="220">1 write en frío → turnos ligeros</text>
 </svg>
-<p class="text-xs text-neutral-400 mt-3 px-1">Legenda: o ramo <strong class="text-emerald-400">verde</strong> preserva o cache; o ramo <strong class="text-purple-400">roxo</strong> aceita 1 write frio pra ganhar em todos os turnos seguintes.</p>
+<p class="text-xs text-neutral-400 mt-3 px-1">Leyenda: la rama <strong class="text-emerald-400">verde</strong> conserva la caché; la rama <strong class="text-purple-400">morado</strong> acepta 1 write en frío para ganar en todos los turnos siguientes.</p>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
-<h4 class="font-bold text-emerald-400 mb-4">✓ Compacte quando</h4>
+<h4 class="font-bold text-emerald-400 mb-4">✓ Compacta cuando</h4>
 <ul class="space-y-2 text-neutral-300 text-sm">
-<li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>O contexto está grande e ainda faltam muitos turnos</span></li>
-<li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>Você está perto do teto de 1M</span></li>
-<li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>A qualidade caiu / o modelo está enrolando</span></li>
+<li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>El contexto es grande y aún faltan muchos turnos</span></li>
+<li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>Estás cerca del límite de 1M</span></li>
+<li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>La calidad bajó / el modelo está dando vueltas</span></li>
 </ul>
 </div>
 <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
-<h4 class="font-bold text-red-400 mb-4">✗ Não compacte quando</h4>
+<h4 class="font-bold text-red-400 mb-4">✗ No compactes cuando</h4>
 <ul class="space-y-2 text-neutral-300 text-sm">
-<li class="flex items-start gap-2"><span class="text-red-400">✗</span><span>A conversa é curta e o cache já está quente</span></li>
-<li class="flex items-start gap-2"><span class="text-red-400">✗</span><span>Vai acabar logo (não há turnos pra pagar o write frio)</span></li>
-<li class="flex items-start gap-2"><span class="text-red-400">✗</span><span>Por hábito, sem olhar tamanho nem qualidade</span></li>
+<li class="flex items-start gap-2"><span class="text-red-400">✗</span><span>La conversación es corta y el caché ya está caliente</span></li>
+<li class="flex items-start gap-2"><span class="text-red-400">✗</span><span>Está por terminar (no hay turnos para amortizar la escritura en frío)</span></li>
+<li class="flex items-start gap-2"><span class="text-red-400">✗</span><span>Por costumbre, sin revisar el tamaño ni la calidad</span></li>
 </ul>
 </div>
 </div>
 <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
-<h3 class="text-lg font-semibold text-primary mb-2 flex items-center"><span aria-hidden="true" class="mr-2">💡</span> Regra de bolso</h3>
-<p class="text-neutral-300 text-sm">Compacte pelo <strong>estado</strong> (tamanho, teto, qualidade), não por relógio. E lembre: cache e compactação trabalham juntos — depois de compactar, o novo contexto pequeno também é cacheado e fica quente de novo.</p>
+<h3 class="text-lg font-semibold text-primary mb-2 flex items-center"><span aria-hidden="true" class="mr-2">💡</span> Regla práctica</h3>
+<p class="text-neutral-300 text-sm">Compacta por <strong>estado</strong> (tamaño, límite, calidad), no por reloj. Y recuerda: la caché y la compactación trabajan juntas; después de compactar, el nuevo contexto pequeño también se guarda en caché y vuelve a estar activo.</p>
 </div>
 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Pequeno → não</div><p class="text-xs text-neutral-400">Preserva o cache quente</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Grande → sim</div><p class="text-xs text-neutral-400">Turnos muito mais leves</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Pelo estado</div><p class="text-xs text-neutral-400">Não por hábito</p></div>
-<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Juntos</div><p class="text-xs text-neutral-400">Compacto também é cacheado</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Pequeño → no</div><p class="text-xs text-neutral-400">Conserva el caché caliente</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Grande → sí</div><p class="text-xs text-neutral-400">Turnos mucho más ligeros</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Según el estado</div><p class="text-xs text-neutral-400">No por costumbre</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Juntos</div><p class="text-xs text-neutral-400">Compacto también se guarda en caché</p></div>
 </div>
 <div class="flex justify-start mt-6">
 <button aria-pressed="false" class="inline-flex items-center gap-2 justify-start px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors" data-inema-read-toggle="" type="button">
 <span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
-<span class="inema-label-todo">Marcar como lido</span><span class="inema-label-done">Lido ✓</span>
+<span class="inema-label-todo">Marcar como leído</span><span class="inema-label-done">Leído ✓</span>
 </button>
 </div>
 </section>
 <!-- ===== RESUMO ===== -->
 <section class="mb-12">
 <div class="bg-gradient-to-br from-purple-900/40 via-dark-800 to-dark-800 rounded-xl border border-purple-500/30 p-8">
-<h2 class="text-2xl font-bold mb-6 flex items-center"><span aria-hidden="true" class="mr-3">📌</span> Resumo do módulo</h2>
+<h2 class="text-2xl font-bold mb-6 flex items-center"><span aria-hidden="true" class="mr-3">📌</span> Resumen del módulo</h2>
 <div class="space-y-4 mb-8">
-<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">Dois eixos</strong><span class="text-neutral-400"> — cache mexe no preço/token; compactar, na quantidade de tokens.</span></div></div>
-<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">Cacheado ainda é caro</strong><span class="text-neutral-400"> — 400k @ 0,1× ≈ 40k-equiv por turno, todo turno.</span></div></div>
-<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">O teto de 1M é quantidade</strong><span class="text-neutral-400"> — só compactar/<code class="font-mono text-xs">/clear</code> libera espaço.</span></div></div>
-<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">Compactar paga rápido</strong><span class="text-neutral-400"> — 1 write frio (~25k), payback em ~1 turno, depois ~2k/turno.</span></div></div>
-<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">Melhora qualidade e latência</strong><span class="text-neutral-400"> — menos context rot, TTFT menor.</span></div></div>
-<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">A régua</strong><span class="text-neutral-400"> — pequeno não; grande/no teto/caindo, sim.</span></div></div>
+<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">Dos ejes</strong><span class="text-neutral-400"> — la caché afecta el precio/token; compactar, la cantidad de tokens.</span></div></div>
+<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">Lo almacenado en caché todavía cuesta</strong><span class="text-neutral-400"> — 400k @ 0,1× ≈ 40k equiv. por turno, en cada turno.</span></div></div>
+<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">El límite de 1M es una cantidad</strong><span class="text-neutral-400"> — solo compactar/<code class="font-mono text-xs">/clear</code> libera espacio.</span></div></div>
+<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">Compactar se amortiza rápido</strong><span class="text-neutral-400"> — 1 escritura en frío (~25k), se recupera la inversión en ~1 turno y luego ~2k/turno.</span></div></div>
+<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">Mejora la calidad y la latencia</strong><span class="text-neutral-400"> — menos context rot, menor TTFT.</span></div></div>
+<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-neutral-100">El criterio</strong><span class="text-neutral-400"> — pequeño, no; grande/al límite/en descenso, sí.</span></div></div>
 </div>
 <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
-<h3 class="font-semibold text-purple-400 mb-1">Próximo módulo</h3>
-<p class="text-neutral-300 text-sm">3.2 — Arquitetura pró-cache e auditoria: desenhar o prefixo pra ele nunca invalidar sem querer.</p>
+<h3 class="font-semibold text-purple-400 mb-1">Siguiente módulo</h3>
+<p class="text-neutral-300 text-sm">3.2 — Arquitectura pro caché y auditoría: diseñar el prefijo para que nunca se invalide por accidente.</p>
 </div>
 <div class="flex flex-col sm:flex-row gap-4">
-<a class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors" href="index.html">← Voltar para a Trilha 3</a>
-<a class="flex-1 text-center px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-500 transition-colors" href="modulo-3-2.html">Próximo: 3.2 →</a>
+<a class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors" href="index.html">← Volver a la Ruta 3</a>
+<a class="flex-1 text-center px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-500 transition-colors" href="modulo-3-2.html">Siguiente: 3.2 →</a>
 </div>
 </div>
 </section>
@@ -673,10 +673,10 @@
 <!-- FOOTER -->
 <footer class="border-t border-dark-600 py-8">
 <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
-<p>cccache — Prompt Caching no Claude Code · Curso <a class="text-sky-400 hover:text-sky-300" href="https://inema.club" rel="noopener" target="_blank">INEMA.CLUB</a> · 2026</p>
+<p>cccache — Prompt Caching en Claude Code · Curso <a class="text-sky-400 hover:text-sky-300" href="https://inema.club" rel="noopener" target="_blank">INEMA.CLUB</a> · 2026</p>
 </div>
 </footer>
-<script src="../../assets/learn.js"></script>
+<script src="../../../assets/learn.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
       if (window.INEMA && typeof INEMA.init === 'function') { INEMA.init(); }

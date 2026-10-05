@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="cccache" name="inema-course"/>
+<title>Module 2.2 · Skills and tools: attach vs. break | cccache</title>
+<!-- 1) ANTI-FOUC -->
+<script>
+    (function () {
+      try {
+        var p = JSON.parse(localStorage.getItem('inema.prefs') || '{}');
+        var d = document.documentElement;
+        var dark = p.theme ? p.theme !== 'claro' : (localStorage.getItem('theme') !== 'light');
+        if (dark) { d.classList.add('dark'); } else { d.classList.remove('dark'); }
+        if (p.theme && p.theme !== 'inema-dark' && p.theme !== 'claro') { d.setAttribute('data-theme', p.theme); }
+        if (p.font) { d.setAttribute('data-font', p.font); }
+        if (p.accent) { d.setAttribute('data-accent', p.accent); }
+        if (p.fontScale) { d.style.setProperty('--fs-root', p.fontScale + '%'); d.style.setProperty('--inema-font-scale', p.fontScale); d.style.fontSize = p.fontScale + '%'; }
+        if (p.lineWidth) { d.style.setProperty('--measure', p.lineWidth + 'ch'); }
+        if (p.leading) { d.style.setProperty('--lh-body', p.leading); }
+        d.style.colorScheme = (p.theme === 'claro' || p.theme === 'sepia') ? 'light' : 'dark';
+      } catch (e) { document.documentElement.classList.add('dark'); }
+    })();
+  </script>
+<!-- 2) MANIFESTO (erro #28 — idêntico em toda página) -->
+<script data-inema-manifest="" type="application/json">
+{
+  "course": { "id": "cccache", "title": "cccache — Prompt Caching no Claude Code" },
+  "tracks": [
+    {
+      "id": "trilha1", "title": "Fundamentos e termos",
+      "modules": [
+        { "id": "modulo-1-1", "title": "O que é prompt caching", "href": "curso/trilha1/modulo-1-1.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] },
+        { "id": "modulo-1-2", "title": "Termos e economia", "href": "curso/trilha1/modulo-1-2.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] }
+      ]
+    },
+    {
+      "id": "trilha2", "title": "Técnico",
+      "modules": [
+        { "id": "modulo-2-1", "title": "O cache numa conversa", "href": "curso/trilha2/modulo-2-1.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] },
+        { "id": "modulo-2-2", "title": "Skills e ferramentas: anexar vs quebrar", "href": "curso/trilha2/modulo-2-2.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] },
+        { "id": "modulo-2-3", "title": "Invalidação a fundo", "href": "curso/trilha2/modulo-2-3.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] }
+      ]
+    },
+    {
+      "id": "trilha3", "title": "Boas práticas avançadas",
+      "modules": [
+        { "id": "modulo-3-1", "title": "Cache vs Compactação", "href": "curso/trilha3/modulo-3-1.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] },
+        { "id": "modulo-3-2", "title": "Arquitetura pró-cache e auditoria", "href": "curso/trilha3/modulo-3-2.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] },
+        { "id": "modulo-3-3", "title": "Prompts prontos (copy-run)", "href": "curso/trilha3/modulo-3-3.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] }
+      ]
+    }
+  ]
+}
+  </script>
+<!-- 3) Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: {
+      primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } } }
+  </script>
+<!-- 4) CSS base -->
+<style>
+    body { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+    .dark body { background-color: #111827; }
+    [id^="topico-"], [id^="modulo-"], section[data-inema-topic] { scroll-margin-top: 5rem; }
+
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37, 99, 235, 0.12); }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .hover\:bg-blue-500\/30:hover { background-color: rgba(37, 99, 235, 0.18); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .group:hover .group-hover\:text-blue-400 { color: #2563eb; }
+    html:not(.dark) .hover\:border-blue-500\/30:hover { border-color: rgba(37, 99, 235, 0.25); }
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(220, 38, 38, 0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220, 38, 38, 0.25); }
+
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+    html:not(.dark) svg[role="img"] { filter: saturate(0.82) brightness(0.96); }
+
+    @keyframes t2-pulse { 0%, 100% { opacity: .5 } 50% { opacity: 1 } }
+    @media (prefers-reduced-motion: no-preference) {
+      .t2-a { animation: t2-pulse 2.6s ease-in-out infinite; }
+      .t2-a:nth-of-type(2) { animation-delay: .3s }
+      .t2-a:nth-of-type(3) { animation-delay: .6s }
+    }
+    .nav-appearance-wrap { position: relative; }
+    .copy-btn.copied { color: #34d399 !important; }
+  </style>
+<!-- 5) learn.css -->
+<link href="../../../assets/learn.css" rel="stylesheet"/>
+<link href="https://inematds.github.io/cccache/curso/trilha2/modulo-2-2.html" hreflang="pt-BR" rel="alternate"/><link href="https://inematds.github.io/cccache/en/curso/trilha2/modulo-2-2.html" hreflang="en" rel="alternate"/><link href="https://inematds.github.io/cccache/es/curso/trilha2/modulo-2-2.html" hreflang="es" rel="alternate"/></head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen"><div class="inema-lang" style="position:fixed;right:14px;bottom:14px;z-index:9999;display:flex;gap:2px;padding:4px;border-radius:10px;background:rgba(12,12,16,.82);border:1px solid rgba(226,162,59,.45);font:600 12px/1 Sora,Inter,system-ui,sans-serif;backdrop-filter:blur(8px)" translate="no"><a href="../../../curso/trilha2/modulo-2-2.html" hreflang="pt-BR" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">PT</a><a href="modulo-2-2.html" hreflang="en" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#1a1206;background:#E2A23B">EN</a><a href="../../../es/curso/trilha2/modulo-2-2.html" hreflang="es" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">ES</a></div>
+<a class="inema-skip" href="#conteudo">Skip to content</a>
+<!-- ================= NAV (erro #13) ================= -->
+<nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between items-center h-14">
+<div class="flex items-center space-x-3 sm:space-x-4">
+<a class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300" href="../../index.html">
+<span aria-hidden="true" class="text-2xl">🧠</span>
+<span class="font-bold text-lg hidden sm:inline">cccache</span>
+</a>
+<span aria-hidden="true" class="text-neutral-600">|</span>
+<a class="text-sky-400 hover:text-sky-300 text-sm font-medium" href="https://inema.club" rel="noopener" target="_blank">INEMA.CLUB</a>
+</div>
+<div class="flex items-center space-x-1 sm:space-x-2">
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors" href="../trilha1/index.html">
+<span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentals</span>
+</a>
+<a aria-current="page" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10" href="../trilha2/index.html">
+<span class="sm:hidden">T2</span><span class="hidden sm:inline">Technical</span>
+</a>
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors" href="../trilha3/index.html">
+<span class="sm:hidden">T3</span><span class="hidden sm:inline">Best practices</span>
+</a>
+<button class="hidden md:inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-neutral-300 hover:text-neutral-100 hover:bg-dark-700 transition-colors text-sm" data-inema-journey-open="" type="button">
+<span aria-hidden="true">◷</span><span>My journey</span>
+<span class="inema-journey-badge hidden" data-count="0" data-inema-journey-badge=""></span>
+</button>
+<div class="nav-appearance-wrap">
+<button aria-expanded="false" aria-haspopup="true" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-neutral-300 hover:text-neutral-100 hover:bg-dark-700 transition-colors text-sm" data-inema-appearance-toggle="[data-inema-appearance]" type="button">
+<span aria-hidden="true">◑</span><span class="hidden sm:inline">Appearance</span>
+</button>
+<div aria-label="Appearance and reading" class="inema-appearance-pop" data-inema-appearance="" role="group">
+<p class="inema-seg-label">Theme</p>
+<div class="inema-segment">
+<button data-inema-set-theme="inema-dark" type="button">Dark</button>
+<button data-inema-set-theme="claro" type="button">Clear</button>
+<button data-inema-set-theme="sepia" type="button">Sepia</button>
+<button data-inema-set-theme="foco" type="button">Focus</button>
+<button data-inema-set-theme="contraste" type="button">High contrast</button>
+</div>
+<p class="inema-seg-label">Source</p>
+<div class="inema-segment">
+<button data-inema-set-font="inter" type="button">Inter</button>
+<button data-inema-set-font="system" type="button">System</button>
+<button data-inema-set-font="leitura" type="button">Reading</button>
+</div>
+<p class="inema-seg-label">Size</p>
+<div class="inema-segment">
+<button data-inema-set-fontscale="100" type="button">A</button>
+<button data-inema-set-fontscale="112" type="button">A+</button>
+<button data-inema-set-fontscale="125" type="button">A++</button>
+</div>
+<p class="inema-seg-label">Line width</p>
+<div class="inema-segment">
+<button data-inema-set-linewidth="60" type="button">Narrow</button>
+<button data-inema-set-linewidth="68" type="button">Medium</button>
+<button data-inema-set-linewidth="75" type="button">Wide</button>
+</div>
+<p class="inema-seg-label">Line spacing</p>
+<div class="inema-segment">
+<button data-inema-set-leading="1.45" type="button">Compact</button>
+<button data-inema-set-leading="1.7" type="button">Comfortable</button>
+</div>
+<p class="inema-seg-label">Accent</p>
+<div aria-label="Accent color" class="inema-accent-grid" role="group">
+<button aria-label="Emerald" data-inema-set-accent="emerald" type="button"></button>
+<button aria-label="Blue" data-inema-set-accent="blue" type="button"></button>
+<button aria-label="Purple" data-inema-set-accent="purple" type="button"></button>
+<button aria-label="Amber" data-inema-set-accent="amber" type="button"></button>
+<button aria-label="Turquoise" data-inema-set-accent="teal" type="button"></button>
+<button aria-label="Pink" data-inema-set-accent="rose" type="button"></button>
+</div>
+</div>
+</div>
+<button aria-label="Toggle light/dark" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-1" id="theme-toggle">
+<svg aria-hidden="true" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-dark-icon" viewbox="0 0 20 20">
+<path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+</svg>
+<svg aria-hidden="true" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-light-icon" viewbox="0 0 20 20">
+<path clip-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd"></path>
+</svg>
+</button>
+</div>
+</div>
+</div>
+</nav>
+<!-- Breadcrumb -->
+<nav aria-label="Navigation track" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+<div class="flex items-center space-x-2 text-sm text-neutral-400">
+<a class="hover:text-blue-400" href="../../index.html">Start</a>
+<span aria-hidden="true">/</span>
+<a class="hover:text-blue-400" href="index.html">Track 2</a>
+<span aria-hidden="true">/</span>
+<span class="text-blue-400">Module 2.2</span>
+</div>
+</nav>
+<!-- Header do módulo -->
+<header class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-semibold rounded-full mb-4">MODULE 2.2</span>
+<h1 class="text-2xl sm:text-4xl font-bold mb-4">🧩 Skills and tools: append vs. break</h1>
+<p class="text-lg text-neutral-300 max-w-3xl">
+        What <strong class="text-blue-400">appends at the end</strong> (safe, a single write) and what
+        <strong class="text-blue-400">changes position 0</strong> (reset of the entire prefix). Why invoking a skill
+        midway through the conversation doesn't reset the cache, but connecting an MCP does.
+      </p>
+<div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">6</div><div class="text-xs text-neutral-400">Topics</div></div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">~35</div><div class="text-xs text-neutral-400">Minutes</div></div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">Technical</div><div class="text-xs text-neutral-400">Level</div></div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">Practice</div><div class="text-xs text-neutral-400">Type</div></div>
+</div>
+<div aria-label="Module 2.2 progress" class="inema-meter mt-6 max-w-sm" data-inema-meter="modulo-2-2">
+<div class="inema-bar"><div class="inema-bar__fill" data-inema-meter-fill=""></div></div>
+<div class="leading-tight">
+<span class="text-blue-400 font-bold" data-inema-meter-pct="">0%</span>
+<span class="text-xs text-neutral-400 ml-1" data-inema-meter-frac="">0 of 6</span>
+</div>
+</div>
+</div>
+</header>
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:grid lg:grid-cols-[1fr_240px] lg:gap-10" id="conteudo">
+<main>
+<!-- ================= TÓPICO 1 ================= -->
+<section aria-labelledby="m22-t1-h" class="mb-16" data-inema-topic="modulo-2-2#topico-1" id="topico-1">
+<div class="flex items-start justify-between gap-4 mb-6">
+<div class="flex items-center space-x-4">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">1</span>
+<h2 class="text-2xl font-bold" id="m22-t1-h">🏷️ Two meanings of "skill"</h2>
+</div>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm flex-shrink-0" data-inema-doubt-toggle="" title="Mark a question on this topic" type="button">
+<span aria-hidden="true">?</span><span class="hidden sm:inline">I have a question</span>
+</button>
+</div>
+<div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
+<p data-inema-block="m2-2-t1-p1">
+            The word “skill” has <strong class="text-blue-400">both directions</strong> that cost different amounts.
+            (a) The <strong class="text-blue-400">description</strong> of the skill — the short line that appears in the
+            skills list — stays <strong class="text-blue-400">always in the stable prefix</strong>. (b) O
+            <strong class="text-blue-400">content</strong> complete (the big document) only loads when the skill is
+            <strong class="text-blue-400">invoked</strong>.
+          </p>
+</div>
+<div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-2">What it is</h3>
+<p class="text-neutral-300">A skill introduces itself to the model with a short description (cheap, always present) and loads its body only on demand. They are two blocks with different costs and timing.</p>
+</div>
+<div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-2">Why learn</h3>
+<p class="text-neutral-300">Because without separating the two, you think "every skill is expensive." In reality, only the content adds weight—and only once, when invoked.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+<div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+<h4 class="font-bold text-blue-400 mb-2">Description (a)</h4>
+<p class="text-sm text-neutral-300">Short line in the skills list. Always in the stable prefix. Cheap and constant.</p>
+</div>
+<div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+<h4 class="font-bold text-blue-400 mb-2">Content (b)</h4>
+<p class="text-sm text-neutral-300">The complete document. It’s included only when the skill is invoked. It costs once, then becomes a cheap read.</p>
+</div>
+</div>
+<div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-3">Key concepts</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">Description</strong> = always present, cheap.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">Content</strong> = on demand, costs 1×.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">Invoke</strong> = bring the content into the conversation.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">Having many skills listed ≠ loading them all.</p></div>
+</div>
+</div>
+<div class="flex justify-start mt-6">
+<button aria-pressed="false" class="inline-flex items-center justify-start gap-2 px-4 py-2 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 transition-colors" data-inema-read-toggle="" type="button">
+<span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
+<span class="inema-label-todo">Mark as read</span><span class="inema-label-done">Read ✓</span>
+</button>
+</div>
+</section>
+<!-- ================= TÓPICO 2 ================= -->
+<section aria-labelledby="m22-t2-h" class="mb-16" data-inema-topic="modulo-2-2#topico-2" id="topico-2">
+<div class="flex items-start justify-between gap-4 mb-6">
+<div class="flex items-center space-x-4">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">2</span>
+<h2 class="text-2xl font-bold" id="m22-t2-h">➕ A Skill in the middle does NOT reset the cache</h2>
+</div>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm flex-shrink-0" data-inema-doubt-toggle="" title="Mark a question on this topic" type="button">
+<span aria-hidden="true">?</span><span class="hidden sm:inline">I have a question</span>
+</button>
+</div>
+<div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
+<p data-inema-block="m2-2-t2-p1">
+            When a skill is invoked mid-conversation, its content is added
+            <strong class="text-blue-400">appended at the END</strong> of the history — <strong class="text-blue-400">not at
+            position 0</strong>. Everything that came before remains valid and is read cheaply; only the new skill block is written
+            (one write). In subsequent turns, it is already <strong class="text-blue-400">cheap read</strong>.
+          </p>
+</div>
+<div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-2">What it is</h3>
+<p class="text-neutral-300">Appending at the end preserves the entire previous prefix: prefix matching continues to work up to the point where the new content begins. So there’s no reset—just an incremental write.</p>
+</div>
+<div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-2">Why learn</h3>
+<p class="text-neutral-300">Because it removes the fear of invoking skills while working. That turn may show a lower cache %, due to the skill write, but it's a one-time investment—it gets cheap starting with the next turn.</p>
+</div>
+<!-- SVG: anexar no fim (seguro) vs mexer na posição 0 (quebra) -->
+<div class="rounded-2xl border border-blue-500/30 bg-dark-900/40 p-3 sm:p-4 mb-6 overflow-hidden">
+<svg aria-label="Two scenarios side by side. On the left, append content to the end of the history: the entire prefix stays green (read from cache), and only a new block at the end is written — safe. On the right, change the tool list at position zero: everything from there on turns red (invalidated) — breaks it." class="w-full h-auto" role="img" viewbox="0 0 1000 300">
+<defs>
+<lineargradient id="m22-grad" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#60a5fa"></stop><stop offset="1" stop-color="#3b82f6"></stop></lineargradient>
+<pattern height="32" id="m22-grid" patternunits="userSpaceOnUse" width="32"><circle cx="1.3" cy="1.3" fill="#3b82f6" opacity="0.12" r="1.3"></circle></pattern>
+</defs>
+<rect fill="url(#m22-grid)" height="300" width="1000" x="0" y="0"></rect>
+<line stroke="#334155" stroke-dasharray="6 8" stroke-width="1.5" x1="500" x2="500" y1="20" y2="280"></line>
+<!-- ESQUERDA: anexar no fim (seguro) -->
+<text fill="#34d399" font-family="Inter,sans-serif" font-size="14" font-weight="700" x="60" y="40">✓ Append at the end (safe)</text>
+<g font-family="Inter,sans-serif" font-size="12" font-weight="600">
+<rect fill="#0e2018" height="34" rx="7" stroke="#34d399" stroke-width="2" width="360" x="60" y="60"></rect><text fill="#a7f3d0" text-anchor="middle" x="240" y="82">tools (position 0) — unchanged</text>
+<rect fill="#0e2018" height="34" rx="7" stroke="#34d399" stroke-width="2" width="360" x="60" y="102"></rect><text fill="#a7f3d0" text-anchor="middle" x="240" y="124">system — intact</text>
+<rect fill="#0e2018" height="34" rx="7" stroke="#34d399" stroke-width="2" width="360" x="60" y="144"></rect><text fill="#a7f3d0" text-anchor="middle" x="240" y="166">history — read from cache</text>
+<rect fill="#0e1622" height="40" rx="7" stroke="url(#m22-grad)" stroke-width="2.5" width="360" x="60" y="192"></rect><text fill="#93c5fd" text-anchor="middle" x="240" y="217">+ skill content (single write)</text>
+</g>
+<text fill="#93c5fd" font-family="Inter,sans-serif" font-size="12" text-anchor="middle" x="240" y="256">prefix keeps matching → cheap read</text>
+<!-- DIREITA: mexer na posição 0 (quebra) -->
+<text fill="#f87171" font-family="Inter,sans-serif" font-size="14" font-weight="700" x="540" y="40">✗ Change position 0 (breaks)</text>
+<g font-family="Inter,sans-serif" font-size="12" font-weight="600">
+<rect fill="#2a0f16" height="34" rx="7" stroke="#f87171" stroke-width="2.5" width="360" x="540" y="60"></rect><text fill="#fecaca" text-anchor="middle" x="720" y="82">tools (position 0) — CHANGED</text>
+<rect fill="#2a0f16" height="34" rx="7" stroke="#f87171" stroke-width="2" width="360" x="540" y="102"></rect><text fill="#fecaca" text-anchor="middle" x="720" y="124">system — invalidated</text>
+<rect fill="#2a0f16" height="34" rx="7" stroke="#f87171" stroke-width="2" width="360" x="540" y="144"></rect><text fill="#fecaca" text-anchor="middle" x="720" y="166">history — invalidated</text>
+<rect fill="#2a0f16" height="40" rx="7" stroke="#f87171" stroke-width="2" width="360" x="540" y="192"></rect><text fill="#fecaca" text-anchor="middle" x="720" y="217">everything reprocessed (1×)</text>
+</g>
+<text fill="#fca5a5" font-family="Inter,sans-serif" font-size="12" text-anchor="middle" x="720" y="256">one byte at position 0 invalidates the entire prefix</text>
+</svg>
+<p class="text-xs text-neutral-400 mt-3 text-center">Same amount of new content, opposite results: appending to the end preserves the cache; changing position 0 clears everything.</p>
+</div>
+<div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-3">Key concepts</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">Append at the end</strong> = intact prefix.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">Single write</strong> of the skill block.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">Following turns</strong> = cheap read.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">Invoking a skill ≠ resetting the cache.</p></div>
+</div>
+</div>
+<div class="flex justify-start mt-6">
+<button aria-pressed="false" class="inline-flex items-center justify-start gap-2 px-4 py-2 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 transition-colors" data-inema-read-toggle="" type="button">
+<span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
+<span class="inema-label-todo">Mark as read</span><span class="inema-label-done">Read ✓</span>
+</button>
+</div>
+</section>
+<!-- ================= TÓPICO 3 ================= -->
+<section aria-labelledby="m22-t3-h" class="mb-16" data-inema-topic="modulo-2-2#topico-3" id="topico-3">
+<div class="flex items-start justify-between gap-4 mb-6">
+<div class="flex items-center space-x-4">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">3</span>
+<h2 class="text-2xl font-bold" id="m22-t3-h">💥 Breaking the tools list = position 0</h2>
+</div>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm flex-shrink-0" data-inema-doubt-toggle="" title="Mark a question on this topic" type="button">
+<span aria-hidden="true">?</span><span class="hidden sm:inline">I have a question</span>
+</button>
+</div>
+<div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
+<p data-inema-block="m2-2-t3-p1">
+            The tools are rendered in the <strong class="text-blue-400">position 0</strong> — before system and the
+            history. That’s why changing the list <code class="font-mono text-sm">tools</code>
+<strong class="text-blue-400">invalidates EVERYTHING</strong>: because prefix matching starts from the first byte, any change to the tools block invalidates the entire prefix after it.
+          </p>
+</div>
+<div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-2">What it is</h3>
+<p class="text-neutral-300">The list <code class="font-mono text-xs">tools</code> occupies position 0 in the assembly order <code class="font-mono text-xs">tools → system → messages</code>. Changing any byte there is the worst possible case for the cache.</p>
+</div>
+<div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-2">Why learn</h3>
+<p class="text-neutral-300">Because it's the most expensive silent invalidator. Knowing that position 0 is sacred changes how you connect MCPs, edit tool descriptions, and build the list.</p>
+</div>
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-red-400 mb-2 flex items-center"><span aria-hidden="true" class="mr-2">⚠️</span> Attention</h3>
+<p class="text-neutral-300">It’s not just “adding a tool.” <strong>Remove</strong>, <strong>reorder</strong> or change <strong>one character</strong> a description counts too. Position 0 needs to be byte-for-byte identical across requests.</p>
+</div>
+<div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-3">Key concepts</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">tools</strong> = prompt position 0.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">Change tools</strong> = full reset.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">Order: <code class="font-mono text-xs">tools → system → messages</code>.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">Position 0 = byte-for-byte identical.</p></div>
+</div>
+</div>
+<div class="flex justify-start mt-6">
+<button aria-pressed="false" class="inline-flex items-center justify-start gap-2 px-4 py-2 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 transition-colors" data-inema-read-toggle="" type="button">
+<span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
+<span class="inema-label-todo">Mark as read</span><span class="inema-label-done">Read ✓</span>
+</button>
+</div>
+</section>
+<!-- ================= TÓPICO 4 ================= -->
+<section aria-labelledby="m22-t4-h" class="mb-16" data-inema-topic="modulo-2-2#topico-4" id="topico-4">
+<div class="flex items-start justify-between gap-4 mb-6">
+<div class="flex items-center space-x-4">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">4</span>
+<h2 class="text-2xl font-bold" id="m22-t4-h">🔨 Examples of cache breaks</h2>
+</div>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm flex-shrink-0" data-inema-doubt-toggle="" title="Mark a question on this topic" type="button">
+<span aria-hidden="true">?</span><span class="hidden sm:inline">I have a question</span>
+</button>
+</div>
+<div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
+<p data-inema-block="m2-2-t4-p1">
+            Four classic ways to break position 0 without noticing. They all change the list
+            <code class="font-mono text-sm">tools</code> — intentionally or by accident.
+          </p>
+</div>
+<div class="space-y-4 mb-6">
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center"><span class="text-blue-400 font-bold">1</span></div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-neutral-100 mb-1">Connect/disconnect an MCP midway</h4>
+<p class="text-sm text-neutral-300">Registers (or removes) new tools in the list → position 0 changes → invalidates everything.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center"><span class="text-blue-400 font-bold">2</span></div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-neutral-100 mb-1">Change <code class="font-mono text-xs">description</code> or <code class="font-mono text-xs">input_schema</code></h4>
+<p class="text-sm text-neutral-300">Just one word in a description or one field in the schema is enough—the bytes of <code class="font-mono text-xs">tools</code> change.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center"><span class="text-blue-400 font-bold">3</span></div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-neutral-100 mb-1">Non-deterministic order</h4>
+<p class="text-sm text-neutral-300">Assemble <code class="font-mono text-xs">tools</code> of a <code class="font-mono text-xs">set</code>/<code class="font-mono text-xs">dict</code> without sorting → the order varies across requests → silent miss. (That’s what the copy-run example below is about.)</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center"><span class="text-blue-400 font-bold">4</span></div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-neutral-100 mb-1">Turn tools on/off by mode/permission</h4>
+<p class="text-sm text-neutral-300">Switching to a mode that enables/disables tools changes the rendered list at position 0.</p>
+</div>
+</div>
+</div>
+<div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-2">What it is / Why learn it</h3>
+<p class="text-neutral-300 mb-2"><strong class="text-blue-400">What it is:</strong> the four most common causes of cache "disappearing" for no apparent reason — all change position 0.</p>
+<p class="text-neutral-300"><strong class="text-blue-400">Why learn:</strong> recognizing the pattern makes you suspect the tools list first when <code class="font-mono text-xs">cache_read_input_tokens</code> resets.</p>
+</div>
+<div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-3">Key concepts</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">MCP connected in the middle = new tools.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">1 word in the description is enough to break it.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><code class="font-mono text-xs">set</code>/<code class="font-mono text-xs">dict</code> no sort = variable order.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">Mode/permission turns tools on and off.</p></div>
+</div>
+</div>
+<div class="flex justify-start mt-6">
+<button aria-pressed="false" class="inline-flex items-center justify-start gap-2 px-4 py-2 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 transition-colors" data-inema-read-toggle="" type="button">
+<span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
+<span class="inema-label-todo">Mark as read</span><span class="inema-label-done">Read ✓</span>
+</button>
+</div>
+</section>
+<!-- ================= TÓPICO 5 ================= -->
+<section aria-labelledby="m22-t5-h" class="mb-16" data-inema-topic="modulo-2-2#topico-5" id="topico-5">
+<div class="flex items-start justify-between gap-4 mb-6">
+<div class="flex items-center space-x-4">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">5</span>
+<h2 class="text-2xl font-bold" id="m22-t5-h">🔍 Tool Search appends intentionally</h2>
+</div>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm flex-shrink-0" data-inema-doubt-toggle="" title="Mark a question on this topic" type="button">
+<span aria-hidden="true">?</span><span class="hidden sm:inline">I have a question</span>
+</button>
+</div>
+<div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
+<p data-inema-block="m2-2-t5-p1">
+            O <strong class="text-blue-400">Tool Search</strong> loads a tool’s schema
+            <strong class="text-blue-400">appending</strong> — without changing the list <code class="font-mono text-sm">tools</code>.
+            This was designed specifically to <strong class="text-blue-400">DO NOT break the cache</strong>: discovering a tool via Tool Search is safe; connecting an MCP that rewrites the list is not.
+          </p>
+</div>
+<div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-2">What it is</h3>
+<p class="text-neutral-300">Tool Search brings in a tool’s schema on demand, appended at the end (like a skill), preserving the prefix. It’s the same “append at the end = safe” pattern applied to tools.</p>
+</div>
+<div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-2">Why learn</h3>
+<p class="text-neutral-300">Because it distinguishes two paths that look the same: "bringing a new tool into the conversation" can be safe (Tool Search, appended) or destructive (rewriting <code class="font-mono text-xs">tools</code>, position 0).</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+<div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+<h4 class="font-bold text-emerald-400 mb-3">✓ Safe</h4>
+<ul class="space-y-2 text-neutral-300 text-sm">
+<li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>Find a tool via Tool Search (appends at the end).</span></li>
+<li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>Invoke a skill (appends content at the end).</span></li>
+</ul>
+</div>
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+<h4 class="font-bold text-red-400 mb-3">✗ Breaks</h4>
+<ul class="space-y-2 text-neutral-300 text-sm">
+<li class="flex items-start gap-2"><span class="text-red-400">✗</span><span>Connect an MCP that rewrites the tools list.</span></li>
+<li class="flex items-start gap-2"><span class="text-red-400">✗</span><span>Edit an existing tool’s description/schema.</span></li>
+</ul>
+</div>
+</div>
+<div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-3">Key concepts</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">Tool Search <strong class="text-blue-400">appends</strong> the schema.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">Made for <strong class="text-blue-400">no</strong> break the cache.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">Finding a tool ≠ rewriting <code class="font-mono text-xs">tools</code>.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">Same principle as skills (end = safe).</p></div>
+</div>
+</div>
+<div class="flex justify-start mt-6">
+<button aria-pressed="false" class="inline-flex items-center justify-start gap-2 px-4 py-2 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 transition-colors" data-inema-read-toggle="" type="button">
+<span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
+<span class="inema-label-todo">Mark as read</span><span class="inema-label-done">Read ✓</span>
+</button>
+</div>
+</section>
+<!-- ================= TÓPICO 6 ================= -->
+<section aria-labelledby="m22-t6-h" class="mb-16" data-inema-topic="modulo-2-2#topico-6" id="topico-6">
+<div class="flex items-start justify-between gap-4 mb-6">
+<div class="flex items-center space-x-4">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">6</span>
+<h2 class="text-2xl font-bold" id="m22-t6-h">👍 Rule of thumb</h2>
+</div>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm flex-shrink-0" data-inema-doubt-toggle="" title="Mark a question on this topic" type="button">
+<span aria-hidden="true">?</span><span class="hidden sm:inline">I have a question</span>
+</button>
+</div>
+<div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
+<p data-inema-block="m2-2-t6-p1">
+            The phrase that resolves 90% of day-to-day decisions: <strong class="text-blue-400">new content at the END =
+            safe</strong>. Changing the list of <code class="font-mono text-sm">tools</code> or in the
+            <strong class="text-blue-400">system prompt</strong> = <strong class="text-blue-400">position 0 reset</strong>.
+          </p>
+</div>
+<div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-2">What it is</h3>
+<p class="text-neutral-300">A one-line mental test: before any change, ask “does this change the beginning of the prompt or only add to the end?” End = cheap write; beginning = reset.</p>
+</div>
+<div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-2">Why learn</h3>
+<p class="text-neutral-300">Because you don't need to memorize every case: the rule of thumb classifies any new action as "safe" or "reset" right away.</p>
+</div>
+<div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-primary mb-2 flex items-center"><span aria-hidden="true" class="mr-2">💡</span> Practical tip</h3>
+<p class="text-neutral-300">Always ask: <strong class="text-primary">"does this change the beginning or just add to the end?"</strong> If the beginning changes (tools/system), expect a reset. If you add to the end (skill/Tool Search/new message), it's a single, cheap write.</p>
+</div>
+<!-- ============ EXEMPLO COPY-RUN (erro #30) ============ -->
+<div class="mb-8">
+<h3 class="text-xl font-bold mb-3 flex items-center"><span aria-hidden="true" class="mr-2">⚡</span> Copy-run example — make the assembly of <code class="font-mono">tools</code> deterministic</h3>
+<div class="rounded-xl border border-blue-500/30 bg-dark-900 overflow-hidden mb-4">
+<div class="flex items-center justify-between px-4 py-2 bg-dark-800 border-b border-dark-600">
+<span class="text-xs font-mono text-blue-400">python · ❌ breaks vs ✅ stable</span>
+<button class="copy-btn text-xs text-neutral-300 hover:text-blue-400 transition-colors" onclick="copyCode(this)" type="button">Copy</button>
+</div>
+<div class="p-4">
+<p class="text-sm text-neutral-300 mb-3"><strong class="text-blue-400">Objective:</strong> ensure the list <code class="font-mono text-xs">tools</code> (position 0) must be byte-for-byte identical in every request. Iterating over a <code class="font-mono text-xs">set</code>/<code class="font-mono text-xs">dict</code> without sorting, the order varies → the cache never hits.</p>
+<pre class="font-mono text-sm text-neutral-200 whitespace-pre-wrap bg-dark-800 rounded-lg p-4 overflow-x-auto"><code># ❌ QUEBRA — ordem varia entre requests (cache nunca bate)
+tools = [tool_schema(name) for name in &lt;meu_set_de_tools&gt;]
+#                                       ^ set/dict: ordem não garantida
+
+# ✅ ESTÁVEL — ordena por nome → mesma sequência de bytes sempre
+tools = [tool_schema(name) for name in sorted(&lt;meu_set_de_tools&gt;)]
+
+# (se as tools forem dicts, serialize com chaves ordenadas também)
+# payload = json.dumps(tool, sort_keys=True)</code></pre>
+<p class="text-sm text-neutral-300 mt-3"><strong class="text-blue-400">How to verify:</strong> run the same request twice in a row and check whether <code class="font-mono text-xs">usage</code>. With the <code class="font-mono text-xs">sorted(...)</code>, o <code class="font-mono text-xs">cache_read_input_tokens</code> <strong>stops being 0</strong> between identical requests — a sign that position 0 stayed identical and the prefix matched.</p>
+</div>
+</div>
+<div class="rounded-xl border border-blue-500/30 bg-dark-900 overflow-hidden">
+<div class="flex items-center justify-between px-4 py-2 bg-dark-800 border-b border-dark-600">
+<span class="text-xs font-mono text-blue-400">prompt · ask Claude Code to apply</span>
+<button class="copy-btn text-xs text-neutral-300 hover:text-blue-400 transition-colors" onclick="copyCode(this)" type="button">Copy</button>
+</div>
+<div class="p-4">
+<pre class="font-mono text-sm text-neutral-200 whitespace-pre-wrap bg-dark-800 rounded-lg p-4 overflow-x-auto"><code>No arquivo &lt;caminho que monta a lista de tools&gt;, procure
+onde `tools` é construída a partir de um set ou dict e:
+  1. ordene a serialização por nome (sorted / sort_keys=True);
+  2. confirme que a ordem fica estável entre dois requests;
+  3. me mostre o antes/depois do trecho.</code></pre>
+</div>
+</div>
+</div>
+<div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-3">Key concepts</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">End</strong> = safe (single write).</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">Beginning</strong> (tools/system) = reset.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><code class="font-mono text-xs">sorted(...)</code> keeps position 0 stable.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><code class="font-mono text-xs">cache_read</code> &gt; 0 between identical requests = ok.</p></div>
+</div>
+</div>
+<div class="flex justify-start mt-6">
+<button aria-pressed="false" class="inline-flex items-center justify-start gap-2 px-4 py-2 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 transition-colors" data-inema-read-toggle="" type="button">
+<span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
+<span class="inema-label-todo">Mark as read</span><span class="inema-label-done">Read ✓</span>
+</button>
+</div>
+</section>
+<!-- ================= RESUMO ================= -->
+<section class="mb-12">
+<div class="bg-gradient-to-br from-blue-900/40 via-dark-800 to-dark-800 rounded-xl border border-blue-500/30 p-8">
+<h2 class="text-2xl font-bold mb-6 flex items-center"><span aria-hidden="true" class="mr-3">📌</span> Module summary</h2>
+<div class="space-y-4 mb-8">
+<div class="flex items-start space-x-3"><span aria-hidden="true" class="text-blue-400 mt-1">✓</span><div><strong class="text-neutral-100">"Skill" has two meanings</strong><span class="text-neutral-400"> — description (always) and content (on demand).</span></div></div>
+<div class="flex items-start space-x-3"><span aria-hidden="true" class="text-blue-400 mt-1">✓</span><div><strong class="text-neutral-100">A skill in the middle gets appended at the end</strong><span class="text-neutral-400"> — single write, not a reset.</span></div></div>
+<div class="flex items-start space-x-3"><span aria-hidden="true" class="text-blue-400 mt-1">✓</span><div><strong class="text-neutral-100">Change tools = position 0</strong><span class="text-neutral-400"> — invalidates everything from there onward.</span></div></div>
+<div class="flex items-start space-x-3"><span aria-hidden="true" class="text-blue-400 mt-1">✓</span><div><strong class="text-neutral-100">4 classic breakages</strong><span class="text-neutral-400"> — MCP, description/schema, order, mode.</span></div></div>
+<div class="flex items-start space-x-3"><span aria-hidden="true" class="text-blue-400 mt-1">✓</span><div><strong class="text-neutral-100">Rule of thumb</strong><span class="text-neutral-400"> — end = safe; beginning = reset.</span></div></div>
+</div>
+<div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+<h3 class="font-semibold text-blue-400 mb-2">Next module:</h3>
+<p class="text-neutral-300">2.3 — Invalidation in depth</p>
+</div>
+<div class="flex flex-col sm:flex-row gap-4">
+<a class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors" href="modulo-2-1.html">← Previous module</a>
+<a class="flex-1 text-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-500 transition-colors" href="modulo-2-3.html">Next module →</a>
+</div>
+</div>
+</section>
+</main>
+<!-- TOC sticky + scrollspy -->
+<aside class="hidden lg:block">
+<nav aria-label="Page index" class="sticky top-24 self-start" data-inema-toc="">
+<p class="text-sm text-neutral-400 mb-2">Section <span class="inema-toc-pos">1</span> of <span class="inema-toc-total">6</span></p>
+<ul class="space-y-1 text-sm">
+<li><a class="inema-toc-link" href="#topico-1">1. Two meanings of "skill"</a></li>
+<li><a class="inema-toc-link" href="#topico-2">2. A skill in the middle doesn't reset it</a></li>
+<li><a class="inema-toc-link" href="#topico-3">3. Tools = position 0</a></li>
+<li><a class="inema-toc-link" href="#topico-4">4. Breakage examples</a></li>
+<li><a class="inema-toc-link" href="#topico-5">5. Tool Search attaches</a></li>
+<li><a class="inema-toc-link" href="#topico-6">6. Rule of thumb</a></li>
+</ul>
+</nav>
+</aside>
+</div>
+<!-- FOOTER -->
+<footer class="border-t border-dark-600 py-8">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+<p>cccache — Prompt Caching in Claude Code · Course <a class="text-sky-400 hover:text-sky-300" href="https://inema.club" rel="noopener" target="_blank">INEMA.CLUB</a> · 2026</p>
+</div>
+</footer>
+<!-- SCRIPTS -->
+<script src="../../../assets/learn.js"></script>
+<script>
+    function copyCode(btn) {
+      var box = btn.closest('.rounded-xl');
+      var code = box && box.querySelector('code');
+      if (!code) { return; }
+      var text = code.textContent;
+      function done() { var o = btn.textContent; btn.textContent = 'Copiado ✓'; btn.classList.add('copied'); setTimeout(function () { btn.textContent = o; btn.classList.remove('copied'); }, 1600); }
+      if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text); done(); }); }
+      else { fallbackCopy(text); done(); }
+    }
+    function fallbackCopy(text) {
+      try { var ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'absolute'; ta.style.left = '-9999px'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); } catch (e) { }
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.INEMA && typeof INEMA.init === 'function') { INEMA.init(); }
+    });
+  </script>
+</body>
+</html>

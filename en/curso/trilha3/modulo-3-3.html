@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="cccache" name="inema-course"/>
+<title>Module 3.3 — Ready-to-use prompts (copy-run) | cccache · INEMA.CLUB</title>
+<!-- 1) ANTI-FOUC -->
+<script>
+    (function () {
+      try {
+        var p = JSON.parse(localStorage.getItem('inema.prefs') || '{}');
+        var d = document.documentElement;
+        var dark = p.theme ? p.theme !== 'claro' : (localStorage.getItem('theme') !== 'light');
+        if (dark) { d.classList.add('dark'); } else { d.classList.remove('dark'); }
+        if (p.theme && p.theme !== 'inema-dark' && p.theme !== 'claro') { d.setAttribute('data-theme', p.theme); }
+        if (p.font) { d.setAttribute('data-font', p.font); }
+        if (p.accent) { d.setAttribute('data-accent', p.accent); }
+        if (p.fontScale) { d.style.setProperty('--fs-root', p.fontScale + '%'); d.style.setProperty('--inema-font-scale', p.fontScale); d.style.fontSize = p.fontScale + '%'; }
+        if (p.lineWidth) { d.style.setProperty('--measure', p.lineWidth + 'ch'); }
+        if (p.leading) { d.style.setProperty('--lh-body', p.leading); }
+        d.style.colorScheme = (p.theme === 'claro' || p.theme === 'sepia') ? 'light' : 'dark';
+      } catch (e) { document.documentElement.classList.add('dark'); }
+    })();
+  </script>
+<!-- 2) MANIFESTO (erro #28) -->
+<script data-inema-manifest="" type="application/json">
+{
+  "course": { "id": "cccache", "title": "cccache — Prompt Caching no Claude Code" },
+  "tracks": [
+    {
+      "id": "trilha1", "title": "Fundamentos e termos",
+      "modules": [
+        { "id": "modulo-1-1", "title": "O que é prompt caching", "href": "curso/trilha1/modulo-1-1.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] },
+        { "id": "modulo-1-2", "title": "Termos e economia", "href": "curso/trilha1/modulo-1-2.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] }
+      ]
+    },
+    {
+      "id": "trilha2", "title": "Técnico",
+      "modules": [
+        { "id": "modulo-2-1", "title": "O cache numa conversa", "href": "curso/trilha2/modulo-2-1.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] },
+        { "id": "modulo-2-2", "title": "Skills e ferramentas: anexar vs quebrar", "href": "curso/trilha2/modulo-2-2.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] },
+        { "id": "modulo-2-3", "title": "Invalidação a fundo", "href": "curso/trilha2/modulo-2-3.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] }
+      ]
+    },
+    {
+      "id": "trilha3", "title": "Boas práticas avançadas",
+      "modules": [
+        { "id": "modulo-3-1", "title": "Cache vs Compactação", "href": "curso/trilha3/modulo-3-1.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] },
+        { "id": "modulo-3-2", "title": "Arquitetura pró-cache e auditoria", "href": "curso/trilha3/modulo-3-2.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] },
+        { "id": "modulo-3-3", "title": "Prompts prontos (copy-run)", "href": "curso/trilha3/modulo-3-3.html",
+          "topics": ["topico-1","topico-2","topico-3","topico-4","topico-5","topico-6"] }
+      ]
+    }
+  ]
+}
+  </script>
+<!-- 3) Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } } }
+  </script>
+<!-- 4) CSS base -->
+<style>
+    body { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+    main [id], section[id] { scroll-margin-top: 5rem; }
+
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124, 58, 237, 0.12); }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .border-purple-500\/30 { border-color: rgba(124, 58, 237, 0.25); }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .hover\:bg-purple-500\/30:hover { background-color: rgba(124, 58, 237, 0.18); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .text-amber-400 { color: #b45309; }
+    html:not(.dark) .bg-amber-500\/20 { background-color: rgba(217, 119, 6, 0.14); }
+    html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+    html:not(.dark) .border-amber-500\/30 { border-color: rgba(217, 119, 6, 0.28); }
+    html:not(.dark) .text-red-400 { color: #b91c1c; }
+
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+    html:not(.dark) svg[role="img"] { filter: saturate(0.82) brightness(0.96); }
+
+    @keyframes t3pulse { 0%, 100% { opacity: .5 } 50% { opacity: 1 } }
+    @media (prefers-reduced-motion: no-preference) {
+      .t3-a { animation: t3pulse 2.6s ease-in-out infinite; }
+      .t3-a:nth-of-type(2) { animation-delay: .25s }
+      .t3-a:nth-of-type(3) { animation-delay: .5s }
+    }
+    .nav-appearance-wrap { position: relative; }
+    .prompt-box pre { tab-size: 2; }
+  </style>
+<link href="../../../assets/learn.css" rel="stylesheet"/>
+<link href="https://inematds.github.io/cccache/curso/trilha3/modulo-3-3.html" hreflang="pt-BR" rel="alternate"/><link href="https://inematds.github.io/cccache/en/curso/trilha3/modulo-3-3.html" hreflang="en" rel="alternate"/><link href="https://inematds.github.io/cccache/es/curso/trilha3/modulo-3-3.html" hreflang="es" rel="alternate"/></head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen"><div class="inema-lang" style="position:fixed;right:14px;bottom:14px;z-index:9999;display:flex;gap:2px;padding:4px;border-radius:10px;background:rgba(12,12,16,.82);border:1px solid rgba(226,162,59,.45);font:600 12px/1 Sora,Inter,system-ui,sans-serif;backdrop-filter:blur(8px)" translate="no"><a href="../../../curso/trilha3/modulo-3-3.html" hreflang="pt-BR" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">PT</a><a href="modulo-3-3.html" hreflang="en" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#1a1206;background:#E2A23B">EN</a><a href="../../../es/curso/trilha3/modulo-3-3.html" hreflang="es" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">ES</a></div>
+<a class="inema-skip" href="#conteudo">Skip to content</a>
+<!-- ================= NAVIGATION ================= -->
+<nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between items-center h-14">
+<div class="flex items-center space-x-3 sm:space-x-4">
+<a class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300" href="../../index.html">
+<span aria-hidden="true" class="text-2xl">🧠</span>
+<span class="font-bold text-lg hidden sm:inline">cccache</span>
+</a>
+<span aria-hidden="true" class="text-neutral-600">|</span>
+<a class="text-sky-400 hover:text-sky-300 text-sm font-medium" href="https://inema.club" rel="noopener" target="_blank">INEMA.CLUB</a>
+</div>
+<div class="flex items-center space-x-1 sm:space-x-2">
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors" href="../trilha1/index.html"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentals</span></a>
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors" href="../trilha2/index.html"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Technical</span></a>
+<a aria-current="page" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-purple-400 bg-purple-500/10" href="index.html"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Best practices</span></a>
+<button class="hidden md:inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-neutral-300 hover:text-neutral-100 hover:bg-dark-700 transition-colors text-sm" data-inema-journey-open="" type="button">
+<span aria-hidden="true">◷</span><span>My journey</span>
+<span class="inema-journey-badge hidden" data-count="0" data-inema-journey-badge=""></span>
+</button>
+<div class="nav-appearance-wrap">
+<button aria-expanded="false" aria-haspopup="true" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-neutral-300 hover:text-neutral-100 hover:bg-dark-700 transition-colors text-sm" data-inema-appearance-toggle="[data-inema-appearance]" type="button">
+<span aria-hidden="true">◑</span><span class="hidden sm:inline">Appearance</span>
+</button>
+<div aria-label="Appearance and reading" class="inema-appearance-pop" data-inema-appearance="" role="group">
+<p class="inema-seg-label">Theme</p>
+<div class="inema-segment">
+<button data-inema-set-theme="inema-dark" type="button">Dark</button>
+<button data-inema-set-theme="claro" type="button">Clear</button>
+<button data-inema-set-theme="sepia" type="button">Sepia</button>
+<button data-inema-set-theme="foco" type="button">Focus</button>
+<button data-inema-set-theme="contraste" type="button">High contrast</button>
+</div>
+<p class="inema-seg-label">Source</p>
+<div class="inema-segment">
+<button data-inema-set-font="inter" type="button">Inter</button>
+<button data-inema-set-font="system" type="button">System</button>
+<button data-inema-set-font="leitura" type="button">Reading</button>
+</div>
+<p class="inema-seg-label">Size</p>
+<div class="inema-segment">
+<button data-inema-set-fontscale="100" type="button">A</button>
+<button data-inema-set-fontscale="112" type="button">A+</button>
+<button data-inema-set-fontscale="125" type="button">A++</button>
+</div>
+<p class="inema-seg-label">Line width</p>
+<div class="inema-segment">
+<button data-inema-set-linewidth="60" type="button">Narrow</button>
+<button data-inema-set-linewidth="68" type="button">Medium</button>
+<button data-inema-set-linewidth="75" type="button">Wide</button>
+</div>
+<p class="inema-seg-label">Line spacing</p>
+<div class="inema-segment">
+<button data-inema-set-leading="1.45" type="button">Compact</button>
+<button data-inema-set-leading="1.7" type="button">Comfortable</button>
+</div>
+<p class="inema-seg-label">Accent</p>
+<div aria-label="Accent color" class="inema-accent-grid" role="group">
+<button aria-label="Emerald" data-inema-set-accent="emerald" type="button"></button>
+<button aria-label="Blue" data-inema-set-accent="blue" type="button"></button>
+<button aria-label="Purple" data-inema-set-accent="purple" type="button"></button>
+<button aria-label="Amber" data-inema-set-accent="amber" type="button"></button>
+<button aria-label="Turquoise" data-inema-set-accent="teal" type="button"></button>
+<button aria-label="Pink" data-inema-set-accent="rose" type="button"></button>
+</div>
+</div>
+</div>
+<button aria-label="Toggle light/dark" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-1" id="theme-toggle">
+<svg aria-hidden="true" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-dark-icon" viewbox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+<svg aria-hidden="true" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-light-icon" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd"></path></svg>
+</button>
+</div>
+</div>
+</div>
+</nav>
+<!-- Breadcrumb -->
+<nav aria-label="Navigation track" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+<div class="flex items-center flex-wrap gap-2 text-sm text-neutral-400">
+<a class="hover:text-purple-400" href="../../index.html">Start</a><span aria-hidden="true">/</span>
+<a class="hover:text-purple-400" href="index.html">Track 3</a><span aria-hidden="true">/</span>
+<span class="text-purple-400">Module 3.3</span>
+</div>
+</nav>
+<!-- Header -->
+<header class="bg-gradient-to-br from-purple-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<span class="inline-block px-3 py-1 bg-purple-500/20 text-purple-400 text-xs font-semibold rounded-full mb-4">MODULE 3.3</span>
+<h1 class="text-3xl sm:text-4xl font-bold mb-4">📋 Ready-to-use prompts (copy-run)</h1>
+<p class="text-lg text-neutral-300 max-w-3xl">Six prompts <strong class="text-purple-400">actually copyable</strong> to use in Claude Code today. Each one includes an objective, the block to copy (with the parts you replace marked as <code class="font-mono text-sm">&lt;assim&gt;</code>) and how to verify the result in the <code class="font-mono text-sm">usage</code>.</p>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 max-w-2xl">
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">6</div><div class="text-xs text-neutral-400">Prompts</div></div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">~30</div><div class="text-xs text-neutral-400">Minutes</div></div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">Advanced</div><div class="text-xs text-neutral-400">Level</div></div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">Copy-run</div><div class="text-xs text-neutral-400">Type</div></div>
+</div>
+</div>
+</header>
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:flex lg:gap-8" id="conteudo">
+<!-- TOC -->
+<nav aria-label="Page index" class="hidden lg:block sticky top-20 self-start w-56 shrink-0" data-inema-toc="">
+<p class="text-xs uppercase tracking-wide text-neutral-500 mb-2">The 6 prompts</p>
+<p class="text-sm text-neutral-400 mb-3"><span data-inema-section-counter="">Section 1 of 6</span></p>
+<ol class="space-y-1 text-sm">
+<li><a class="inema-toc-link" href="#topico-1">1. Audit cache</a></li>
+<li><a class="inema-toc-link" href="#topico-2">2. Deterministic tools</a></li>
+<li><a class="inema-toc-link" href="#topico-3">3. Compact vs. continue</a></li>
+<li><a class="inema-toc-link" href="#topico-4">4. Diagnose read = 0</a></li>
+<li><a class="inema-toc-link" href="#topico-5">5. Review system</a></li>
+<li><a class="inema-toc-link" href="#topico-6">6. Breakpoints</a></li>
+</ol>
+<div class="mt-5 pt-4 border-t border-dark-600">
+<div aria-label="Module 3.3 progress" class="inema-meter" data-inema-meter="modulo-3-3">
+<div class="inema-bar"><div class="inema-bar__fill" data-inema-meter-fill=""></div></div>
+<span class="text-xs text-purple-400 font-semibold" data-inema-meter-pct="">0%</span>
+</div>
+<p class="text-xs text-neutral-500 mt-1"><span data-inema-meter-frac="">0 of 6</span> read</p>
+</div>
+</nav>
+<!-- Conteúdo -->
+<main class="flex-1 min-w-0" data-inema-module="3-3" data-inema-track="3" id="modulo-3-3">
+<!-- Intro / como usar -->
+<div class="mb-12">
+<div class="inema-prose text-neutral-300 mb-4" style="margin-inline:0">
+<p data-inema-block="m3-3-p1">Each prompt follows the same format: <strong class="text-purple-400">Objective</strong> (what it does), <strong class="text-purple-400">the copyable block</strong> (copy and replace the parts between <code class="font-mono text-sm">&lt;chevrons&gt;</code>) e <strong class="text-purple-400">How to verify</strong> (what to look at in the <code class="font-mono text-sm">usage</code> to know it worked). They all rely on the same truth: caching is prefix matching, and the sum of <code class="font-mono text-xs">cache_read_input_tokens</code> + <code class="font-mono text-xs">cache_creation_input_tokens</code> + <code class="font-mono text-xs">input_tokens</code> is the prompt size.</p>
+</div>
+<div class="rounded-2xl border border-purple-500/30 bg-dark-900/40 p-3 sm:p-4 overflow-hidden">
+<svg aria-label="Workflow for each prompt: copy the block, replace the variable parts, paste and run it in Claude Code, and check the result in the response's usage fields." class="w-full h-auto" role="img" viewbox="0 0 1000 130">
+<defs><pattern height="32" id="m33i-grid" patternunits="userSpaceOnUse" width="32"><circle cx="1.3" cy="1.3" fill="#a855f7" opacity="0.12" r="1.3"></circle></pattern>
+<filter height="180%" id="m33i-glow" width="180%" x="-40%" y="-40%"><fegaussianblur result="b" stddeviation="1.8"></fegaussianblur><femerge><femergenode in="b"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge></filter>
+<marker id="m33i-ap" markerheight="9" markerwidth="9" orient="auto" refx="6.5" refy="4.5"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#c084fc"></path></marker>
+<marker id="m33i-ac" markerheight="9" markerwidth="9" orient="auto" refx="6.5" refy="4.5"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#38bdf8"></path></marker></defs>
+<rect fill="url(#m33i-grid)" height="130" width="1000" x="0" y="0"></rect>
+<g font-family="Inter,sans-serif" font-size="13" font-weight="600">
+<rect fill="#1a1230" height="46" rx="12" stroke="#c084fc" stroke-width="2" width="180" x="30" y="42"></rect><text fill="#c084fc" text-anchor="middle" x="120" y="70">1 · copy + swap</text>
+<path d="M210,65 L268,65" fill="none" marker-end="url(#m33i-ap)" opacity="0.7" stroke="#c084fc" stroke-width="2"></path>
+<rect fill="#1a1230" height="46" rx="12" stroke="#c084fc" stroke-width="2" width="180" x="270" y="42"></rect><text fill="#c084fc" text-anchor="middle" x="360" y="70">2 · paste into Claude</text>
+<path d="M450,65 L508,65" fill="none" marker-end="url(#m33i-ap)" opacity="0.7" stroke="#c084fc" stroke-width="2"></path>
+<rect fill="#1a1230" height="46" rx="12" stroke="#c084fc" stroke-width="2" width="180" x="510" y="42"></rect><text fill="#c084fc" text-anchor="middle" x="600" y="70">3 · run</text>
+<path d="M690,65 L748,65" fill="none" marker-end="url(#m33i-ac)" opacity="0.7" stroke="#38bdf8" stroke-width="2"></path>
+</g>
+<g filter="url(#m33i-glow)"><rect fill="#0e1b26" height="46" rx="12" stroke="#38bdf8" stroke-width="2.5" width="220" x="750" y="42"></rect></g>
+<text fill="#bfe6ff" font-family="Inter,sans-serif" font-size="13" font-weight="700" text-anchor="middle" x="860" y="63">4 · check usage</text>
+<text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="10.5" text-anchor="middle" x="860" y="80">does cache_read go up?</text>
+</svg>
+<p class="text-xs text-neutral-400 mt-3 px-1">Legend: the three steps <strong class="text-purple-400">purples</strong> prepare and run; the step <strong class="text-sky-400">cyan</strong> confirm in the <code class="font-mono text-xs">usage</code> whether the cache improved.</p>
+</div>
+</div>
+<!-- ===== PROMPT 1 ===== -->
+<section class="mb-16" data-inema-topic="modulo-3-3#topico-1" id="topico-1">
+<div class="flex items-start justify-between gap-4 mb-6">
+<div class="flex items-center space-x-4">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">1</span>
+<h2 class="text-2xl font-bold">🕵️ Audit a pipeline's cache</h2>
+</div>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Mark a question on this topic" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">I have a question</span></button>
+</div>
+<div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
+<p data-inema-block="m3-3-t1-p1">Use when the cache “doesn’t hit” and you don’t know why. This prompt has Claude Code scan the code that builds the prefix and return a <strong class="text-purple-400">actionable list</strong> of silent invalidators, each with a file, line, and fix.</p>
+</div>
+<div class="prompt-box bg-dark-800 border border-purple-500/30 rounded-xl overflow-hidden mb-6">
+<div class="px-5 py-3 bg-purple-500/10 border-b border-purple-500/30 flex items-center gap-2"><span aria-hidden="true">▶️</span><span class="font-semibold text-purple-400">Prompt 1 — cache audit</span></div>
+<div class="p-5 space-y-4">
+<div><p class="text-sm font-semibold text-purple-400 mb-1">Objective</p><p class="text-sm text-neutral-300">List every byte of variation in your pipeline that prevents caching, prioritized by impact.</p></div>
+<div><p class="text-sm font-semibold text-purple-400 mb-1">Prompt (copy and replace <code class="font-mono text-xs">&lt;…&gt;</code>)</p>
+<pre class="font-mono text-xs sm:text-sm bg-dark-900/70 border border-dark-600 rounded-lg p-4 overflow-x-auto whitespace-pre-wrap text-neutral-200">Audite o prompt caching do meu pipeline em &lt;caminho/do/projeto&gt;.
+Varra TUDO que alimenta o prefixo (a lista de `tools`, o `system` e o
+começo estável das `messages`) e liste cada silent invalidator:
+- datetime.now() / Date.now() / uuid / id aleatório no prefixo;
+- json.dumps sem sort_keys=True;
+- iteração de set (ordem não garantida);
+- tools montadas por usuário/modo;
+- seção condicional no system (if flag: system += ...).
+Para cada achado, dê: arquivo, linha, por que quebra o cache e o fix mínimo.
+Ordene por impacto — o que fica mais na FRENTE do prefixo primeiro.</pre></div>
+<div><p class="text-sm font-semibold text-purple-400 mb-1">How to verify</p><p class="text-sm text-neutral-300">Apply the fixes and run two identical requests. In the <code class="font-mono text-xs">usage</code>, <code class="font-mono text-xs">cache_read_input_tokens</code> must stop being 0 starting with the 2nd. If it’s still 0, an invalidator remains — use Prompt 4.</p></div>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Scan</div><p class="text-xs text-neutral-400">Tools + system + messages</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">File+line</div><p class="text-xs text-neutral-400">Actionable finding</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">By impact</div><p class="text-xs text-neutral-400">Front of the prefix before</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Check</div><p class="text-xs text-neutral-400">read &gt; 0 on the 2nd request</p></div>
+</div>
+<div class="flex justify-start mt-6">
+<button aria-pressed="false" class="inline-flex items-center gap-2 justify-start px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors" data-inema-read-toggle="" type="button">
+<span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
+<span class="inema-label-todo">Mark as read</span><span class="inema-label-done">Read ✓</span>
+</button>
+</div>
+</section>
+<!-- ===== PROMPT 2 ===== -->
+<section class="mb-16" data-inema-topic="modulo-3-3#topico-2" id="topico-2">
+<div class="flex items-start justify-between gap-4 mb-6">
+<div class="flex items-center space-x-4">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">2</span>
+<h2 class="text-2xl font-bold">🔤 Make the tools list deterministic</h2>
+</div>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Mark a question on this topic" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">I have a question</span></button>
+</div>
+<div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
+<p data-inema-block="m3-3-t2-p1">Use when the <code class="font-mono text-sm">tools</code> come from a <code class="font-mono text-sm">set</code>/<code class="font-mono text-sm">dict</code> and the order can vary. Since the tools are in the <strong class="text-purple-400">position 0</strong>, any change in order invalidates the entire prefix.</p>
+</div>
+<div class="prompt-box bg-dark-800 border border-purple-500/30 rounded-xl overflow-hidden mb-6">
+<div class="px-5 py-3 bg-purple-500/10 border-b border-purple-500/30 flex items-center gap-2"><span aria-hidden="true">▶️</span><span class="font-semibold text-purple-400">Prompt 2 — stable tool serialization</span></div>
+<div class="p-5 space-y-4">
+<div><p class="text-sm font-semibold text-purple-400 mb-1">Objective</p><p class="text-sm text-neutral-300">Ensure that the list of <code class="font-mono text-xs">tools</code> always come out in the same order across requests.</p></div>
+<div><p class="text-sm font-semibold text-purple-400 mb-1">Prompt (copy and replace <code class="font-mono text-xs">&lt;…&gt;</code>)</p>
+<pre class="font-mono text-xs sm:text-sm bg-dark-900/70 border border-dark-600 rounded-lg p-4 overflow-x-auto whitespace-pre-wrap text-neutral-200">Em &lt;caminho/do/arquivo&gt;, a lista de `tools` é montada assim:
+&lt;cole aqui o trecho que monta as tools&gt;
+Reescreva pra serialização ficar DETERMINÍSTICA:
+1) ordene as tools por nome antes de enviar
+   (ex.: sorted(tools, key=lambda t: t["name"]));
+2) garanta que cada objeto interno saia ordenado
+   (json.dumps(..., sort_keys=True));
+3) confirme que a ordem é IDÊNTICA entre dois requests.
+Mostre o diff e explique por que isso preserva o prefixo (posição 0).</pre></div>
+<div><p class="text-sm font-semibold text-purple-400 mb-1">How to verify</p><p class="text-sm text-neutral-300">Send two identical requests: <code class="font-mono text-xs">cache_read_input_tokens</code> becomes &gt; 0 on the 2nd. Before the fix, it stayed at 0 even when repeating the same prompt.</p></div>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Position 0</div><p class="text-xs text-neutral-400">Tools before everything</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">sorted()</div><p class="text-xs text-neutral-400">Sort by name</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">sort_keys</div><p class="text-xs text-neutral-400">Internal objects too</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Identical</div><p class="text-xs text-neutral-400">Between requests</p></div>
+</div>
+<div class="flex justify-start mt-6">
+<button aria-pressed="false" class="inline-flex items-center gap-2 justify-start px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors" data-inema-read-toggle="" type="button">
+<span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
+<span class="inema-label-todo">Mark as read</span><span class="inema-label-done">Read ✓</span>
+</button>
+</div>
+</section>
+<!-- ===== PROMPT 3 ===== -->
+<section class="mb-16" data-inema-topic="modulo-3-3#topico-3" id="topico-3">
+<div class="flex items-start justify-between gap-4 mb-6">
+<div class="flex items-center space-x-4">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">3</span>
+<h2 class="text-2xl font-bold">🤔 Decide whether to compact or continue</h2>
+</div>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Mark a question on this topic" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">I have a question</span></button>
+</div>
+<div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
+<p data-inema-block="m3-3-t3-p1">Use when the context has grown and you’re not sure whether it’s worth it <code class="font-mono text-sm">/compact</code>. This prompt puts <strong class="text-purple-400">numbers</strong> in the decision: cost per turn of continuing vs. the one-time cost of compacting, with the payback.</p>
+</div>
+<div class="prompt-box bg-dark-800 border border-purple-500/30 rounded-xl overflow-hidden mb-6">
+<div class="px-5 py-3 bg-purple-500/10 border-b border-purple-500/30 flex items-center gap-2"><span aria-hidden="true">▶️</span><span class="font-semibold text-purple-400">Prompt 3 — compact or continue</span></div>
+<div class="p-5 space-y-4">
+<div><p class="text-sm font-semibold text-purple-400 mb-1">Objective</p><p class="text-sm text-neutral-300">Compare the per-turn cost of loading the current context with the one-time cost of compacting, and recommend an option.</p></div>
+<div><p class="text-sm font-semibold text-purple-400 mb-1">Prompt (copy and replace <code class="font-mono text-xs">&lt;…&gt;</code>)</p>
+<pre class="font-mono text-xs sm:text-sm bg-dark-900/70 border border-dark-600 rounded-lg p-4 overflow-x-auto whitespace-pre-wrap text-neutral-200">Estou com um contexto de ~&lt;N&gt; tokens e ainda faltam ~&lt;M&gt; turnos.
+Compare os dois caminhos (use read≈0,1× · write 5min≈1,25×):
+(a) CONTINUAR sem compactar: custo por turno = N @ 0,1× ≈ N/10-equiv,
+    repetido em todos os &lt;M&gt; turnos;
+(b) COMPACTAR pra ~&lt;K&gt; tokens: 1 write frio K @ 1,25× (uma vez) e
+    depois K @ 0,1× por turno.
+Diga o payback (em quantos turnos a compactação se paga) e recomende
+compactar OU continuar — considerando também o teto de 1M e a qualidade
+(context rot). Se a conversa for curta, avise que continuar pode ser melhor.</pre></div>
+<div><p class="text-sm font-semibold text-purple-400 mb-1">How to verify</p><p class="text-sm text-neutral-300">The recommendation should follow the guideline from module 3.1: small context / few turns → continue (keeps the cache warm); large context, near the limit, or declining quality → compact (payback in ~1 turn).</p></div>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Cost/turn</div><p class="text-xs text-neutral-400">N @ 0,1×</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Cold write</div><p class="text-xs text-neutral-400">K at 1.25×, once</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Payback</div><p class="text-xs text-neutral-400">How many turns until it pays off</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Ruler</div><p class="text-xs text-neutral-400">Small → continue</p></div>
+</div>
+<div class="flex justify-start mt-6">
+<button aria-pressed="false" class="inline-flex items-center gap-2 justify-start px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors" data-inema-read-toggle="" type="button">
+<span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
+<span class="inema-label-todo">Mark as read</span><span class="inema-label-done">Read ✓</span>
+</button>
+</div>
+</section>
+<!-- ===== PROMPT 4 ===== -->
+<section class="mb-16" data-inema-topic="modulo-3-3#topico-4" id="topico-4">
+<div class="flex items-start justify-between gap-4 mb-6">
+<div class="flex items-center space-x-4">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">4</span>
+<h2 class="text-2xl font-bold">🩺 Diagnose <code class="font-mono">cache_read = 0</code></h2>
+</div>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Mark a question on this topic" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">I have a question</span></button>
+</div>
+<div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
+<p data-inema-block="m3-3-t4-p1">Use when <code class="font-mono text-sm">cache_read_input_tokens</code> comes <strong class="text-purple-400">always 0</strong> even when repeating the same prompt. This proves there's a silent invalidator; this prompt makes the <strong class="text-purple-400">byte diff</strong> to find the culprit.</p>
+</div>
+<!-- SVG: diff de dois requests -->
+<div class="rounded-2xl border border-purple-500/30 bg-dark-900/40 p-3 sm:p-4 mb-6 overflow-hidden">
+<svg aria-label="Two identical requests have their prefixes compared byte by byte; the diff points to the only section that changes, such as a timestamp, which is why the cache doesn’t match." class="w-full h-auto" role="img" viewbox="0 0 1000 180">
+<defs><pattern height="32" id="m33d-grid" patternunits="userSpaceOnUse" width="32"><circle cx="1.3" cy="1.3" fill="#a855f7" opacity="0.12" r="1.3"></circle></pattern>
+<filter height="180%" id="m33d-glow" width="180%" x="-40%" y="-40%"><fegaussianblur result="b" stddeviation="1.8"></fegaussianblur><femerge><femergenode in="b"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge></filter></defs>
+<rect fill="url(#m33d-grid)" height="180" width="1000" x="0" y="0"></rect>
+<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="12.5" font-weight="600" text-anchor="middle" x="200" y="34">request A · prefix</text>
+<rect fill="#1a1230" height="34" rx="8" stroke="#c084fc" stroke-width="2" width="320" x="40" y="46"></rect>
+<text fill="#e9d5ff" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="160" y="68">system... 14:03:07 ...tools</text>
+<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="12.5" font-weight="600" text-anchor="middle" x="200" y="110">request B · prefix</text>
+<rect fill="#1a1230" height="34" rx="8" stroke="#c084fc" stroke-width="2" width="320" x="40" y="120"></rect>
+<text fill="#e9d5ff" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="160" y="142">system... 14:03:09 ...tools</text>
+<!-- diff -->
+<g filter="url(#m33d-glow)"><rect fill="#2a0f16" height="66" rx="14" stroke="#f87171" stroke-width="2.5" width="480" x="470" y="60"></rect></g>
+<text fill="#fca5a5" font-family="Inter,sans-serif" font-size="13" font-weight="700" text-anchor="middle" x="710" y="88">diff: only the timestamp changes</text>
+<text fill="#fecaca" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="710" y="110">→ datetime.now() in system = the invalidator</text>
+</svg>
+<p class="text-xs text-neutral-400 mt-3 px-1">Legend: two "identical" prefixes, one different section. That byte is why <code class="font-mono text-xs">cache_read</code> stay 0.</p>
+</div>
+<div class="prompt-box bg-dark-800 border border-purple-500/30 rounded-xl overflow-hidden mb-6">
+<div class="px-5 py-3 bg-purple-500/10 border-b border-purple-500/30 flex items-center gap-2"><span aria-hidden="true">▶️</span><span class="font-semibold text-purple-400">Prompt 4 — prefix diff</span></div>
+<div class="p-5 space-y-4">
+<div><p class="text-sm font-semibold text-purple-400 mb-1">Objective</p><p class="text-sm text-neutral-300">Find the first byte that changes between two identical requests and its source.</p></div>
+<div><p class="text-sm font-semibold text-purple-400 mb-1">Prompt (copy and replace <code class="font-mono text-xs">&lt;…&gt;</code>)</p>
+<pre class="font-mono text-xs sm:text-sm bg-dark-900/70 border border-dark-600 rounded-lg p-4 overflow-x-auto whitespace-pre-wrap text-neutral-200">Meu cache_read_input_tokens vem SEMPRE 0 repetindo o MESMO prompt.
+Capture os bytes exatos do prefixo (tools + system + começo das messages)
+de DOIS requests consecutivos e faça o diff entre eles.
+Aponte o PRIMEIRO ponto que difere e explique a origem
+(relógio/datetime.now(), uuid, ordem de set/dict, json.dumps sem sort_keys,
+seção condicional no system). Proponha o fix determinístico.
+Arquivos que montam o prefixo: &lt;cole os caminhos&gt;.</pre></div>
+<div><p class="text-sm font-semibold text-purple-400 mb-1">How to verify</p><p class="text-sm text-neutral-300">After the fix, diff the two prefixes again: it should be <strong>empty</strong>. Then <code class="font-mono text-xs">cache_read_input_tokens</code> starts increasing with each repeated turn.</p></div>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">read = 0</div><p class="text-xs text-neutral-400">The symptom</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">2 requests</div><p class="text-xs text-neutral-400">Equal, consecutive</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Diff</div><p class="text-xs text-neutral-400">1st byte that changes</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Empty</div><p class="text-xs text-neutral-400">Clean diff = fixed</p></div>
+</div>
+<div class="flex justify-start mt-6">
+<button aria-pressed="false" class="inline-flex items-center gap-2 justify-start px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors" data-inema-read-toggle="" type="button">
+<span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
+<span class="inema-label-todo">Mark as read</span><span class="inema-label-done">Read ✓</span>
+</button>
+</div>
+</section>
+<!-- ===== PROMPT 5 ===== -->
+<section class="mb-16" data-inema-topic="modulo-3-3#topico-5" id="topico-5">
+<div class="flex items-start justify-between gap-4 mb-6">
+<div class="flex items-center space-x-4">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">5</span>
+<h2 class="text-2xl font-bold">🧊 Review the cache-friendly system prompt</h2>
+</div>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Mark a question on this topic" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">I have a question</span></button>
+</div>
+<div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
+<p data-inema-block="m3-3-t5-p1">Use when the system prompt has an interpolated date, user name, or mode. This prompt <strong class="text-purple-400">freezes the system</strong> and moves the dynamic context to the end of the <code class="font-mono text-sm">messages</code>, without losing information.</p>
+</div>
+<div class="prompt-box bg-dark-800 border border-purple-500/30 rounded-xl overflow-hidden mb-6">
+<div class="px-5 py-3 bg-purple-500/10 border-b border-purple-500/30 flex items-center gap-2"><span aria-hidden="true">▶️</span><span class="font-semibold text-purple-400">Prompt 5 — freeze the system prompt</span></div>
+<div class="p-5 space-y-4">
+<div><p class="text-sm font-semibold text-purple-400 mb-1">Objective</p><p class="text-sm text-neutral-300">Remove all dynamic interpolation from the system and return it as a ready-to-use block for the end of the messages.</p></div>
+<div><p class="text-sm font-semibold text-purple-400 mb-1">Prompt (copy and replace <code class="font-mono text-xs">&lt;…&gt;</code>)</p>
+<pre class="font-mono text-xs sm:text-sm bg-dark-900/70 border border-dark-600 rounded-lg p-4 overflow-x-auto whitespace-pre-wrap text-neutral-200">Aqui está meu system prompt:
+&lt;cole o system prompt inteiro&gt;
+Remova TODA interpolação dinâmica dele (data/hora, nome do usuário, modo,
+e qualquer valor que muda entre requests) e mova esse contexto pro FIM
+das messages — nunca no system. Devolva:
+1) o system CONGELADO (fixo, sem variáveis);
+2) o bloco de contexto dinâmico pronto pra ir nas messages;
+3) o diff comentado, explicando por que cada mudança preserva o prefixo.</pre></div>
+<div><p class="text-sm font-semibold text-purple-400 mb-1">How to verify</p><p class="text-sm text-neutral-300">After the change, the system is byte-for-byte identical across requests. The cache for <code class="font-mono text-xs">tools</code> + <code class="font-mono text-xs">system</code> stop invalidating and <code class="font-mono text-xs">cache_read_input_tokens</code> covers this section.</p></div>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Freeze</div><p class="text-xs text-neutral-400">System without variables</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Move</div><p class="text-xs text-neutral-400">Dynamic → end of messages</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Doesn’t lose</div><p class="text-xs text-neutral-400">Context is still there</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Stable</div><p class="text-xs text-neutral-400">Identical prefix</p></div>
+</div>
+<div class="flex justify-start mt-6">
+<button aria-pressed="false" class="inline-flex items-center gap-2 justify-start px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors" data-inema-read-toggle="" type="button">
+<span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
+<span class="inema-label-todo">Mark as read</span><span class="inema-label-done">Read ✓</span>
+</button>
+</div>
+</section>
+<!-- ===== PROMPT 6 ===== -->
+<section class="mb-16" data-inema-topic="modulo-3-3#topico-6" id="topico-6">
+<div class="flex items-start justify-between gap-4 mb-6">
+<div class="flex items-center space-x-4">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">6</span>
+<h2 class="text-2xl font-bold">📍 Breakpoint strategy</h2>
+</div>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm shrink-0" data-inema-doubt-toggle="" title="Mark a question on this topic" type="button"><span aria-hidden="true">?</span><span class="hidden sm:inline">I have a question</span></button>
+</div>
+<div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
+<p data-inema-block="m3-3-t6-p1">Use when you control the <code class="font-mono text-sm">cache_control</code> manually (outside Claude Code, in the API). They are <strong class="text-purple-400">at most 4 per request</strong>; this prompt suggests where to put them and warns about the <strong class="text-purple-400">20-block lookback</strong>.</p>
+</div>
+<!-- SVG: onde colocar breakpoints -->
+<div class="rounded-2xl border border-purple-500/30 bg-dark-900/40 p-3 sm:p-4 mb-6 overflow-hidden">
+<svg aria-label="Along the prefix formed by tools, system, and a shared segment, breakpoints are placed at the end of the stable system and at the end of the shared segment, before the variable part." class="w-full h-auto" role="img" viewbox="0 0 1000 170">
+<defs><pattern height="32" id="m33f-grid" patternunits="userSpaceOnUse" width="32"><circle cx="1.3" cy="1.3" fill="#a855f7" opacity="0.12" r="1.3"></circle></pattern>
+<filter height="180%" id="m33f-glow" width="180%" x="-40%" y="-40%"><fegaussianblur result="b" stddeviation="1.8"></fegaussianblur><femerge><femergenode in="b"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge></filter></defs>
+<rect fill="url(#m33f-grid)" height="170" width="1000" x="0" y="0"></rect>
+<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="13" font-weight="600" x="40" y="34">Where to mark cache_control (max. 4)</text>
+<g font-family="Inter,sans-serif" font-size="12">
+<rect fill="#1a1230" height="46" rx="10" stroke="#c084fc" stroke-width="2" width="150" x="40" y="60"></rect><text fill="#c084fc" font-weight="600" text-anchor="middle" x="115" y="88">tools</text>
+<rect fill="#1a1230" height="46" rx="10" stroke="#c084fc" stroke-width="2" width="200" x="200" y="60"></rect><text fill="#c084fc" font-weight="600" text-anchor="middle" x="300" y="88">stable system</text>
+<rect fill="#1a1230" height="46" rx="10" stroke="#c084fc" stroke-width="2" width="240" x="410" y="60"></rect><text fill="#c084fc" font-weight="600" text-anchor="middle" x="530" y="88">shared segment</text>
+<rect fill="#0e1b26" height="46" rx="10" stroke="#38bdf8" stroke-dasharray="6 5" stroke-width="2" width="290" x="660" y="60"></rect><text fill="#9ad6ff" font-weight="600" text-anchor="middle" x="805" y="88">variable portion (not cached)</text>
+</g>
+<!-- breakpoints -->
+<g filter="url(#m33f-glow)"><circle cx="400" cy="83" fill="#1a1230" r="10" stroke="#c084fc" stroke-width="3"></circle></g>
+<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="400" y="130">▲ end of system</text>
+<g filter="url(#m33f-glow)"><circle cx="650" cy="83" fill="#1a1230" r="10" stroke="#c084fc" stroke-width="3"></circle></g>
+<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="650" y="130">▲ end of shared section</text>
+</svg>
+<p class="text-xs text-neutral-400 mt-3 px-1">Legend: two well-placed breakpoints (end of the system, end of the shared section) cover almost everything; the <strong class="text-sky-400">variable portion</strong> intentionally left out.</p>
+</div>
+<div class="prompt-box bg-dark-800 border border-purple-500/30 rounded-xl overflow-hidden mb-6">
+<div class="px-5 py-3 bg-purple-500/10 border-b border-purple-500/30 flex items-center gap-2"><span aria-hidden="true">▶️</span><span class="font-semibold text-purple-400">Prompt 6 — breakpoint plan</span></div>
+<div class="p-5 space-y-4">
+<div><p class="text-sm font-semibold text-purple-400 mb-1">Objective</p><p class="text-sm text-neutral-300">Decide where to position the <code class="font-mono text-xs">cache_control</code> and avoid the 20-block lookback gap.</p></div>
+<div><p class="text-sm font-semibold text-purple-400 mb-1">Prompt (copy and replace <code class="font-mono text-xs">&lt;…&gt;</code>)</p>
+<pre class="font-mono text-xs sm:text-sm bg-dark-900/70 border border-dark-600 rounded-lg p-4 overflow-x-auto whitespace-pre-wrap text-neutral-200">Meu prompt tem esta estrutura:
+&lt;descreva: tamanho do system; se as tools mudam; se há um trecho
+ compartilhado seguido de um sufixo que varia por request&gt;
+Sugira onde colocar os cache_control (MÁX. 4 por request). Tipicamente:
+- no fim do `system` estável;
+- no fim do maior trecho COMPARTILHADO, antes da parte variável.
+Alerte sobre o 20-block lookback: se um turno adiciona &gt;20 blocos
+(loops com muitos tool_use/tool_result), proponha um breakpoint
+intermediário (~a cada 15 blocos). Explique cada escolha.</pre></div>
+<div><p class="text-sm font-semibold text-purple-400 mb-1">How to verify</p><p class="text-sm text-neutral-300"><code class="font-mono text-xs">cache_read_input_tokens</code> stays high and stable from turn to turn. If a turn with many blocks drops the read to 0, the lookback is missing an intermediate breakpoint.</p></div>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Max. 4</div><p class="text-xs text-neutral-400">Breakpoints per request</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">End of the system</div><p class="text-xs text-neutral-400">Cache tools+system</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">Shared</div><p class="text-xs text-neutral-400">Before the variable part</p></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-4"><div class="text-purple-400 font-bold text-sm mb-1">20 blocks</div><p class="text-xs text-neutral-400">Lookback: intermediate pt.</p></div>
+</div>
+<div class="flex justify-start mt-6">
+<button aria-pressed="false" class="inline-flex items-center gap-2 justify-start px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors" data-inema-read-toggle="" type="button">
+<span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
+<span class="inema-label-todo">Mark as read</span><span class="inema-label-done">Read ✓</span>
+</button>
+</div>
+</section>
+<!-- ===== RESUMO ===== -->
+<section class="mb-12">
+<div class="bg-gradient-to-br from-purple-900/40 via-dark-800 to-dark-800 rounded-xl border border-purple-500/30 p-8">
+<h2 class="text-2xl font-bold mb-6 flex items-center"><span aria-hidden="true" class="mr-3">📌</span> The complete toolkit</h2>
+<div class="space-y-4 mb-8">
+<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">1</span><div><strong class="text-neutral-100">Audit cache</strong><span class="text-neutral-400"> — scan the pipeline and list the silent invalidators with fixes.</span></div></div>
+<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">2</span><div><strong class="text-neutral-100">Deterministic tools</strong><span class="text-neutral-400"> — sorts the serialization and confirms stable ordering.</span></div></div>
+<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">3</span><div><strong class="text-neutral-100">Compact vs. continue</strong><span class="text-neutral-400"> — estimates cost per turn versus a cold write and makes a recommendation.</span></div></div>
+<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">4</span><div><strong class="text-neutral-100">Diagnose read = 0</strong><span class="text-neutral-400"> — diff of the prefix bytes between two requests.</span></div></div>
+<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">5</span><div><strong class="text-neutral-100">Review system</strong><span class="text-neutral-400"> — freezes the system and moves dynamic content to the end of the messages.</span></div></div>
+<div class="flex items-start gap-3"><span class="text-purple-400 mt-1">6</span><div><strong class="text-neutral-100">Breakpoints</strong><span class="text-neutral-400"> — where to mark <code class="font-mono text-xs">cache_control</code> and the 20-block lookback warning.</span></div></div>
+</div>
+<div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+<h3 class="font-semibold text-purple-400 mb-1">End of Track 3</h3>
+<p class="text-neutral-300 text-sm">You’ve covered the advanced best practices: deciding between caching and compaction, building a cache-friendly architecture, and keeping your prompts handy. Mark the topics as read and track your progress in “My journey.”</p>
+</div>
+<div class="flex flex-col sm:flex-row gap-4">
+<a class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors" href="modulo-3-2.html">← Previous: 3.2</a>
+<a class="flex-1 text-center px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-500 transition-colors" href="index.html">Back to Track 3</a>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- FOOTER -->
+<footer class="border-t border-dark-600 py-8">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+<p>cccache — Prompt Caching in Claude Code · Course <a class="text-sky-400 hover:text-sky-300" href="https://inema.club" rel="noopener" target="_blank">INEMA.CLUB</a> · 2026</p>
+</div>
+</footer>
+<script src="../../../assets/learn.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.INEMA && typeof INEMA.init === 'function') { INEMA.init(); }
+    });
+  </script>
+</body>
+</html>

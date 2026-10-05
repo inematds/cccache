@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 
-<html class="dark" lang="pt-BR">
+<html class="dark" lang="es">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta content="cccache" name="inema-course"/>
-<title>Módulo 2.2 · Skills e ferramentas: anexar vs quebrar | cccache</title>
+<title>Módulo 2.2 · Skills y herramientas: adjuntar vs. dividir | cccache</title>
 <!-- 1) ANTI-FOUC -->
 <script>
     (function () {
@@ -128,10 +128,10 @@
     .copy-btn.copied { color: #34d399 !important; }
   </style>
 <!-- 5) learn.css -->
-<link href="../../assets/learn.css" rel="stylesheet"/>
+<link href="../../../assets/learn.css" rel="stylesheet"/>
 <link href="https://inematds.github.io/cccache/curso/trilha2/modulo-2-2.html" hreflang="pt-BR" rel="alternate"/><link href="https://inematds.github.io/cccache/en/curso/trilha2/modulo-2-2.html" hreflang="en" rel="alternate"/><link href="https://inematds.github.io/cccache/es/curso/trilha2/modulo-2-2.html" hreflang="es" rel="alternate"/></head>
-<body class="bg-dark-900 text-neutral-100 min-h-screen"><div class="inema-lang" style="position:fixed;right:14px;bottom:14px;z-index:9999;display:flex;gap:2px;padding:4px;border-radius:10px;background:rgba(12,12,16,.82);border:1px solid rgba(226,162,59,.45);font:600 12px/1 Sora,Inter,system-ui,sans-serif;backdrop-filter:blur(8px)" translate="no"><a href="modulo-2-2.html" hreflang="pt-BR" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#1a1206;background:#E2A23B">PT</a><a href="../../en/curso/trilha2/modulo-2-2.html" hreflang="en" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">EN</a><a href="../../es/curso/trilha2/modulo-2-2.html" hreflang="es" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">ES</a></div>
-<a class="inema-skip" href="#conteudo">Pular para o conteúdo</a>
+<body class="bg-dark-900 text-neutral-100 min-h-screen"><div class="inema-lang" style="position:fixed;right:14px;bottom:14px;z-index:9999;display:flex;gap:2px;padding:4px;border-radius:10px;background:rgba(12,12,16,.82);border:1px solid rgba(226,162,59,.45);font:600 12px/1 Sora,Inter,system-ui,sans-serif;backdrop-filter:blur(8px)" translate="no"><a href="../../../curso/trilha2/modulo-2-2.html" hreflang="pt-BR" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">PT</a><a href="../../../en/curso/trilha2/modulo-2-2.html" hreflang="en" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">EN</a><a href="modulo-2-2.html" hreflang="es" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#1a1206;background:#E2A23B">ES</a></div>
+<a class="inema-skip" href="#conteudo">Saltar al contenido</a>
 <!-- ================= NAV (erro #13) ================= -->
 <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
 <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -152,60 +152,60 @@
 <span class="sm:hidden">T2</span><span class="hidden sm:inline">Técnico</span>
 </a>
 <a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors" href="../trilha3/index.html">
-<span class="sm:hidden">T3</span><span class="hidden sm:inline">Boas práticas</span>
+<span class="sm:hidden">T3</span><span class="hidden sm:inline">Buenas prácticas</span>
 </a>
 <button class="hidden md:inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-neutral-300 hover:text-neutral-100 hover:bg-dark-700 transition-colors text-sm" data-inema-journey-open="" type="button">
-<span aria-hidden="true">◷</span><span>Minha jornada</span>
+<span aria-hidden="true">◷</span><span>Mi recorrido</span>
 <span class="inema-journey-badge hidden" data-count="0" data-inema-journey-badge=""></span>
 </button>
 <div class="nav-appearance-wrap">
 <button aria-expanded="false" aria-haspopup="true" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-neutral-300 hover:text-neutral-100 hover:bg-dark-700 transition-colors text-sm" data-inema-appearance-toggle="[data-inema-appearance]" type="button">
-<span aria-hidden="true">◑</span><span class="hidden sm:inline">Aparência</span>
+<span aria-hidden="true">◑</span><span class="hidden sm:inline">Apariencia</span>
 </button>
-<div aria-label="Aparência e leitura" class="inema-appearance-pop" data-inema-appearance="" role="group">
+<div aria-label="Apariencia y lectura" class="inema-appearance-pop" data-inema-appearance="" role="group">
 <p class="inema-seg-label">Tema</p>
 <div class="inema-segment">
-<button data-inema-set-theme="inema-dark" type="button">Escuro</button>
+<button data-inema-set-theme="inema-dark" type="button">Oscuro</button>
 <button data-inema-set-theme="claro" type="button">Claro</button>
-<button data-inema-set-theme="sepia" type="button">Sépia</button>
-<button data-inema-set-theme="foco" type="button">Foco</button>
+<button data-inema-set-theme="sepia" type="button">Sepia</button>
+<button data-inema-set-theme="foco" type="button">Enfoque</button>
 <button data-inema-set-theme="contraste" type="button">Alto contraste</button>
 </div>
-<p class="inema-seg-label">Fonte</p>
+<p class="inema-seg-label">Fuente</p>
 <div class="inema-segment">
 <button data-inema-set-font="inter" type="button">Inter</button>
 <button data-inema-set-font="system" type="button">Sistema</button>
-<button data-inema-set-font="leitura" type="button">Leitura</button>
+<button data-inema-set-font="leitura" type="button">Lectura</button>
 </div>
-<p class="inema-seg-label">Tamanho</p>
+<p class="inema-seg-label">Tamaño</p>
 <div class="inema-segment">
 <button data-inema-set-fontscale="100" type="button">A</button>
 <button data-inema-set-fontscale="112" type="button">A+</button>
 <button data-inema-set-fontscale="125" type="button">A++</button>
 </div>
-<p class="inema-seg-label">Largura da linha</p>
+<p class="inema-seg-label">Ancho de línea</p>
 <div class="inema-segment">
-<button data-inema-set-linewidth="60" type="button">Estreito</button>
-<button data-inema-set-linewidth="68" type="button">Médio</button>
-<button data-inema-set-linewidth="75" type="button">Largo</button>
+<button data-inema-set-linewidth="60" type="button">Estrecho</button>
+<button data-inema-set-linewidth="68" type="button">Medio</button>
+<button data-inema-set-linewidth="75" type="button">Ancho</button>
 </div>
-<p class="inema-seg-label">Entrelinha</p>
+<p class="inema-seg-label">Interlineado</p>
 <div class="inema-segment">
 <button data-inema-set-leading="1.45" type="button">Compacto</button>
-<button data-inema-set-leading="1.7" type="button">Confortável</button>
+<button data-inema-set-leading="1.7" type="button">Cómodo</button>
 </div>
 <p class="inema-seg-label">Acento</p>
-<div aria-label="Cor de acento" class="inema-accent-grid" role="group">
+<div aria-label="Color de acento" class="inema-accent-grid" role="group">
 <button aria-label="Esmeralda" data-inema-set-accent="emerald" type="button"></button>
 <button aria-label="Azul" data-inema-set-accent="blue" type="button"></button>
-<button aria-label="Roxo" data-inema-set-accent="purple" type="button"></button>
-<button aria-label="Âmbar" data-inema-set-accent="amber" type="button"></button>
+<button aria-label="Morado" data-inema-set-accent="purple" type="button"></button>
+<button aria-label="Ámbar" data-inema-set-accent="amber" type="button"></button>
 <button aria-label="Turquesa" data-inema-set-accent="teal" type="button"></button>
 <button aria-label="Rosa" data-inema-set-accent="rose" type="button"></button>
 </div>
 </div>
 </div>
-<button aria-label="Alternar claro/escuro" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-1" id="theme-toggle">
+<button aria-label="Alternar entre claro y oscuro" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-1" id="theme-toggle">
 <svg aria-hidden="true" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-dark-icon" viewbox="0 0 20 20">
 <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
 </svg>
@@ -218,9 +218,9 @@
 </div>
 </nav>
 <!-- Breadcrumb -->
-<nav aria-label="Trilha de navegação" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+<nav aria-label="Ruta de navegación" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
 <div class="flex items-center space-x-2 text-sm text-neutral-400">
-<a class="hover:text-blue-400" href="../../index.html">Início</a>
+<a class="hover:text-blue-400" href="../../index.html">Inicio</a>
 <span aria-hidden="true">/</span>
 <a class="hover:text-blue-400" href="index.html">Trilha 2</a>
 <span aria-hidden="true">/</span>
@@ -231,19 +231,19 @@
 <header class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
 <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 <span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-semibold rounded-full mb-4">MÓDULO 2.2</span>
-<h1 class="text-2xl sm:text-4xl font-bold mb-4">🧩 Skills e ferramentas: anexar vs quebrar</h1>
+<h1 class="text-2xl sm:text-4xl font-bold mb-4">🧩 Skills y herramientas: anexar vs. romper</h1>
 <p class="text-lg text-neutral-300 max-w-3xl">
-        O que <strong class="text-blue-400">anexa no fim</strong> (seguro, um write único) e o que
-        <strong class="text-blue-400">mexe na posição 0</strong> (reset do prefixo inteiro). Por que invocar uma skill
-        no meio da conversa não zera o cache, mas conectar um MCP sim.
+        Lo que <strong class="text-blue-400">adjunta al final</strong> (seguro, una única escritura) y qué
+        <strong class="text-blue-400">cambia la posición 0</strong> (restablecimiento de todo el prefijo). Por qué invocar una skill
+        a mitad de la conversación no reinicia la caché, pero conectar un MCP sí.
       </p>
 <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
-<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">6</div><div class="text-xs text-neutral-400">Temas</div></div>
 <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">~35</div><div class="text-xs text-neutral-400">Minutos</div></div>
-<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">Técnico</div><div class="text-xs text-neutral-400">Nível</div></div>
-<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">Prática</div><div class="text-xs text-neutral-400">Tipo</div></div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">Técnico</div><div class="text-xs text-neutral-400">Nivel</div></div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">Práctica</div><div class="text-xs text-neutral-400">Tipo</div></div>
 </div>
-<div aria-label="Progresso do módulo 2.2" class="inema-meter mt-6 max-w-sm" data-inema-meter="modulo-2-2">
+<div aria-label="Progreso del módulo 2.2" class="inema-meter mt-6 max-w-sm" data-inema-meter="modulo-2-2">
 <div class="inema-bar"><div class="inema-bar__fill" data-inema-meter-fill=""></div></div>
 <div class="leading-tight">
 <span class="text-blue-400 font-bold" data-inema-meter-pct="">0%</span>
@@ -259,52 +259,52 @@
 <div class="flex items-start justify-between gap-4 mb-6">
 <div class="flex items-center space-x-4">
 <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">1</span>
-<h2 class="text-2xl font-bold" id="m22-t1-h">🏷️ Dois sentidos de "skill"</h2>
+<h2 class="text-2xl font-bold" id="m22-t1-h">🏷️ Dos sentidos de "skill"</h2>
 </div>
-<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm flex-shrink-0" data-inema-doubt-toggle="" title="Marcar dúvida neste tópico" type="button">
-<span aria-hidden="true">?</span><span class="hidden sm:inline">Tenho dúvida</span>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm flex-shrink-0" data-inema-doubt-toggle="" title="Marcar duda en este tema" type="button">
+<span aria-hidden="true">?</span><span class="hidden sm:inline">Tengo una duda</span>
 </button>
 </div>
 <div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
 <p data-inema-block="m2-2-t1-p1">
-            A palavra "skill" tem <strong class="text-blue-400">dois sentidos</strong> que custam coisas diferentes.
-            (a) A <strong class="text-blue-400">descrição</strong> da skill — a linha curta que aparece na lista de
-            skills — fica <strong class="text-blue-400">sempre no prefixo estável</strong>. (b) O
-            <strong class="text-blue-400">conteúdo</strong> completo (o documentão) só entra quando a skill é
+            La palabra «skill» tiene <strong class="text-blue-400">dos sentidos</strong> que cuestan cosas diferentes.
+            (a) La <strong class="text-blue-400">descripción</strong> de la skill — la línea corta que aparece en la lista de
+            skills — queda <strong class="text-blue-400">siempre en el prefijo estable</strong>. (b) O
+            <strong class="text-blue-400">contenido</strong> completo (el documentazo) solo se carga cuando la skill está
             <strong class="text-blue-400">invocada</strong>.
           </p>
 </div>
 <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
-<h3 class="text-lg font-semibold text-blue-400 mb-2">O que é</h3>
-<p class="text-neutral-300">Uma skill se apresenta ao modelo por uma descrição curta (barata, sempre presente) e carrega seu corpo só sob demanda. São dois blocos com custos e momentos diferentes.</p>
+<h3 class="text-lg font-semibold text-blue-400 mb-2">Qué es</h3>
+<p class="text-neutral-300">Una skill se presenta al modelo con una descripción breve (barata, siempre presente) y carga su contenido solo cuando se necesita. Son dos bloques con costos y momentos distintos.</p>
 </div>
 <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
-<h3 class="text-lg font-semibold text-blue-400 mb-2">Por que aprender</h3>
-<p class="text-neutral-300">Porque sem separar os dois você acha que "toda skill é cara". Na verdade, só o conteúdo pesa — e uma vez só, quando invocado.</p>
+<h3 class="text-lg font-semibold text-blue-400 mb-2">Por qué aprenderlo</h3>
+<p class="text-neutral-300">Porque, si no separas las dos cosas, piensas que "toda skill es cara". En realidad, solo pesa el contenido, y eso ocurre una sola vez, al invocarla.</p>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
-<h4 class="font-bold text-blue-400 mb-2">Descrição (a)</h4>
-<p class="text-sm text-neutral-300">Linha curta na lista de skills. Sempre no prefixo estável. Barata e constante.</p>
+<h4 class="font-bold text-blue-400 mb-2">Descripción (a)</h4>
+<p class="text-sm text-neutral-300">Línea breve en la lista de skills. Siempre al principio estable. Barata y constante.</p>
 </div>
 <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
-<h4 class="font-bold text-blue-400 mb-2">Conteúdo (b)</h4>
-<p class="text-sm text-neutral-300">O documento completo. Entra só quando a skill é invocada. Pesa uma vez, depois vira read barato.</p>
+<h4 class="font-bold text-blue-400 mb-2">Contenido (b)</h4>
+<p class="text-sm text-neutral-300">El documento completo. Solo se incluye cuando se invoca la skill. Pesa una vez; después se convierte en una lectura barata.</p>
 </div>
 </div>
 <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
-<h3 class="text-lg font-semibold text-blue-400 mb-3">Conceitos-chave</h3>
+<h3 class="text-lg font-semibold text-blue-400 mb-3">Conceptos clave</h3>
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">Descrição</strong> = sempre presente, barata.</p></div>
-<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">Conteúdo</strong> = sob demanda, pesa 1×.</p></div>
-<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">Invocar</strong> = trazer o conteúdo pra conversa.</p></div>
-<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">Ter muitas skills listadas ≠ carregar todas.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">Descripción</strong> = siempre presente, barato.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">Contenido</strong> = bajo demanda, cuesta 1×.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">Invocar</strong> = traer el contenido a la conversación.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">Tener muchas skills listadas ≠ cargarlas todas.</p></div>
 </div>
 </div>
 <div class="flex justify-start mt-6">
 <button aria-pressed="false" class="inline-flex items-center justify-start gap-2 px-4 py-2 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 transition-colors" data-inema-read-toggle="" type="button">
 <span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
-<span class="inema-label-todo">Marcar como lido</span><span class="inema-label-done">Lido ✓</span>
+<span class="inema-label-todo">Marcar como leído</span><span class="inema-label-done">Leído ✓</span>
 </button>
 </div>
 </section>
@@ -313,31 +313,31 @@
 <div class="flex items-start justify-between gap-4 mb-6">
 <div class="flex items-center space-x-4">
 <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">2</span>
-<h2 class="text-2xl font-bold" id="m22-t2-h">➕ Skill no meio NÃO zera o cache</h2>
+<h2 class="text-2xl font-bold" id="m22-t2-h">➕ Skill en medio NO reinicia el caché</h2>
 </div>
-<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm flex-shrink-0" data-inema-doubt-toggle="" title="Marcar dúvida neste tópico" type="button">
-<span aria-hidden="true">?</span><span class="hidden sm:inline">Tenho dúvida</span>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm flex-shrink-0" data-inema-doubt-toggle="" title="Marcar duda en este tema" type="button">
+<span aria-hidden="true">?</span><span class="hidden sm:inline">Tengo una duda</span>
 </button>
 </div>
 <div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
 <p data-inema-block="m2-2-t2-p1">
-            Quando uma skill é invocada no meio da conversa, o conteúdo dela entra
-            <strong class="text-blue-400">anexado no FIM</strong> do histórico — <strong class="text-blue-400">não na
-            posição 0</strong>. Tudo que veio antes continua válido e é lido barato; só o bloco novo da skill é gravado
-            (um write). Nos turnos seguintes, ela já é <strong class="text-blue-400">read barato</strong>.
+            Cuando se invoca una skill en medio de la conversación, su contenido se incorpora
+            <strong class="text-blue-400">adjuntado al FINAL</strong> del historial — <strong class="text-blue-400">no en la
+            posición 0</strong>. Todo lo anterior sigue siendo válido y se lee a bajo costo; solo se guarda el bloque nuevo de la skill
+            (un write). En los turnos siguientes, ya está <strong class="text-blue-400">lectura barata</strong>.
           </p>
 </div>
 <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
-<h3 class="text-lg font-semibold text-blue-400 mb-2">O que é</h3>
-<p class="text-neutral-300">Anexar no fim preserva todo o prefixo anterior: o casamento de prefixo continua batendo até o ponto onde o conteúdo novo começa. Logo, não há reset — só uma gravação incremental.</p>
+<h3 class="text-lg font-semibold text-blue-400 mb-2">Qué es</h3>
+<p class="text-neutral-300">Anexar al final preserva todo el prefijo anterior: la coincidencia de prefijo sigue funcionando hasta el punto donde comienza el contenido nuevo. Por lo tanto, no hay reinicio, solo una escritura incremental.</p>
 </div>
 <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
-<h3 class="text-lg font-semibold text-blue-400 mb-2">Por que aprender</h3>
-<p class="text-neutral-300">Porque tira o medo de invocar skills durante o trabalho. Aquele turno pode marcar uma % de cache mais baixa (o write da skill), mas é investimento único — vira barato já no próximo turno.</p>
+<h3 class="text-lg font-semibold text-blue-400 mb-2">Por qué aprenderlo</h3>
+<p class="text-neutral-300">Porque quita el miedo a invocar skills durante el trabajo. Ese turno puede mostrar un % de caché más bajo (la escritura de la skill), pero es una inversión única: ya en el siguiente turno cuesta poco.</p>
 </div>
 <!-- SVG: anexar no fim (seguro) vs mexer na posição 0 (quebra) -->
 <div class="rounded-2xl border border-blue-500/30 bg-dark-900/40 p-3 sm:p-4 mb-6 overflow-hidden">
-<svg aria-label="Dois cenários lado a lado. À esquerda, anexar conteúdo no fim do histórico: o prefixo inteiro continua verde (lido do cache) e só um bloco novo no fim é gravado — seguro. À direita, mexer na lista de ferramentas na posição zero: tudo dali pra frente fica vermelho (invalidado) — quebra." class="w-full h-auto" role="img" viewbox="0 0 1000 300">
+<svg aria-label="Dos escenarios lado a lado. A la izquierda, agregar contenido al final del historial: todo el prefijo sigue en verde (leído del caché) y solo se escribe un bloque nuevo al final; es seguro. A la derecha, modificar la lista de herramientas en la posición cero: todo lo que viene después queda en rojo (invalidado); se rompe." class="w-full h-auto" role="img" viewbox="0 0 1000 300">
 <defs>
 <lineargradient id="m22-grad" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#60a5fa"></stop><stop offset="1" stop-color="#3b82f6"></stop></lineargradient>
 <pattern height="32" id="m22-grid" patternunits="userSpaceOnUse" width="32"><circle cx="1.3" cy="1.3" fill="#3b82f6" opacity="0.12" r="1.3"></circle></pattern>
@@ -345,39 +345,39 @@
 <rect fill="url(#m22-grid)" height="300" width="1000" x="0" y="0"></rect>
 <line stroke="#334155" stroke-dasharray="6 8" stroke-width="1.5" x1="500" x2="500" y1="20" y2="280"></line>
 <!-- ESQUERDA: anexar no fim (seguro) -->
-<text fill="#34d399" font-family="Inter,sans-serif" font-size="14" font-weight="700" x="60" y="40">✓ Anexar no fim (seguro)</text>
+<text fill="#34d399" font-family="Inter,sans-serif" font-size="14" font-weight="700" x="60" y="40">✓ Añadir al final (seguro)</text>
 <g font-family="Inter,sans-serif" font-size="12" font-weight="600">
-<rect fill="#0e2018" height="34" rx="7" stroke="#34d399" stroke-width="2" width="360" x="60" y="60"></rect><text fill="#a7f3d0" text-anchor="middle" x="240" y="82">tools (posição 0) — intacto</text>
+<rect fill="#0e2018" height="34" rx="7" stroke="#34d399" stroke-width="2" width="360" x="60" y="60"></rect><text fill="#a7f3d0" text-anchor="middle" x="240" y="82">tools (posición 0) — intacto</text>
 <rect fill="#0e2018" height="34" rx="7" stroke="#34d399" stroke-width="2" width="360" x="60" y="102"></rect><text fill="#a7f3d0" text-anchor="middle" x="240" y="124">system — intacto</text>
-<rect fill="#0e2018" height="34" rx="7" stroke="#34d399" stroke-width="2" width="360" x="60" y="144"></rect><text fill="#a7f3d0" text-anchor="middle" x="240" y="166">histórico — lido do cache</text>
-<rect fill="#0e1622" height="40" rx="7" stroke="url(#m22-grad)" stroke-width="2.5" width="360" x="60" y="192"></rect><text fill="#93c5fd" text-anchor="middle" x="240" y="217">+ conteúdo da skill (write único)</text>
+<rect fill="#0e2018" height="34" rx="7" stroke="#34d399" stroke-width="2" width="360" x="60" y="144"></rect><text fill="#a7f3d0" text-anchor="middle" x="240" y="166">historial — leído del caché</text>
+<rect fill="#0e1622" height="40" rx="7" stroke="url(#m22-grad)" stroke-width="2.5" width="360" x="60" y="192"></rect><text fill="#93c5fd" text-anchor="middle" x="240" y="217">+ contenido de la skill (escritura única)</text>
 </g>
-<text fill="#93c5fd" font-family="Inter,sans-serif" font-size="12" text-anchor="middle" x="240" y="256">prefixo continua batendo → read barato</text>
+<text fill="#93c5fd" font-family="Inter,sans-serif" font-size="12" text-anchor="middle" x="240" y="256">el prefijo sigue coincidiendo → read barato</text>
 <!-- DIREITA: mexer na posição 0 (quebra) -->
-<text fill="#f87171" font-family="Inter,sans-serif" font-size="14" font-weight="700" x="540" y="40">✗ Mexer na posição 0 (quebra)</text>
+<text fill="#f87171" font-family="Inter,sans-serif" font-size="14" font-weight="700" x="540" y="40">✗ Cambiar la posición 0 (se rompe)</text>
 <g font-family="Inter,sans-serif" font-size="12" font-weight="600">
-<rect fill="#2a0f16" height="34" rx="7" stroke="#f87171" stroke-width="2.5" width="360" x="540" y="60"></rect><text fill="#fecaca" text-anchor="middle" x="720" y="82">tools (posição 0) — MUDOU</text>
+<rect fill="#2a0f16" height="34" rx="7" stroke="#f87171" stroke-width="2.5" width="360" x="540" y="60"></rect><text fill="#fecaca" text-anchor="middle" x="720" y="82">tools (posición 0) — CAMBIÓ</text>
 <rect fill="#2a0f16" height="34" rx="7" stroke="#f87171" stroke-width="2" width="360" x="540" y="102"></rect><text fill="#fecaca" text-anchor="middle" x="720" y="124">system — invalidado</text>
-<rect fill="#2a0f16" height="34" rx="7" stroke="#f87171" stroke-width="2" width="360" x="540" y="144"></rect><text fill="#fecaca" text-anchor="middle" x="720" y="166">histórico — invalidado</text>
-<rect fill="#2a0f16" height="40" rx="7" stroke="#f87171" stroke-width="2" width="360" x="540" y="192"></rect><text fill="#fecaca" text-anchor="middle" x="720" y="217">tudo reprocessado (1×)</text>
+<rect fill="#2a0f16" height="34" rx="7" stroke="#f87171" stroke-width="2" width="360" x="540" y="144"></rect><text fill="#fecaca" text-anchor="middle" x="720" y="166">historial — invalidado</text>
+<rect fill="#2a0f16" height="40" rx="7" stroke="#f87171" stroke-width="2" width="360" x="540" y="192"></rect><text fill="#fecaca" text-anchor="middle" x="720" y="217">todo reprocesado (1×)</text>
 </g>
-<text fill="#fca5a5" font-family="Inter,sans-serif" font-size="12" text-anchor="middle" x="720" y="256">um byte na posição 0 derruba o prefixo inteiro</text>
+<text fill="#fca5a5" font-family="Inter,sans-serif" font-size="12" text-anchor="middle" x="720" y="256">un byte en la posición 0 invalida todo el prefijo</text>
 </svg>
-<p class="text-xs text-neutral-400 mt-3 text-center">Mesma quantidade de conteúdo novo, resultados opostos: anexar no fim preserva o cache; alterar a posição 0 zera tudo.</p>
+<p class="text-xs text-neutral-400 mt-3 text-center">La misma cantidad de contenido nuevo, resultados opuestos: añadir al final conserva la caché; cambiar la posición 0 lo reinicia todo.</p>
 </div>
 <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
-<h3 class="text-lg font-semibold text-blue-400 mb-3">Conceitos-chave</h3>
+<h3 class="text-lg font-semibold text-blue-400 mb-3">Conceptos clave</h3>
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">Anexa no fim</strong> = prefixo intacto.</p></div>
-<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">Write único</strong> do bloco da skill.</p></div>
-<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">Turnos seguintes</strong> = read barato.</p></div>
-<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">Invocar skill ≠ resetar o cache.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">Anexa al final</strong> = prefijo intacto.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">Write único</strong> del bloque de la skill.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">Turnos siguientes</strong> = read barato.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">Invocar skill ≠ restablecer la caché.</p></div>
 </div>
 </div>
 <div class="flex justify-start mt-6">
 <button aria-pressed="false" class="inline-flex items-center justify-start gap-2 px-4 py-2 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 transition-colors" data-inema-read-toggle="" type="button">
 <span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
-<span class="inema-label-todo">Marcar como lido</span><span class="inema-label-done">Lido ✓</span>
+<span class="inema-label-todo">Marcar como leído</span><span class="inema-label-done">Leído ✓</span>
 </button>
 </div>
 </section>
@@ -386,45 +386,44 @@
 <div class="flex items-start justify-between gap-4 mb-6">
 <div class="flex items-center space-x-4">
 <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">3</span>
-<h2 class="text-2xl font-bold" id="m22-t3-h">💥 Quebrar a lista de tools = posição 0</h2>
+<h2 class="text-2xl font-bold" id="m22-t3-h">💥 Romper la lista de tools = posición 0</h2>
 </div>
-<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm flex-shrink-0" data-inema-doubt-toggle="" title="Marcar dúvida neste tópico" type="button">
-<span aria-hidden="true">?</span><span class="hidden sm:inline">Tenho dúvida</span>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm flex-shrink-0" data-inema-doubt-toggle="" title="Marcar duda en este tema" type="button">
+<span aria-hidden="true">?</span><span class="hidden sm:inline">Tengo una duda</span>
 </button>
 </div>
 <div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
 <p data-inema-block="m2-2-t3-p1">
-            As ferramentas são renderizadas na <strong class="text-blue-400">posição 0</strong> — antes de system e do
-            histórico. Por isso mudar a lista <code class="font-mono text-sm">tools</code>
-<strong class="text-blue-400">invalida TUDO</strong>: como o casamento de prefixo começa do primeiro byte,
-            qualquer alteração no bloco de ferramentas derruba o prefixo inteiro dali pra frente.
+            Las herramientas se renderizan en la <strong class="text-blue-400">posición 0</strong> — antes de system y del historial. Por eso, cambiar la lista <code class="font-mono text-sm">tools</code>
+<strong class="text-blue-400">invalida TODO</strong>: como la coincidencia del prefijo empieza desde el primer byte,
+            cualquier cambio en el bloque de herramientas invalida todo el prefijo a partir de ahí.
           </p>
 </div>
 <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
-<h3 class="text-lg font-semibold text-blue-400 mb-2">O que é</h3>
-<p class="text-neutral-300">A lista <code class="font-mono text-xs">tools</code> ocupa a posição 0 na ordem de montagem <code class="font-mono text-xs">tools → system → messages</code>. Mudar qualquer byte ali é o pior caso possível para o cache.</p>
+<h3 class="text-lg font-semibold text-blue-400 mb-2">Qué es</h3>
+<p class="text-neutral-300">La lista <code class="font-mono text-xs">tools</code> ocupa la posición 0 en el orden de montaje <code class="font-mono text-xs">tools → system → messages</code>. Cambiar cualquier byte allí es el peor caso posible para el caché.</p>
 </div>
 <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
-<h3 class="text-lg font-semibold text-blue-400 mb-2">Por que aprender</h3>
-<p class="text-neutral-300">Porque é o silent invalidator mais caro. Saber que a posição 0 é sagrada muda como você conecta MCPs, edita descrições de tools e monta a lista.</p>
+<h3 class="text-lg font-semibold text-blue-400 mb-2">Por qué aprenderlo</h3>
+<p class="text-neutral-300">Porque es el invalidator silencioso más caro. Saber que la posición 0 es sagrada cambia la forma en que conectas MCPs, editas descripciones de tools y armas la lista.</p>
 </div>
 <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6 mb-6">
-<h3 class="text-lg font-semibold text-red-400 mb-2 flex items-center"><span aria-hidden="true" class="mr-2">⚠️</span> Atenção</h3>
-<p class="text-neutral-300">Não é só "adicionar tool". <strong>Remover</strong>, <strong>reordenar</strong> ou mudar <strong>um caractere</strong> numa descrição também conta. A posição 0 precisa ser byte-a-byte idêntica entre requests.</p>
+<h3 class="text-lg font-semibold text-red-400 mb-2 flex items-center"><span aria-hidden="true" class="mr-2">⚠️</span> Atención</h3>
+<p class="text-neutral-300">No es solo «agregar una tool». <strong>Eliminar</strong>, <strong>reordenar</strong> o cambiar <strong>un carácter</strong> también cuenta en una descripción. La posición 0 debe ser idéntica byte por byte entre requests.</p>
 </div>
 <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
-<h3 class="text-lg font-semibold text-blue-400 mb-3">Conceitos-chave</h3>
+<h3 class="text-lg font-semibold text-blue-400 mb-3">Conceptos clave</h3>
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">tools</strong> = posição 0 do prompt.</p></div>
-<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">Mudar tools</strong> = reset total.</p></div>
-<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">Ordem: <code class="font-mono text-xs">tools → system → messages</code>.</p></div>
-<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">Posição 0 = byte-a-byte idêntica.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">tools</strong> = posición 0 del prompt.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">Cambiar tools</strong> = reinicio total.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">Orden: <code class="font-mono text-xs">tools → system → messages</code>.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">Posición 0 = idéntica byte a byte.</p></div>
 </div>
 </div>
 <div class="flex justify-start mt-6">
 <button aria-pressed="false" class="inline-flex items-center justify-start gap-2 px-4 py-2 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 transition-colors" data-inema-read-toggle="" type="button">
 <span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
-<span class="inema-label-todo">Marcar como lido</span><span class="inema-label-done">Lido ✓</span>
+<span class="inema-label-todo">Marcar como leído</span><span class="inema-label-done">Leído ✓</span>
 </button>
 </div>
 </section>
@@ -433,66 +432,66 @@
 <div class="flex items-start justify-between gap-4 mb-6">
 <div class="flex items-center space-x-4">
 <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">4</span>
-<h2 class="text-2xl font-bold" id="m22-t4-h">🔨 Exemplos de quebra</h2>
+<h2 class="text-2xl font-bold" id="m22-t4-h">🔨 Ejemplos de ruptura</h2>
 </div>
-<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm flex-shrink-0" data-inema-doubt-toggle="" title="Marcar dúvida neste tópico" type="button">
-<span aria-hidden="true">?</span><span class="hidden sm:inline">Tenho dúvida</span>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm flex-shrink-0" data-inema-doubt-toggle="" title="Marcar duda en este tema" type="button">
+<span aria-hidden="true">?</span><span class="hidden sm:inline">Tengo una duda</span>
 </button>
 </div>
 <div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
 <p data-inema-block="m2-2-t4-p1">
-            Quatro formas clássicas de quebrar a posição 0 sem perceber. Todas mexem na lista
-            <code class="font-mono text-sm">tools</code> — de propósito ou por acidente.
+            Cuatro formas clásicas de romper la posición 0 sin darse cuenta. Todas modifican la lista
+            <code class="font-mono text-sm">tools</code> — a propósito o por accidente.
           </p>
 </div>
 <div class="space-y-4 mb-6">
 <div class="flex items-start space-x-4">
 <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center"><span class="text-blue-400 font-bold">1</span></div>
 <div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
-<h4 class="font-semibold text-neutral-100 mb-1">Conectar/desconectar MCP no meio</h4>
-<p class="text-sm text-neutral-300">Registra (ou remove) ferramentas novas na lista → a posição 0 muda → invalida tudo.</p>
+<h4 class="font-semibold text-neutral-100 mb-1">Conectar/desconectar un MCP a mitad de</h4>
+<p class="text-sm text-neutral-300">Registra (o elimina) herramientas nuevas en la lista → la posición 0 cambia → invalida todo.</p>
 </div>
 </div>
 <div class="flex items-start space-x-4">
 <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center"><span class="text-blue-400 font-bold">2</span></div>
 <div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
-<h4 class="font-semibold text-neutral-100 mb-1">Mudar <code class="font-mono text-xs">description</code> ou <code class="font-mono text-xs">input_schema</code></h4>
-<p class="text-sm text-neutral-300">Basta uma palavra numa description ou um campo no schema — os bytes de <code class="font-mono text-xs">tools</code> mudam.</p>
+<h4 class="font-semibold text-neutral-100 mb-1">Cambiar <code class="font-mono text-xs">description</code> o <code class="font-mono text-xs">input_schema</code></h4>
+<p class="text-sm text-neutral-300">Basta con que cambie una palabra en una description o un campo en el schema: los bytes de <code class="font-mono text-xs">tools</code> cambian.</p>
 </div>
 </div>
 <div class="flex items-start space-x-4">
 <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center"><span class="text-blue-400 font-bold">3</span></div>
 <div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
-<h4 class="font-semibold text-neutral-100 mb-1">Ordem não-determinística</h4>
-<p class="text-sm text-neutral-300">Montar <code class="font-mono text-xs">tools</code> de um <code class="font-mono text-xs">set</code>/<code class="font-mono text-xs">dict</code> sem ordenar → a ordem varia entre requests → miss silencioso. (É o assunto do exemplo copy-run abaixo.)</p>
+<h4 class="font-semibold text-neutral-100 mb-1">Orden no determinista</h4>
+<p class="text-sm text-neutral-300">Montar <code class="font-mono text-xs">tools</code> de un <code class="font-mono text-xs">set</code>/<code class="font-mono text-xs">dict</code> sin ordenar → el orden varía entre solicitudes → fallo silencioso. (Es el tema del ejemplo copy-run de abajo.)</p>
 </div>
 </div>
 <div class="flex items-start space-x-4">
 <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center"><span class="text-blue-400 font-bold">4</span></div>
 <div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
-<h4 class="font-semibold text-neutral-100 mb-1">Ligar/desligar tools por modo/permissão</h4>
-<p class="text-sm text-neutral-300">Trocar de modo que habilita/desabilita ferramentas altera a lista renderizada na posição 0.</p>
+<h4 class="font-semibold text-neutral-100 mb-1">Activar/desactivar tools por modo/permiso</h4>
+<p class="text-sm text-neutral-300">Cambiar de modo para habilitar o deshabilitar herramientas modifica la lista renderizada en la posición 0.</p>
 </div>
 </div>
 </div>
 <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
-<h3 class="text-lg font-semibold text-blue-400 mb-2">O que é / Por que aprender</h3>
-<p class="text-neutral-300 mb-2"><strong class="text-blue-400">O que é:</strong> as quatro causas mais comuns de cache que "some" sem motivo aparente — todas alteram a posição 0.</p>
-<p class="text-neutral-300"><strong class="text-blue-400">Por que aprender:</strong> reconhecer o padrão faz você desconfiar da lista de tools primeiro quando <code class="font-mono text-xs">cache_read_input_tokens</code> zera.</p>
+<h3 class="text-lg font-semibold text-blue-400 mb-2">Qué es / Por qué aprender</h3>
+<p class="text-neutral-300 mb-2"><strong class="text-blue-400">Qué es:</strong> las cuatro causas más comunes de que la caché «desaparezca» sin motivo aparente — todas alteran la posición 0.</p>
+<p class="text-neutral-300"><strong class="text-blue-400">Por qué aprenderlo:</strong> reconocer el patrón hace que primero desconfíes de la lista de tools cuando <code class="font-mono text-xs">cache_read_input_tokens</code> se pone en cero.</p>
 </div>
 <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
-<h3 class="text-lg font-semibold text-blue-400 mb-3">Conceitos-chave</h3>
+<h3 class="text-lg font-semibold text-blue-400 mb-3">Conceptos clave</h3>
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">MCP conectado no meio = tools novas.</p></div>
-<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">1 palavra na description já quebra.</p></div>
-<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><code class="font-mono text-xs">set</code>/<code class="font-mono text-xs">dict</code> sem sort = ordem variável.</p></div>
-<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">Modo/permissão liga-desliga tools.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">MCP conectado en medio = tools nuevas.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">1 palabra en la description ya lo rompe.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><code class="font-mono text-xs">set</code>/<code class="font-mono text-xs">dict</code> sin sort = orden variable.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">El modo/permiso activa y desactiva tools.</p></div>
 </div>
 </div>
 <div class="flex justify-start mt-6">
 <button aria-pressed="false" class="inline-flex items-center justify-start gap-2 px-4 py-2 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 transition-colors" data-inema-read-toggle="" type="button">
 <span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
-<span class="inema-label-todo">Marcar como lido</span><span class="inema-label-done">Lido ✓</span>
+<span class="inema-label-todo">Marcar como leído</span><span class="inema-label-done">Leído ✓</span>
 </button>
 </div>
 </section>
@@ -501,57 +500,57 @@
 <div class="flex items-start justify-between gap-4 mb-6">
 <div class="flex items-center space-x-4">
 <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">5</span>
-<h2 class="text-2xl font-bold" id="m22-t5-h">🔍 Tool Search anexa de propósito</h2>
+<h2 class="text-2xl font-bold" id="m22-t5-h">🔍 Tool Search se anexa a propósito</h2>
 </div>
-<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm flex-shrink-0" data-inema-doubt-toggle="" title="Marcar dúvida neste tópico" type="button">
-<span aria-hidden="true">?</span><span class="hidden sm:inline">Tenho dúvida</span>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm flex-shrink-0" data-inema-doubt-toggle="" title="Marcar duda en este tema" type="button">
+<span aria-hidden="true">?</span><span class="hidden sm:inline">Tengo una duda</span>
 </button>
 </div>
 <div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
 <p data-inema-block="m2-2-t5-p1">
-            O <strong class="text-blue-400">Tool Search</strong> carrega o schema de uma ferramenta
-            <strong class="text-blue-400">anexando</strong> — não trocando a lista <code class="font-mono text-sm">tools</code>.
-            Isso foi projetado justamente para <strong class="text-blue-400">NÃO quebrar o cache</strong>: descobrir uma
-            tool via Tool Search é seguro; conectar um MCP que reescreve a lista, não.
+            O <strong class="text-blue-400">Tool Search</strong> carga el schema de una herramienta
+            <strong class="text-blue-400">adjuntando</strong> — sin cambiar la lista <code class="font-mono text-sm">tools</code>.
+            Esto se diseñó justamente para <strong class="text-blue-400">NO rompas la caché</strong>: descubrir una
+            herramienta mediante Tool Search es seguro; conectar un MCP que reescribe la lista, no.
           </p>
 </div>
 <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
-<h3 class="text-lg font-semibold text-blue-400 mb-2">O que é</h3>
-<p class="text-neutral-300">Tool Search traz o schema de uma ferramenta sob demanda, anexado no fim (como uma skill), preservando o prefixo. É o mesmo padrão "anexar no fim = seguro" aplicado a ferramentas.</p>
+<h3 class="text-lg font-semibold text-blue-400 mb-2">Qué es</h3>
+<p class="text-neutral-300">Tool Search trae el schema de una herramienta bajo demanda y lo adjunta al final (como una skill), preservando el prefijo. Es el mismo patrón «adjuntar al final = seguro» aplicado a las herramientas.</p>
 </div>
 <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
-<h3 class="text-lg font-semibold text-blue-400 mb-2">Por que aprender</h3>
-<p class="text-neutral-300">Porque distingue dois caminhos que parecem iguais: "trazer uma ferramenta nova pra conversa" pode ser seguro (Tool Search, anexa) ou destrutivo (reescrever <code class="font-mono text-xs">tools</code>, posição 0).</p>
+<h3 class="text-lg font-semibold text-blue-400 mb-2">Por qué aprenderlo</h3>
+<p class="text-neutral-300">Porque distingue dos caminos que parecen iguales: "traer una herramienta nueva a la conversación" puede ser seguro (Tool Search, se añade) o destructivo (reescribir <code class="font-mono text-xs">tools</code>, posición 0).</p>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
 <h4 class="font-bold text-emerald-400 mb-3">✓ Seguro</h4>
 <ul class="space-y-2 text-neutral-300 text-sm">
-<li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>Descobrir tool via Tool Search (anexa no fim).</span></li>
-<li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>Invocar skill (anexa conteúdo no fim).</span></li>
+<li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>Descubrir una tool mediante Tool Search (se agrega al final).</span></li>
+<li class="flex items-start gap-2"><span class="text-emerald-400">✓</span><span>Invocar skill (anexa contenido al final).</span></li>
 </ul>
 </div>
 <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
-<h4 class="font-bold text-red-400 mb-3">✗ Quebra</h4>
+<h4 class="font-bold text-red-400 mb-3">✗ Se rompe</h4>
 <ul class="space-y-2 text-neutral-300 text-sm">
-<li class="flex items-start gap-2"><span class="text-red-400">✗</span><span>Conectar MCP que reescreve a lista de tools.</span></li>
-<li class="flex items-start gap-2"><span class="text-red-400">✗</span><span>Editar description/schema de uma tool existente.</span></li>
+<li class="flex items-start gap-2"><span class="text-red-400">✗</span><span>Conectar un MCP que reescribe la lista de tools.</span></li>
+<li class="flex items-start gap-2"><span class="text-red-400">✗</span><span>Editar la description/schema de una tool existente.</span></li>
 </ul>
 </div>
 </div>
 <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
-<h3 class="text-lg font-semibold text-blue-400 mb-3">Conceitos-chave</h3>
+<h3 class="text-lg font-semibold text-blue-400 mb-3">Conceptos clave</h3>
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">Tool Search <strong class="text-blue-400">anexa</strong> o schema.</p></div>
-<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">Feito para <strong class="text-blue-400">não</strong> quebrar o cache.</p></div>
-<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">Descobrir tool ≠ reescrever <code class="font-mono text-xs">tools</code>.</p></div>
-<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">Mesmo princípio das skills (fim = seguro).</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">Tool Search <strong class="text-blue-400">adjunta</strong> el schema.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">Hecho para <strong class="text-blue-400">no</strong> romper la caché.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">Descubrir una tool ≠ reescribir <code class="font-mono text-xs">tools</code>.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300">El mismo principio que con las skills (el final = seguro).</p></div>
 </div>
 </div>
 <div class="flex justify-start mt-6">
 <button aria-pressed="false" class="inline-flex items-center justify-start gap-2 px-4 py-2 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 transition-colors" data-inema-read-toggle="" type="button">
 <span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
-<span class="inema-label-todo">Marcar como lido</span><span class="inema-label-done">Lido ✓</span>
+<span class="inema-label-todo">Marcar como leído</span><span class="inema-label-done">Leído ✓</span>
 </button>
 </div>
 </section>
@@ -560,41 +559,41 @@
 <div class="flex items-start justify-between gap-4 mb-6">
 <div class="flex items-center space-x-4">
 <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">6</span>
-<h2 class="text-2xl font-bold" id="m22-t6-h">👍 Regra de bolso</h2>
+<h2 class="text-2xl font-bold" id="m22-t6-h">👍 Regla práctica</h2>
 </div>
-<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm flex-shrink-0" data-inema-doubt-toggle="" title="Marcar dúvida neste tópico" type="button">
-<span aria-hidden="true">?</span><span class="hidden sm:inline">Tenho dúvida</span>
+<button aria-pressed="false" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm flex-shrink-0" data-inema-doubt-toggle="" title="Marcar duda en este tema" type="button">
+<span aria-hidden="true">?</span><span class="hidden sm:inline">Tengo una duda</span>
 </button>
 </div>
 <div class="inema-prose text-neutral-300 mb-6" style="margin-inline:0">
 <p data-inema-block="m2-2-t6-p1">
-            A frase que resolve 90% das decisões do dia a dia: <strong class="text-blue-400">conteúdo novo no FIM =
-            seguro</strong>. Mexer na lista de <code class="font-mono text-sm">tools</code> ou no
-            <strong class="text-blue-400">system prompt</strong> = <strong class="text-blue-400">reset da posição 0</strong>.
+            La frase que resuelve el 90% de las decisiones del día a día: <strong class="text-blue-400">contenido nuevo al FINAL =
+            seguro</strong>. Cambiar la lista de <code class="font-mono text-sm">tools</code> o en el
+            <strong class="text-blue-400">prompt de sistema</strong> = <strong class="text-blue-400">reinicio de la posición 0</strong>.
           </p>
 </div>
 <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
-<h3 class="text-lg font-semibold text-blue-400 mb-2">O que é</h3>
-<p class="text-neutral-300">Um teste mental de uma linha: antes de qualquer mudança, pergunte "isso muda o começo do prompt ou só acrescenta no fim?". Fim = write barato; começo = reset.</p>
+<h3 class="text-lg font-semibold text-blue-400 mb-2">Qué es</h3>
+<p class="text-neutral-300">Una prueba mental de una línea: antes de cualquier cambio, pregúntate «¿esto cambia el comienzo del prompt o solo agrega algo al final?». Final = write barato; comienzo = reset.</p>
 </div>
 <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
-<h3 class="text-lg font-semibold text-blue-400 mb-2">Por que aprender</h3>
-<p class="text-neutral-300">Porque você não precisa memorizar cada caso: a regra de bolso classifica qualquer ação nova em "seguro" ou "reset" na hora.</p>
+<h3 class="text-lg font-semibold text-blue-400 mb-2">Por qué aprenderlo</h3>
+<p class="text-neutral-300">Porque no necesitas memorizar cada caso: la regla práctica clasifica cualquier acción nueva al instante como "segura" o "reinicio".</p>
 </div>
 <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
-<h3 class="text-lg font-semibold text-primary mb-2 flex items-center"><span aria-hidden="true" class="mr-2">💡</span> Dica prática</h3>
-<p class="text-neutral-300">Pergunte sempre: <strong class="text-primary">"isso muda o começo ou só acrescenta no fim?"</strong> Se muda o começo (tools/system), espere um reset. Se acrescenta no fim (skill/Tool Search/nova mensagem), é write único e barato.</p>
+<h3 class="text-lg font-semibold text-primary mb-2 flex items-center"><span aria-hidden="true" class="mr-2">💡</span> Consejo práctico</h3>
+<p class="text-neutral-300">Pregunta siempre: <strong class="text-primary">«¿esto cambia el comienzo o solo agrega algo al final?»</strong> Si cambia el comienzo (tools/system), espera un reinicio. Si se añade al final (skill/Tool Search/mensaje nuevo), es un único write barato.</p>
 </div>
 <!-- ============ EXEMPLO COPY-RUN (erro #30) ============ -->
 <div class="mb-8">
-<h3 class="text-xl font-bold mb-3 flex items-center"><span aria-hidden="true" class="mr-2">⚡</span> Exemplo copy-run — tornar a montagem de <code class="font-mono">tools</code> determinística</h3>
+<h3 class="text-xl font-bold mb-3 flex items-center"><span aria-hidden="true" class="mr-2">⚡</span> Ejemplo copy-run — hacer que el montaje de <code class="font-mono">tools</code> determinística</h3>
 <div class="rounded-xl border border-blue-500/30 bg-dark-900 overflow-hidden mb-4">
 <div class="flex items-center justify-between px-4 py-2 bg-dark-800 border-b border-dark-600">
-<span class="text-xs font-mono text-blue-400">python · ❌ quebra vs ✅ estável</span>
+<span class="text-xs font-mono text-blue-400">python · ❌ falla vs ✅ estable</span>
 <button class="copy-btn text-xs text-neutral-300 hover:text-blue-400 transition-colors" onclick="copyCode(this)" type="button">Copiar</button>
 </div>
 <div class="p-4">
-<p class="text-sm text-neutral-300 mb-3"><strong class="text-blue-400">Objetivo:</strong> garantir que a lista <code class="font-mono text-xs">tools</code> (posição 0) saia byte-a-byte idêntica em todo request. Iterar um <code class="font-mono text-xs">set</code>/<code class="font-mono text-xs">dict</code> sem ordenar deixa a ordem variar → o cache nunca bate.</p>
+<p class="text-sm text-neutral-300 mb-3"><strong class="text-blue-400">Objetivo:</strong> garantizar que la lista <code class="font-mono text-xs">tools</code> (posición 0) quede idéntica byte por byte en cada request. Iterar un <code class="font-mono text-xs">set</code>/<code class="font-mono text-xs">dict</code> sin ordenar, el orden varía → la caché nunca coincide.</p>
 <pre class="font-mono text-sm text-neutral-200 whitespace-pre-wrap bg-dark-800 rounded-lg p-4 overflow-x-auto"><code># ❌ QUEBRA — ordem varia entre requests (cache nunca bate)
 tools = [tool_schema(name) for name in &lt;meu_set_de_tools&gt;]
 #                                       ^ set/dict: ordem não garantida
@@ -604,12 +603,12 @@ tools = [tool_schema(name) for name in sorted(&lt;meu_set_de_tools&gt;)]
 
 # (se as tools forem dicts, serialize com chaves ordenadas também)
 # payload = json.dumps(tool, sort_keys=True)</code></pre>
-<p class="text-sm text-neutral-300 mt-3"><strong class="text-blue-400">Como verificar:</strong> rode o mesmo pedido duas vezes seguidas e olhe o <code class="font-mono text-xs">usage</code>. Com o <code class="font-mono text-xs">sorted(...)</code>, o <code class="font-mono text-xs">cache_read_input_tokens</code> <strong>deixa de ser 0</strong> entre requests iguais — sinal de que a posição 0 ficou idêntica e o prefixo bateu.</p>
+<p class="text-sm text-neutral-300 mt-3"><strong class="text-blue-400">Cómo verificar:</strong> haz la misma solicitud dos veces seguidas y mira el <code class="font-mono text-xs">usage</code>. Con el <code class="font-mono text-xs">sorted(...)</code>, o <code class="font-mono text-xs">cache_read_input_tokens</code> <strong>deja de ser 0</strong> entre requests iguales: señal de que la posición 0 quedó idéntica y el prefijo coincidió.</p>
 </div>
 </div>
 <div class="rounded-xl border border-blue-500/30 bg-dark-900 overflow-hidden">
 <div class="flex items-center justify-between px-4 py-2 bg-dark-800 border-b border-dark-600">
-<span class="text-xs font-mono text-blue-400">prompt · peça ao Claude Code para aplicar</span>
+<span class="text-xs font-mono text-blue-400">prompt · pídele a Claude Code que lo aplique</span>
 <button class="copy-btn text-xs text-neutral-300 hover:text-blue-400 transition-colors" onclick="copyCode(this)" type="button">Copiar</button>
 </div>
 <div class="p-4">
@@ -622,54 +621,54 @@ onde `tools` é construída a partir de um set ou dict e:
 </div>
 </div>
 <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
-<h3 class="text-lg font-semibold text-blue-400 mb-3">Conceitos-chave</h3>
+<h3 class="text-lg font-semibold text-blue-400 mb-3">Conceptos clave</h3>
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">Fim</strong> = seguro (write único).</p></div>
-<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">Começo</strong> (tools/system) = reset.</p></div>
-<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><code class="font-mono text-xs">sorted(...)</code> deixa a posição 0 estável.</p></div>
-<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><code class="font-mono text-xs">cache_read</code> &gt; 0 entre requests iguais = ok.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">Fin</strong> = seguro (un solo write).</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><strong class="text-blue-400">Inicio</strong> (tools/system) = restablecimiento.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><code class="font-mono text-xs">sorted(...)</code> deja estable la posición 0.</p></div>
+<div class="bg-dark-700/40 rounded-lg p-4"><p class="text-sm text-neutral-300"><code class="font-mono text-xs">cache_read</code> &gt; 0 entre requests iguales = bien.</p></div>
 </div>
 </div>
 <div class="flex justify-start mt-6">
 <button aria-pressed="false" class="inline-flex items-center justify-start gap-2 px-4 py-2 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 transition-colors" data-inema-read-toggle="" type="button">
 <span aria-hidden="true" class="inema-ico-todo">○</span><span aria-hidden="true" class="inema-ico-done">●</span>
-<span class="inema-label-todo">Marcar como lido</span><span class="inema-label-done">Lido ✓</span>
+<span class="inema-label-todo">Marcar como leído</span><span class="inema-label-done">Leído ✓</span>
 </button>
 </div>
 </section>
 <!-- ================= RESUMO ================= -->
 <section class="mb-12">
 <div class="bg-gradient-to-br from-blue-900/40 via-dark-800 to-dark-800 rounded-xl border border-blue-500/30 p-8">
-<h2 class="text-2xl font-bold mb-6 flex items-center"><span aria-hidden="true" class="mr-3">📌</span> Resumo do módulo</h2>
+<h2 class="text-2xl font-bold mb-6 flex items-center"><span aria-hidden="true" class="mr-3">📌</span> Resumen del módulo</h2>
 <div class="space-y-4 mb-8">
-<div class="flex items-start space-x-3"><span aria-hidden="true" class="text-blue-400 mt-1">✓</span><div><strong class="text-neutral-100">"Skill" tem dois sentidos</strong><span class="text-neutral-400"> — descrição (sempre) e conteúdo (sob demanda).</span></div></div>
-<div class="flex items-start space-x-3"><span aria-hidden="true" class="text-blue-400 mt-1">✓</span><div><strong class="text-neutral-100">Skill no meio anexa no fim</strong><span class="text-neutral-400"> — write único, não reset.</span></div></div>
-<div class="flex items-start space-x-3"><span aria-hidden="true" class="text-blue-400 mt-1">✓</span><div><strong class="text-neutral-100">Mudar tools = posição 0</strong><span class="text-neutral-400"> — invalida tudo dali pra frente.</span></div></div>
-<div class="flex items-start space-x-3"><span aria-hidden="true" class="text-blue-400 mt-1">✓</span><div><strong class="text-neutral-100">4 quebras clássicas</strong><span class="text-neutral-400"> — MCP, description/schema, ordem, modo.</span></div></div>
-<div class="flex items-start space-x-3"><span aria-hidden="true" class="text-blue-400 mt-1">✓</span><div><strong class="text-neutral-100">Regra de bolso</strong><span class="text-neutral-400"> — fim = seguro; começo = reset.</span></div></div>
+<div class="flex items-start space-x-3"><span aria-hidden="true" class="text-blue-400 mt-1">✓</span><div><strong class="text-neutral-100">«Skill» tiene dos sentidos</strong><span class="text-neutral-400"> — descripción (siempre) y contenido (a pedido).</span></div></div>
+<div class="flex items-start space-x-3"><span aria-hidden="true" class="text-blue-400 mt-1">✓</span><div><strong class="text-neutral-100">Una skill en medio se agrega al final</strong><span class="text-neutral-400"> — write único, no reinicio.</span></div></div>
+<div class="flex items-start space-x-3"><span aria-hidden="true" class="text-blue-400 mt-1">✓</span><div><strong class="text-neutral-100">Cambiar tools = posición 0</strong><span class="text-neutral-400"> — invalida todo a partir de ahí.</span></div></div>
+<div class="flex items-start space-x-3"><span aria-hidden="true" class="text-blue-400 mt-1">✓</span><div><strong class="text-neutral-100">4 errores clásicos</strong><span class="text-neutral-400"> — MCP, descripción/esquema, orden, modo.</span></div></div>
+<div class="flex items-start space-x-3"><span aria-hidden="true" class="text-blue-400 mt-1">✓</span><div><strong class="text-neutral-100">Regla práctica</strong><span class="text-neutral-400"> — final = seguro; principio = reinicio.</span></div></div>
 </div>
 <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
-<h3 class="font-semibold text-blue-400 mb-2">Próximo módulo:</h3>
-<p class="text-neutral-300">2.3 — Invalidação a fundo</p>
+<h3 class="font-semibold text-blue-400 mb-2">Siguiente módulo:</h3>
+<p class="text-neutral-300">2.3 — Invalidación a fondo</p>
 </div>
 <div class="flex flex-col sm:flex-row gap-4">
 <a class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors" href="modulo-2-1.html">← Módulo anterior</a>
-<a class="flex-1 text-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-500 transition-colors" href="modulo-2-3.html">Próximo módulo →</a>
+<a class="flex-1 text-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-500 transition-colors" href="modulo-2-3.html">Siguiente módulo →</a>
 </div>
 </div>
 </section>
 </main>
 <!-- TOC sticky + scrollspy -->
 <aside class="hidden lg:block">
-<nav aria-label="Índice da página" class="sticky top-24 self-start" data-inema-toc="">
-<p class="text-sm text-neutral-400 mb-2">Seção <span class="inema-toc-pos">1</span> de <span class="inema-toc-total">6</span></p>
+<nav aria-label="Índice de la página" class="sticky top-24 self-start" data-inema-toc="">
+<p class="text-sm text-neutral-400 mb-2">Sección <span class="inema-toc-pos">1</span> de <span class="inema-toc-total">6</span></p>
 <ul class="space-y-1 text-sm">
-<li><a class="inema-toc-link" href="#topico-1">1. Dois sentidos de "skill"</a></li>
-<li><a class="inema-toc-link" href="#topico-2">2. Skill no meio não zera</a></li>
-<li><a class="inema-toc-link" href="#topico-3">3. Tools = posição 0</a></li>
-<li><a class="inema-toc-link" href="#topico-4">4. Exemplos de quebra</a></li>
-<li><a class="inema-toc-link" href="#topico-5">5. Tool Search anexa</a></li>
-<li><a class="inema-toc-link" href="#topico-6">6. Regra de bolso</a></li>
+<li><a class="inema-toc-link" href="#topico-1">1. Dos sentidos de "skill"</a></li>
+<li><a class="inema-toc-link" href="#topico-2">2. Una skill en medio no lo reinicia</a></li>
+<li><a class="inema-toc-link" href="#topico-3">3. Tools = posición 0</a></li>
+<li><a class="inema-toc-link" href="#topico-4">4. Ejemplos de errores</a></li>
+<li><a class="inema-toc-link" href="#topico-5">5. Tool Search adjunta</a></li>
+<li><a class="inema-toc-link" href="#topico-6">6. Regla práctica</a></li>
 </ul>
 </nav>
 </aside>
@@ -677,11 +676,11 @@ onde `tools` é construída a partir de um set ou dict e:
 <!-- FOOTER -->
 <footer class="border-t border-dark-600 py-8">
 <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
-<p>cccache — Prompt Caching no Claude Code · Curso <a class="text-sky-400 hover:text-sky-300" href="https://inema.club" rel="noopener" target="_blank">INEMA.CLUB</a> · 2026</p>
+<p>cccache — Prompt Caching en Claude Code · Curso <a class="text-sky-400 hover:text-sky-300" href="https://inema.club" rel="noopener" target="_blank">INEMA.CLUB</a> · 2026</p>
 </div>
 </footer>
 <!-- SCRIPTS -->
-<script src="../../assets/learn.js"></script>
+<script src="../../../assets/learn.js"></script>
 <script>
     function copyCode(btn) {
       var box = btn.closest('.rounded-xl');
